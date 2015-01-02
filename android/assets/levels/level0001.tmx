@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="64" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
+  <image source="tileset_basic.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="17" name="tileset_foes" tilewidth="32" tileheight="64">
+  <image source="tileset_foes.png" width="32" height="64"/>
+ </tileset>
+ <layer name="ground" width="32" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2WUQ7AMAhC7ZL2/kfebtDMuQaQj+b9ooDpjIj1vAnEC0THG10DQJ+Zp/3j6WGVrwrzIfHEPjv01Lk0nZdvzN6JE/eFzS82vWY/qv0L1OappO+RHp13blb6p9pv1bnY8mXiEdlftt6y6e2eL8+tq78jM/fHPv+z1x1vdfv4GQAgAAA=
+  </data>
+ </layer>
+ <layer name="blocks" width="32" height="64">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2Y6wrDIAyFCxt0sMH2/k/bChNKoCYmJ14wH8jmj9qcU03UbQuuvM/2KfSt43F8z/Yr9GvRPo/2oRa0D0FbWs8XCnK+JC37pUl0Zf0IHx6k/xQ8k/UjfNC8P4PQnzS8/v/Tb42eyBtBT2bNg9q4ad7T5kFt3DTvafNg630fpde+LzPqvEXW1RJ34yPraonedWvU788xa9yrg6obWlB1ozecj95+cj6i/Fx9nbdeH5TR18ds91fo+Gr1o/fH1vs7VLxaX1Hfy2t9eOuXjsvlIW/9o+ehVbDeF1iRnhfp+7z3I9w89dYvjc8Kur7U4j3+avtN6TnCyxfpOSLyvo0D8hjtJAAgAAA=
+  </data>
+ </layer>
+ <objectgroup name="horde0">
+  <object name="foe0" gid="17" x="128" y="1728">
+   <properties>
+    <property name="step0" value="delaymove,60,4,59"/>
+    <property name="step1" value="delaymove,60,origin"/>
+   </properties>
+  </object>
+  <object name="foe1" type="robot" gid="17" x="320" y="1856">
+   <properties>
+    <property name="step0" value="move,17,57"/>
+    <property name="step1" value="move,17,59"/>
+    <property name="step2" value="move,17,57"/>
+    <property name="step3" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde1">
+  <object type="robot" gid="17" x="352" y="416"/>
+  <object type="robot" gid="17" x="288" y="320">
+   <properties>
+    <property name="step0" value="move,15,9"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="17" x="640" y="320">
+   <properties>
+    <property name="step0" value="move,20,13"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="levelscript">
+  <properties>
+   <property name="step0" value="createhorde,0"/>
+   <property name="step1" value="waithordekilled,0"/>
+   <property name="step2" value="createhorde,1"/>
+  </properties>
+ </objectgroup>
+</map>
