@@ -93,6 +93,10 @@ public class LevelScreen implements Screen {
         System.gc();
     }
 
+    public OrthographicCamera getCamera() {
+        return mainCamera;
+    }
+
     public LevelScript getLevelScript() {
         return levelScript;
     }
@@ -287,7 +291,7 @@ public class LevelScreen implements Screen {
                 hidden = true;
             }
 
-            if (!hidden) {
+            if (!hidden && foe.isOnCamera()) {
                 mainShape.begin(ShapeRenderer.ShapeType.Line);
                 mainShape.line(foePosition.x, foePosition.y,
                         hero.getX() + hero.getWidth() / 2, hero.getY() + hero.getHeight() / 2);
