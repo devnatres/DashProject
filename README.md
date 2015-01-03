@@ -1,6 +1,17 @@
 DashProject
 ===========
 
-An amateur action game for Android.
+An amateur 2D action game for Android touchscreen.
 
+(Please, excuse my english. Corrections for both english and code are welcome!)
 
+The idea is provide a frantic experience using a very simple control.
+Each level consists in a top-down tiled map where you can freely move the hero looking for enemies and defeating them.
+If development progresses fast enough (what's this?) the game will have an adventure context with some brief cutscenes.
+
+This game is developed using LibGdx (thanks Mr. Zechner). It can be tested on desktop machines with Java (Windows, Linux and Mac OS X) using the mouse but the target platform is Android touchscreen. 
+
+-------------
+Another game from the author is "Boo & Marung":
+https://play.google.com/store/apps/details?id=devnatres.android.boomarung
+It was made in Java completely from scratch, without third-party libraries nor frameworks (not even OpenGL).
