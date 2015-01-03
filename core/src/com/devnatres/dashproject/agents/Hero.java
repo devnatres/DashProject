@@ -19,6 +19,14 @@ import com.devnatres.dashproject.tools.VectorPool;
  * Created by DevNatres on 06/12/2014.
  */
 public class Hero extends Agent {
+    private static final int DAMAGE_DURATION = 15;
+    private static final int MAX_LIFE = 10;
+    private static final int HEAL_DURATION = 30;
+
+    private int damageImageDuration;
+    private int healDuration = HEAL_DURATION * 2;
+    private int life = MAX_LIFE;
+
     private final Sound dashSound;
     private final Sound failDashSound;
     private final Sound hitSound;
@@ -41,6 +49,12 @@ public class Hero extends Agent {
     private final LevelScreen levelScreen;
 
     private final HyperStore hyperStore;
+
+    private final Sprite damageImage;
+    private final Sprite healPointImage;
+
+    private final Vector2 nextPositionFromInput = new Vector2();
+    private boolean thereIsNextPositionFromInput;
 
     static {
         VectorPool.initialize();
@@ -72,26 +86,37 @@ public class Hero extends Agent {
         attackRadio = attackHalo.getWidth() / 2;
         attackRadio2 = attackRadio * attackRadio;
 
-        centerHalos();
+        damageImage = new Sprite(hyperStore.getTexture("shoot_damage.png"));
+        healPointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
+
+        centerReferences();
     }
 
     @Override
     public void positionChanged() {
         super.positionChanged();
-        if (dashHalo != null) centerHalos();
+        if (dashHalo != null) centerReferences();
     }
 
-    private void centerHalos() {
+    private void centerReferences() {
         dashHalo.setCenter(auxCenter.x, auxCenter.y);
         attackHalo.setCenter(auxCenter.x, auxCenter.y);
+        damageImage.setCenter(auxCenter.x, auxCenter.y);
     }
 
-    public void setPositionOnLevel(float targetCenterX, float targetCenterY, LevelScreen levelScreen) {
+    public void programNextPosition(float nextX, float nextY) {
+        nextPositionFromInput.set(nextX, nextY);
+        thereIsNextPositionFromInput = true;
+    }
+
+    private void setNextPositionIfAvailable(float targetCenterX, float targetCenterY) {
         if (Debug.DEBUG) Debug.addPoint(targetCenterX, targetCenterY, Color.WHITE);
 
-        if (levelScreen == null) {
+        if (!thereIsNextPositionFromInput) {
             return;
         }
+
+        thereIsNextPositionFromInput = false;
 
         Vector2 vTarget = VectorPool.get();
         vTarget.set(targetCenterX, targetCenterY);
@@ -152,6 +177,7 @@ public class Hero extends Agent {
     @Override
     public void act(float delta) {
         super.act(delta);
+        setNextPositionIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
         tryAttack();
 
         if (attackingTime > 0) {
@@ -188,6 +214,15 @@ public class Hero extends Agent {
         }
     }
 
+    public void receiveDamage() {
+        damageImageDuration = DAMAGE_DURATION;
+        failDashSound.play();
+        if (life > 0) {
+            life--;
+        }
+        healDuration = HEAL_DURATION;
+    }
+
     public boolean isCoverLeft() {
         return coverDirection.isLeft();
     }
@@ -210,6 +245,21 @@ public class Hero extends Agent {
         attackHalo.draw(batch);
         super.draw(batch);
 
+        if (damageImageDuration > 0) {
+            damageImageDuration--;
+            damageImage.draw(batch);
+        }
+
+        if (healDuration > 0) {
+            healDuration--;
+            float lifeWidth = healPointImage.getWidth() + 2;
+            float lifeX = auxCenter.x -(life*lifeWidth/2);
+            for (int i = 1; i <= life; i++) {
+                healPointImage.setPosition(lifeX + (i-1)*lifeWidth,
+                        getY() + getHeight() + 5);
+                healPointImage.draw(batch);
+            }
+        }
     }
 
 }

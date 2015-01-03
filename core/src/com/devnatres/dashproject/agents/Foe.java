@@ -3,6 +3,8 @@ package com.devnatres.dashproject.agents;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.store.HyperStore;
@@ -13,6 +15,11 @@ import com.devnatres.dashproject.store.HyperStore;
 public class Foe extends Agent {
     private static final int SHAKE_FRAME_DURATION = 4;
     private static final int SHAKE_TOTAL_DURATION = 20;
+    private static final int PUM_DURATION = 15;
+    private static final int FIRE_WAIT = 30;
+
+    private int pumImageDuration;
+    private int fireWait = FIRE_WAIT;
 
     Animation foeDeadAnimation;
     boolean dying;
@@ -27,6 +34,11 @@ public class Foe extends Agent {
     private int shakeFrameDuration;
     private int shakeTotalDuration;
 
+    private final Hero hero;
+    private final Vector2 heroLastCenterPos = new Vector2();
+
+    private final Sprite pumImage;
+
     public Foe(HyperStore hyperStore, LevelScreen levelScreen) {
         super(EAnimations.FOE_ROBOT_WALKING.create(hyperStore));
 
@@ -36,7 +48,10 @@ public class Foe extends Agent {
         halfCameraHeight = camera.viewportHeight/2f;
 
         foeDeadAnimation = EAnimations.FOE_ROBOT_DEAD.create(hyperStore);
+        hero = levelScreen.getHero();
+        heroLastCenterPos.set(hero.getAuxCenter());
 
+        pumImage = new Sprite(hyperStore.getTexture("pum.png"));
     }
 
 
@@ -48,14 +63,48 @@ public class Foe extends Agent {
                 setVisible(false);
             }
         } else {
-            if (!isBulletTime(levelScreen)) {
+            if (!levelScreen.isBulletTime()) {
                 super.act(delta);
+                shotHeroIfInSight();
             }
+            heroLastCenterPos.set(hero.getAuxCenter());
         }
     }
 
-    private boolean isBulletTime(LevelScreen levelScreen) {
-        return levelScreen != null && levelScreen.isBulletTime();
+    private void shotHeroIfInSight() {
+        if (isOnCamera()) {
+            if (fireWait > 0) {
+                fireWait--;
+            }
+            if (isHeroUncovered()) {
+                boolean isHeroMoved = !heroLastCenterPos.equals(hero.getAuxCenter());
+                if (isHeroMoved || fireWait == 0) {
+                    shotHero();
+                    fireWait = FIRE_WAIT;
+                }
+            }
+        } else {
+            fireWait = FIRE_WAIT; // To avoid firing just when foe enters on camera
+        }
+    }
+
+    private void shotHero() {
+        hero.receiveDamage();
+        pumImageDuration = PUM_DURATION;
+        fireWait = FIRE_WAIT;
+    }
+
+    private boolean isHeroUncovered() {
+        Vector2 heroCenterPos = hero.getAuxCenter();
+        boolean isHeroCovered = false;
+
+        if ((auxCenter.x < heroCenterPos.x && hero.isCoverLeft())
+                || (auxCenter.x > heroCenterPos.x && hero.isCoverRight())
+                || (auxCenter.y < heroCenterPos.y && hero.isCoverDown())
+                || (auxCenter.y > heroCenterPos.y && hero.isCoverUp())) {
+            isHeroCovered = true;
+        }
+        return !isHeroCovered;
     }
 
     public boolean isDying() {
@@ -99,6 +148,11 @@ public class Foe extends Agent {
             setPosition(originalX, originalY);
         } else {
             super.draw(batch, parentAlpha);
+            if (pumImageDuration > 0) {
+                pumImageDuration--;
+                pumImage.setCenter(auxCenter.x, auxCenter.y);
+                pumImage.draw(batch);
+            }
         }
     }
 

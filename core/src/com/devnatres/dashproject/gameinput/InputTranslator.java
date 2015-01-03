@@ -31,6 +31,15 @@ public class InputTranslator implements InputProcessor {
         Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * Clear all flags
+     */
+    public void clear() {
+        isDragged = false;
+        touchDownPointPrepared = false;
+        resetRequested = false;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == resetKeycode) {

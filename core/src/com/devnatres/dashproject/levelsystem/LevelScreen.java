@@ -91,6 +91,11 @@ public class LevelScreen implements Screen {
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
 
         System.gc();
+        inputTranslator.clear();
+    }
+
+    public Hero getHero() {
+        return hero;
     }
 
     public OrthographicCamera getCamera() {
@@ -252,7 +257,7 @@ public class LevelScreen implements Screen {
         if (touchDownPoint != null) {
             Vector3 clickCoordinates = new Vector3(touchDownPoint.x, touchDownPoint.y, 0);
             Vector3 position = mainCamera.unproject(clickCoordinates);
-            hero.setPositionOnLevel(position.x, position.y, this);
+            hero.programNextPosition(position.x, position.y);
         }
 
         //hero.act(delta);
