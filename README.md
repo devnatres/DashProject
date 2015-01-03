@@ -11,6 +11,8 @@ If development progresses fast enough (what's this?) the game will have an adven
 
 This game is developed using LibGdx (thanks Mr. Zechner). It can be tested on desktop machines with Java (Windows, Linux and Mac OS X) using the mouse but the target platform is Android touchscreen. 
 
+The current prototype is still being expanded and refactored.
+
 -------------
 Another game from the author is "Boo & Marung":
 https://play.google.com/store/apps/details?id=devnatres.android.boomarung
