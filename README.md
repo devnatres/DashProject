@@ -5,12 +5,13 @@ An amateur 2D action game for Android touchscreen.
 
 (Please, excuse my english. Corrections for both english and code are welcome!)
 
-The idea is to provide a frantic experience using a very simple control.
+The idea is to provide a frantic experience using a very simple control. The atmosphere mixes sci-fi technology and medieval features.
 
 Each level consists in a top-down tiled map where you can freely move the hero looking for enemies (with a simple radar support) to defeat them in a race against time. The hero moves teleporting to nearby places. He attacks automatically to nearby enemies using swords. 
+
 He can take cover only when he is near to low obstacles. There aren't high obstacles, so the hero can be shot if he is not near an obstacle.
 
-The atmosphere mixes sci-fi technology and medieval features.
+There will be combos and special attacks.
 
 If development progresses fast enough (what's this?) the game will have an adventure context with some brief cutscenes.
 
