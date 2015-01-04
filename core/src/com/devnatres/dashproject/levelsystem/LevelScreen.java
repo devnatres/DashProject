@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agents.*;
+import com.devnatres.dashproject.gameconstants.Parameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
@@ -26,10 +27,16 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  * Created by DevNatres on 04/12/2014.
  */
 public class LevelScreen implements Screen {
+    private static final int RESET_COUNT = 180;
+
+    private int resetCount = RESET_COUNT;
+
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final ShapeRenderer mainShape;
     private final OrthographicCamera mainCamera;
+
+    private final OrthographicCamera fixedCamera;
 
     private final HyperStore hyperStore;
 
@@ -39,13 +46,13 @@ public class LevelScreen implements Screen {
 
     private final Music badassMusic;
 
-    private InputTranslator inputTranslator;
+    private final InputTranslator inputTranslator;
 
-    private Texture backgroundTexture;
-    private Texture grayScreenTexture;
+    private final Texture backgroundTexture;
+    private final Texture grayScreenTexture;
 
-    private float screenWidth;
-    private float screenHeight;
+    private final float screenWidth;
+    private final float screenHeight;
 
     private float bulletTime;
 
@@ -53,6 +60,7 @@ public class LevelScreen implements Screen {
     private final Horde totalHorde;
 
     private final LevelScript levelScript;
+    private final Texture dissipatedMessage;
 
     public LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
@@ -66,6 +74,9 @@ public class LevelScreen implements Screen {
         hyperStore = game.getHyperStore();
 
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
+
+        fixedCamera = new OrthographicCamera();
+        fixedCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
 
         map = new LevelMap(levelName);
 
@@ -87,8 +98,8 @@ public class LevelScreen implements Screen {
         mainShape.setColor(Color.WHITE);
 
         backgroundTexture = hyperStore.getTexture("background.jpg");
-
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
+        dissipatedMessage = hyperStore.getTexture("dissipated.png");
 
         System.gc();
         inputTranslator.clear();
@@ -119,7 +130,7 @@ public class LevelScreen implements Screen {
     @Override
     public void render(float delta) {
         if (inputTranslator.isResetRequested()) {
-            dashGame.setScreen(new MainMenuScreen(dashGame));
+            reset();
             return;
         }
 
@@ -142,12 +153,22 @@ public class LevelScreen implements Screen {
         // player.draw(renderer.getSpriteBatch());
         // renderer.rendererTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
         // renderer.getSpriteBatch().end()
+        mainBatch.setProjectionMatrix(mainCamera.combined);
         renderBackground();
         renderMap();
         renderSprites();
+        renderMessages();
 
         renderDebugger();
 
+        if (resetCount == 0) {
+            reset();
+        }
+
+    }
+
+    private void reset() {
+        dashGame.setScreen(new MainMenuScreen(dashGame));
     }
 
     @Override
@@ -201,7 +222,6 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackground() {
-        mainBatch.setProjectionMatrix(mainCamera.combined);
         mainBatch.begin();
         mainBatch.draw(backgroundTexture, 300, 0);
         mainBatch.end();
@@ -209,6 +229,20 @@ public class LevelScreen implements Screen {
 
     private void renderMap() {
         map.paint(mainCamera);
+    }
+
+    private void renderMessages() {
+        if (!hero.isVisible()) {
+            mainBatch.setProjectionMatrix(fixedCamera.combined);
+            mainBatch.begin();
+            mainBatch.draw(dissipatedMessage,
+                    (screenWidth - dissipatedMessage.getWidth())/2,
+                    (screenHeight - dissipatedMessage.getHeight())/2);
+            mainBatch.end();
+            if (resetCount > 0) {
+                resetCount--;
+            }
+        }
     }
 
     private void renderSprites() {

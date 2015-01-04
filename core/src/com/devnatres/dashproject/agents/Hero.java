@@ -31,6 +31,7 @@ public class Hero extends Agent {
     private final Sound failDashSound;
     private final Sound hitSound;
     private final Sound comboSound;
+    private final Sound deadSound;
 
     private final DirectionSelector coverDirection;
     private final Rectangle nextArea;
@@ -56,6 +57,9 @@ public class Hero extends Agent {
     private final Vector2 nextPositionFromInput = new Vector2();
     private boolean thereIsNextPositionFromInput;
 
+    private final Animation deadAnimation;
+    private boolean dying;
+
     static {
         VectorPool.initialize();
     }
@@ -75,6 +79,7 @@ public class Hero extends Agent {
         failDashSound = hyperStore.getSound("sounds/fail_hit.ogg");
         hitSound = hyperStore.getSound("sounds/hit.ogg");
         comboSound = hyperStore.getSound("sounds/combo.ogg");
+        deadSound = hyperStore.getSound("sounds/hit.ogg");
 
         coverDirection = new DirectionSelector();
         nextArea = new Rectangle(auxArea);
@@ -90,6 +95,8 @@ public class Hero extends Agent {
         healPointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
 
         centerReferences();
+
+        deadAnimation = EAnimations.HERO_DYING.create(hyperStore);
     }
 
     @Override
@@ -176,14 +183,21 @@ public class Hero extends Agent {
 
     @Override
     public void act(float delta) {
-        super.act(delta);
-        setNextPositionIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
-        tryAttack();
+        if (dying) {
+            addStateTime(delta);
+            if (getAnimation().isAnimationFinished(animationStateTime)) {
+                setVisible(false);
+            }
+        } else {
+            super.act(delta);
+            setNextPositionIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
+            tryAttack();
 
-        if (attackingTime > 0) {
-            attackingTime--;
-            if (attackingTime == 0) {
-                setAnimation(walkingAnimation);
+            if (attackingTime > 0) {
+                attackingTime--;
+                if (attackingTime == 0) {
+                    setAnimation(walkingAnimation);
+                }
             }
         }
     }
@@ -215,12 +229,23 @@ public class Hero extends Agent {
     }
 
     public void receiveDamage() {
-        damageImageDuration = DAMAGE_DURATION;
-        failDashSound.play();
-        if (life > 0) {
-            life--;
+        if (!dying) {
+            damageImageDuration = DAMAGE_DURATION;
+            failDashSound.play();
+            if (life > 0) {
+                life--;
+                if (life == 0) {
+                    deadSound.play();
+                    dying = true;
+                    setAnimation(deadAnimation);
+                }
+            }
+            healDuration = HEAL_DURATION;
         }
-        healDuration = HEAL_DURATION;
+    }
+
+    public boolean isDying() {
+        return dying;
     }
 
     public boolean isCoverLeft() {

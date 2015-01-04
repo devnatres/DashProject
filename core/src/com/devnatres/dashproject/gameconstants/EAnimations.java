@@ -26,6 +26,11 @@ public enum EAnimations {
             return createAnimation(hyperStore, "mark_dashing.png", 3, 1, 10f, PlayMode.NORMAL);
         }
     },
+    HERO_DYING {
+        public Animation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "mark_dying.png", 3, 1, 15f, PlayMode.NORMAL);
+        }
+    },
 
     FOE_ROBOT_WALKING {
         public Animation create(HyperStore hyperStore) {

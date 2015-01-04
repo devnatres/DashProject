@@ -21,8 +21,8 @@ public class Foe extends Agent {
     private int pumImageDuration;
     private int fireWait = FIRE_WAIT;
 
-    Animation foeDeadAnimation;
-    boolean dying;
+    private final Animation foeDeadAnimation;
+    private boolean dying;
 
     private final LevelScreen levelScreen;
     private final OrthographicCamera camera;
@@ -72,6 +72,10 @@ public class Foe extends Agent {
     }
 
     private void shotHeroIfInSight() {
+        if (hero.isDying()) {
+            return;
+        }
+
         if (isOnCamera()) {
             if (fireWait > 0) {
                 fireWait--;
