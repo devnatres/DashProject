@@ -42,8 +42,22 @@ public enum EAnimations {
         public Animation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "foe_robot_cutting.png", 2, 1, 30f, PlayMode.NORMAL);
         }
-    }
+    },
+
+    SCORE_50 {
+        public Animation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "score/score_50.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
+        }
+    },
+
+    SCORE_100 {
+        public Animation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "score/score_100.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
+        }
+    },
     ;
+    private static int SCORE_DURATION = 90;
+
     abstract public Animation create(HyperStore hyperStore);
 
     static private Animation createAnimation(HyperStore hyperStore,

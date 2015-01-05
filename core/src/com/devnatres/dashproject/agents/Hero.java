@@ -19,9 +19,12 @@ import com.devnatres.dashproject.tools.VectorPool;
  * Created by DevNatres on 06/12/2014.
  */
 public class Hero extends Agent {
+    private static final boolean DEBUG_IMMORTAL = true;
+
     private static final int DAMAGE_DURATION = 15;
     private static final int MAX_LIFE = 10;
     private static final int HEAL_DURATION = 30;
+    private static final int STANDARD_ATTACK_DAMAGE = 1;
 
     private int damageImageDuration;
     private int healDuration = HEAL_DURATION * 2;
@@ -60,6 +63,8 @@ public class Hero extends Agent {
     private final Animation deadAnimation;
     private boolean dying;
 
+    private final FoeDamageResult foeDamageResult;
+
     static {
         VectorPool.initialize();
     }
@@ -97,6 +102,8 @@ public class Hero extends Agent {
         centerReferences();
 
         deadAnimation = EAnimations.HERO_DYING.create(hyperStore);
+
+        foeDamageResult = new FoeDamageResult();
     }
 
     @Override
@@ -145,9 +152,7 @@ public class Hero extends Agent {
         if (map.slide(nextArea)) {
             if (levelScreen != null) {
                 Agent dashShadow = new TransientAgent(EAnimations.HERO_DASHING.create(hyperStore));
-                float dashShadowX = getX() - (dashShadow.getWidth() - auxArea.width)/2;
-                float dashShadowY = getY() - (dashShadow.getHeight() - auxArea.height)/2;
-                dashShadow.setPosition(dashShadowX, dashShadowY);
+                dashShadow.setCenter(auxCenter.x, auxCenter.y);
                 levelScreen.register(dashShadow, AgentRegistry.EAgentLayer.TRUNK);
             }
 
@@ -191,7 +196,7 @@ public class Hero extends Agent {
         } else {
             super.act(delta);
             setNextPositionIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
-            tryAttack();
+            attack();
 
             if (attackingTime > 0) {
                 attackingTime--;
@@ -202,20 +207,21 @@ public class Hero extends Agent {
         }
     }
 
-    private void tryAttack() {
+    private void attack() {
         if (levelScreen == null) {
             return;
         }
 
-        Horde totalHorde = levelScreen.getTotalHorde();
-        for (int i = 0, n = totalHorde.size(); i < n; i++) {
-            Foe foe = totalHorde.getFoe(i);
+        Horde globalHorde = levelScreen.getGlobalHorde();
+        for (int i = 0, n = globalHorde.size(); i < n; i++) {
+            Foe foe = globalHorde.getFoe(i);
             if (foe.isVisible() && !foe.isDying() && (auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2)) {
 
                 setAnimation(attackingAnimation);
                 attackingTime = attackingAnimation.getAnimationDuration();
 
-                foe.receiveDamage();
+                foe.receiveDamage(STANDARD_ATTACK_DAMAGE, foeDamageResult);
+                levelScreen.processFoeDamageResult(foeDamageResult);
 
                 if (levelScreen.isBulletTime()) {
                     comboSound.play(.1f);
@@ -234,7 +240,7 @@ public class Hero extends Agent {
             failDashSound.play();
             if (life > 0) {
                 life--;
-                if (life == 0) {
+                if (!DEBUG_IMMORTAL && life <= 0) {
                     deadSound.play();
                     dying = true;
                     setAnimation(deadAnimation);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -28,12 +29,14 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  */
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
+    private static final int SCORE_HORDE_COMBO_DURATION = 90;
 
-    private int resetCount = RESET_COUNT;
+    private int resetCountDown = RESET_COUNT;
 
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final ShapeRenderer mainShape;
+    private final BitmapFont mainFont;
     private final OrthographicCamera mainCamera;
 
     private final OrthographicCamera fixedCamera;
@@ -57,10 +60,15 @@ public class LevelScreen implements Screen {
     private float bulletTime;
 
     private final AgentRegistry agentRegistry;
-    private final Horde totalHorde;
+    private final HordeGroup hordeGroup;
 
     private final LevelScript levelScript;
     private final Texture dissipatedMessage;
+
+    private int totalScore;
+    private String scoreString = "0";
+    private String scoreHordeComboString;
+    private int scoreHordeComboDuration;
 
     public LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
@@ -69,6 +77,7 @@ public class LevelScreen implements Screen {
         screenHeight = game.getScreenHeight();
         mainBatch = game.getMainBatch();
         mainShape = game.getMainShape();
+        mainFont = game.getMainFont();
         mainCamera = game.getMainCamera();
 
         hyperStore = game.getHyperStore();
@@ -84,7 +93,7 @@ public class LevelScreen implements Screen {
 
         hero = new Hero(hyperStore, this);
         agentRegistry.register(hero, EAgentLayer.TRUNK);
-        totalHorde = new Horde();
+        hordeGroup = new HordeGroup();
 
         levelScript = new LevelScript();
 
@@ -123,8 +132,8 @@ public class LevelScreen implements Screen {
 
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
-        totalHorde.removeKilled();
-        totalHorde.add(horde);
+        hordeGroup.removeKilled();
+        hordeGroup.add(horde);
     }
 
     @Override
@@ -157,11 +166,12 @@ public class LevelScreen implements Screen {
         renderBackground();
         renderMap();
         renderSprites();
+        renderHub();
         renderMessages();
 
         renderDebugger();
 
-        if (resetCount == 0) {
+        if (resetCountDown == 0) {
             reset();
         }
 
@@ -181,8 +191,8 @@ public class LevelScreen implements Screen {
         return map;
     }
 
-    public Horde getTotalHorde() {
-        return totalHorde;
+    public Horde getGlobalHorde() {
+        return hordeGroup.getGlobalHorde();
     }
 
     private void moveCameraTo(float posX, float posY, float speed) {
@@ -200,6 +210,23 @@ public class LevelScreen implements Screen {
             } else {
                 mainCamera.translate(vJump.x, vJump.y);
             }
+        }
+    }
+
+    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
+        Foe foe = foeDamageResult.getFoe();
+        int score = foeDamageResult.getScore();
+        if (foe != null && score > 0) {
+            totalScore += foeDamageResult.getScore();
+
+            int scoreHordeCombo = hordeGroup.processFoeDamageResult(foeDamageResult);
+            if (scoreHordeCombo > 0) {
+                totalScore += scoreHordeCombo;
+                scoreHordeComboString = String.valueOf(scoreHordeCombo);
+                scoreHordeComboDuration = SCORE_HORDE_COMBO_DURATION;
+            }
+
+            scoreString = String.valueOf(totalScore);
         }
     }
 
@@ -231,6 +258,17 @@ public class LevelScreen implements Screen {
         map.paint(mainCamera);
     }
 
+    private void renderHub() {
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        mainFont.draw(mainBatch, scoreString, 50, screenHeight - 10);
+        if (scoreHordeComboDuration > 0) {
+            mainFont.draw(mainBatch, scoreHordeComboString, screenWidth/2, screenHeight - 100);
+            scoreHordeComboDuration--;
+        }
+        mainBatch.end();
+    }
+
     private void renderMessages() {
         if (!hero.isVisible()) {
             mainBatch.setProjectionMatrix(fixedCamera.combined);
@@ -239,8 +277,8 @@ public class LevelScreen implements Screen {
                     (screenWidth - dissipatedMessage.getWidth())/2,
                     (screenHeight - dissipatedMessage.getHeight())/2);
             mainBatch.end();
-            if (resetCount > 0) {
-                resetCount--;
+            if (resetCountDown > 0) {
+                resetCountDown--;
             }
         }
     }
@@ -311,9 +349,9 @@ public class LevelScreen implements Screen {
 
     private void renderDebugger() {
         mainShape.setProjectionMatrix(mainCamera.combined);
-        Horde totalHorde = getTotalHorde();
-        for (int i = 0, n = totalHorde.size(); i < n; i++) {
-            Foe foe = totalHorde.getFoe(i);
+        Horde globalHorde = getGlobalHorde();
+        for (int i = 0, n = globalHorde.size(); i < n; i++) {
+            Foe foe = globalHorde.getFoe(i);
 
             Vector2 foePosition = foe.getAuxCenter();
             boolean hidden = false;

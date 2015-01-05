@@ -15,6 +15,7 @@ public class AgentRegistry {
         //LEAF,
         //ARCH,
         //CLOUD,
+        SCORE,
         //SYSTEM
     }
 

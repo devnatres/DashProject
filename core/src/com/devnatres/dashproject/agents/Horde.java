@@ -7,15 +7,12 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Horde {
     private final Array<Foe> foes = new Array();
+    private int score;
+    private int deadInComboFoeCount;
+    private int deadCount;
 
     public void add(Foe foe) {
         foes.add(foe);
-    }
-
-    public void add(Horde horde) {
-        for (int i = 0, n = horde.size(); i < n; i++) {
-            foes.add(horde.getFoe(i));
-        }
     }
 
     public Foe getFoe(int index) {
@@ -37,12 +34,36 @@ public class Horde {
     }
 
     public boolean isKilled() {
+        // TODO It can be optimized if every foe notify its dead to its horde
         for (int i = 0, n = foes.size; i < n; i++) {
-            if (foes.get(i).isVisible()) {
+            if (!foes.get(i).isDying()) {
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean isDeadInCombo() {
+        return deadInComboFoeCount == foes.size;
+    }
+
+    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
+        Foe foe = foeDamageResult.getFoe();
+        if (foe != null) {
+            score += foeDamageResult.getScore();
+            if (deadCount == 0 || foeDamageResult.isDeadInCombo()) {
+                deadInComboFoeCount++;
+
+                if (deadInComboFoeCount == 2) {
+                    deadInComboFoeCount = deadInComboFoeCount + 0;
+                }
+            }
+            deadCount++;
+        }
+    }
+
+    public int getScore() {
+        return score;
     }
 
 }

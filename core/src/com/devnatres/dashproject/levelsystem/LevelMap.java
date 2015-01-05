@@ -180,7 +180,7 @@ public class LevelMap implements Disposable {
             String foeType = properties.get("type", String.class);
             Foe foe;
             if (foeType == null || foeType.equals("robot")) {
-                foe = new Foe(hyperStore, levelScreen);
+                foe = new Foe(hyperStore, levelScreen, horde);
                 horde.add(foe);
             } else {
                 foe = null;

@@ -13,11 +13,16 @@ import com.devnatres.dashproject.store.HyperStore;
  * Created by DevNatres on 09/12/2014.
  */
 public class Foe extends Agent {
+    private static final int STANDARD_SCORE = 50;
+    private static final int STANDARD_COMBO_FACTOR = 2;
+
+    private static final int DEFAULT_HEAL_POINTS = 1;
     private static final int SHAKE_FRAME_DURATION = 4;
     private static final int SHAKE_TOTAL_DURATION = 20;
     private static final int PUM_DURATION = 15;
     private static final int FIRE_WAIT = 30;
 
+    private int life = DEFAULT_HEAL_POINTS;
     private int pumImageDuration;
     private int fireWait = FIRE_WAIT;
 
@@ -39,7 +44,12 @@ public class Foe extends Agent {
 
     private final Sprite pumImage;
 
-    public Foe(HyperStore hyperStore, LevelScreen levelScreen) {
+    private final TransientAgent score50;
+    private final TransientAgent score100;
+
+    private final Horde horde;
+
+    public Foe(HyperStore hyperStore, LevelScreen levelScreen, Horde horde) {
         super(EAnimations.FOE_ROBOT_WALKING.create(hyperStore));
 
         this.levelScreen = levelScreen;
@@ -52,6 +62,11 @@ public class Foe extends Agent {
         heroLastCenterPos.set(hero.getAuxCenter());
 
         pumImage = new Sprite(hyperStore.getTexture("pum.png"));
+
+        score50 = new TransientAgent(EAnimations.SCORE_50.create(hyperStore));
+        score100 = new TransientAgent(EAnimations.SCORE_100.create(hyperStore));
+
+        this.horde = horde;
     }
 
 
@@ -115,10 +130,41 @@ public class Foe extends Agent {
         return dying;
     }
 
-    public void receiveDamage() {
+    public Horde getHorde() {
+        return horde;
+    }
+
+    /**
+     *
+     * @param foeDamageResult
+     */
+    public void receiveDamage(int damagePoints, FoeDamageResult foeDamageResult) {
+        foeDamageResult.clear();
+
         if (!dying) {
-            dying = true;
-            setAnimation(foeDeadAnimation);
+            if (life > 0) {
+                life -= damagePoints;
+            }
+            if (life <= 0) {
+                dying = true;
+                setAnimation(foeDeadAnimation);
+            }
+
+            foeDamageResult.setFoe(this);
+            int score;
+            Agent scoreAgent;
+            if (levelScreen.isBulletTime()) {
+                score = STANDARD_SCORE * STANDARD_COMBO_FACTOR;
+                scoreAgent = score100;
+                foeDamageResult.setDeadInCombo(true);
+            } else {
+                score = STANDARD_SCORE;
+                scoreAgent = score50;
+                foeDamageResult.setDeadInCombo(false);
+            }
+            foeDamageResult.setScore(score);
+            scoreAgent.setCenter(auxCenter.x, auxCenter.y);
+            levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
         }
     }
 

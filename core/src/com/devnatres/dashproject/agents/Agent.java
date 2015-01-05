@@ -48,6 +48,10 @@ public class Agent extends Actor {
         this(new Animation(DEFAULT_STATE_TIME, new TextureRegion(texture)));
     }
 
+    public void setCenter(float x, float y) {
+        setPosition(x - getWidth()/2, y - getHeight()/2);
+    }
+
     @Override
     public void positionChanged() {
         auxPosition.set(getX(), getY());
