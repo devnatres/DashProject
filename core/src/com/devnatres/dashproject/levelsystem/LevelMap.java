@@ -2,6 +2,7 @@ package com.devnatres.dashproject.levelsystem;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -63,6 +64,10 @@ public class LevelMap implements Disposable {
 
         blockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("blocks");
         blockMapSlider = new BlockMapSlider(blockLayer);
+    }
+
+    public Batch getBatch() {
+        return tiledMapRenderer.getSpriteBatch();
     }
 
     public void paint(OrthographicCamera camera) {
@@ -168,7 +173,7 @@ public class LevelMap implements Disposable {
     }
 
     public Horde extractHorde(int n, HyperStore hyperStore, LevelScreen levelScreen) {
-        Horde horde = new Horde();
+        Horde horde = new Horde(levelScreen);
         MapLayer mapLayer = tiledMap.getLayers().get("horde"+n);
         if (mapLayer == null) {
             return horde;
@@ -180,8 +185,8 @@ public class LevelMap implements Disposable {
             String foeType = properties.get("type", String.class);
             Foe foe;
             if (foeType == null || foeType.equals("robot")) {
-                foe = new Foe(hyperStore, levelScreen, horde);
-                horde.add(foe);
+                foe = new Foe(hyperStore, levelScreen);
+                horde.addLinked(foe);
             } else {
                 foe = null;
             }

@@ -47,9 +47,11 @@ public class Foe extends Agent {
     private final TransientAgent score50;
     private final TransientAgent score100;
 
-    private final Horde horde;
+    private Horde horde;
 
-    public Foe(HyperStore hyperStore, LevelScreen levelScreen, Horde horde) {
+    private FoeDamageResult foeDamageResult;
+
+    public Foe(HyperStore hyperStore, LevelScreen levelScreen) {
         super(EAnimations.FOE_ROBOT_WALKING.create(hyperStore));
 
         this.levelScreen = levelScreen;
@@ -66,7 +68,7 @@ public class Foe extends Agent {
         score50 = new TransientAgent(EAnimations.SCORE_50.create(hyperStore));
         score100 = new TransientAgent(EAnimations.SCORE_100.create(hyperStore));
 
-        this.horde = horde;
+        foeDamageResult = new FoeDamageResult();
     }
 
 
@@ -84,6 +86,10 @@ public class Foe extends Agent {
             }
             heroLastCenterPos.set(hero.getAuxCenter());
         }
+    }
+
+    void setHorde(Horde horde) {
+        this.horde = horde;
     }
 
     private void shotHeroIfInSight() {
@@ -134,11 +140,7 @@ public class Foe extends Agent {
         return horde;
     }
 
-    /**
-     *
-     * @param foeDamageResult
-     */
-    public void receiveDamage(int damagePoints, FoeDamageResult foeDamageResult) {
+    public void receiveDamage(int damagePoints) {
         foeDamageResult.clear();
 
         if (!dying) {
@@ -146,25 +148,30 @@ public class Foe extends Agent {
                 life -= damagePoints;
             }
             if (life <= 0) {
+                if (horde != null) {
+                    horde.countKilledFoe(this);
+                }
                 dying = true;
                 setAnimation(foeDeadAnimation);
-            }
 
-            foeDamageResult.setFoe(this);
-            int score;
-            Agent scoreAgent;
-            if (levelScreen.isBulletTime()) {
-                score = STANDARD_SCORE * STANDARD_COMBO_FACTOR;
-                scoreAgent = score100;
-                foeDamageResult.setDeadInCombo(true);
-            } else {
-                score = STANDARD_SCORE;
-                scoreAgent = score50;
-                foeDamageResult.setDeadInCombo(false);
+                int score;
+                Agent scoreAgent;
+                if (levelScreen.isBulletTime()) {
+                    score = STANDARD_SCORE * STANDARD_COMBO_FACTOR;
+                    scoreAgent = score100;
+                    foeDamageResult.setDeadInCombo(true);
+                } else {
+                    score = STANDARD_SCORE;
+                    scoreAgent = score50;
+                    foeDamageResult.setDeadInCombo(false);
+                }
+                foeDamageResult.setScore(score);
+                scoreAgent.setCenter(auxCenter.x, auxCenter.y);
+                levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
+
+                levelScreen.processFoeDamageResult(foeDamageResult);
+                horde.processFoeDamageResult(foeDamageResult);
             }
-            foeDamageResult.setScore(score);
-            scoreAgent.setCenter(auxCenter.x, auxCenter.y);
-            levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
         }
     }
 

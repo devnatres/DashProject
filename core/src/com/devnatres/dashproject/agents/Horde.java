@@ -1,18 +1,39 @@
 package com.devnatres.dashproject.agents;
 
 import com.badlogic.gdx.utils.Array;
+import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
  * Created by David on 28/12/2014.
  */
 public class Horde {
     private final Array<Foe> foes = new Array();
-    private int score;
-    private int deadInComboFoeCount;
-    private int deadCount;
+    private int killedFoesCount;
+    private HordeGroup hordeGroup;
+    private final HordeDamageResult hordeDamageResult;
+    private final LevelScreen levelScreen;
 
-    public void add(Foe foe) {
+    public Horde(LevelScreen levelScreen) {
+        this.levelScreen = levelScreen;
+        hordeDamageResult = new HordeDamageResult();
+    }
+    /**
+     * Add the foe to the horde but it is not notify to the foe.
+     */
+    public void addUnlinked(Foe foe) {
         foes.add(foe);
+    }
+
+    /**
+     * Add the foe to the horde and let the foe know that horde.
+     */
+    public void addLinked(Foe foe) {
+        foes.add(foe);
+        foe.setHorde(this);
+    }
+
+    void setHordeGroup(HordeGroup hordeGroup) {
+        this.hordeGroup = hordeGroup;
     }
 
     public Foe getFoe(int index) {
@@ -34,36 +55,25 @@ public class Horde {
     }
 
     public boolean isKilled() {
-        // TODO It can be optimized if every foe notify its dead to its horde
-        for (int i = 0, n = foes.size; i < n; i++) {
-            if (!foes.get(i).isDying()) {
-                return false;
-            }
-        }
-        return true;
+        return killedFoesCount == foes.size;
     }
 
-    public boolean isDeadInCombo() {
-        return deadInComboFoeCount == foes.size;
+    public void countKilledFoe(Foe foe) {
+        killedFoesCount++;
     }
 
     public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
-        Foe foe = foeDamageResult.getFoe();
-        if (foe != null) {
-            score += foeDamageResult.getScore();
-            if (deadCount == 0 || foeDamageResult.isDeadInCombo()) {
-                deadInComboFoeCount++;
+        hordeDamageResult.sumFoeScore(foeDamageResult.getScore());
 
-                if (deadInComboFoeCount == 2) {
-                    deadInComboFoeCount = deadInComboFoeCount + 0;
-                }
+        if (killedFoesCount == 1 || foeDamageResult.isDeadInCombo()) {
+            hordeDamageResult.sumDeadInComboFoe();
+            if (hordeDamageResult.getDeadInComboFoeCount() == foes.size) {
+                hordeDamageResult.markHordeCombo();
+                hordeDamageResult.setComboScore((int)(hordeDamageResult.getFoeScore() * 1.5));
+                levelScreen.processHordeDamageResult(hordeDamageResult);
+
             }
-            deadCount++;
         }
+        hordeGroup.processHordeDamageResult(hordeDamageResult);
     }
-
-    public int getScore() {
-        return score;
-    }
-
 }

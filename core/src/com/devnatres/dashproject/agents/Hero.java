@@ -63,8 +63,6 @@ public class Hero extends Agent {
     private final Animation deadAnimation;
     private boolean dying;
 
-    private final FoeDamageResult foeDamageResult;
-
     static {
         VectorPool.initialize();
     }
@@ -102,8 +100,6 @@ public class Hero extends Agent {
         centerReferences();
 
         deadAnimation = EAnimations.HERO_DYING.create(hyperStore);
-
-        foeDamageResult = new FoeDamageResult();
     }
 
     @Override
@@ -220,8 +216,7 @@ public class Hero extends Agent {
                 setAnimation(attackingAnimation);
                 attackingTime = attackingAnimation.getAnimationDuration();
 
-                foe.receiveDamage(STANDARD_ATTACK_DAMAGE, foeDamageResult);
-                levelScreen.processFoeDamageResult(foeDamageResult);
+                foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
                 if (levelScreen.isBulletTime()) {
                     comboSound.play(.1f);

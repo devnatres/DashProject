@@ -66,6 +66,7 @@ public class LevelScreen implements Screen {
     private final Texture dissipatedMessage;
 
     private int totalScore;
+    private int lastTotalScore;
     private String scoreString = "0";
     private String scoreHordeComboString;
     private int scoreHordeComboDuration;
@@ -93,7 +94,7 @@ public class LevelScreen implements Screen {
 
         hero = new Hero(hyperStore, this);
         agentRegistry.register(hero, EAgentLayer.TRUNK);
-        hordeGroup = new HordeGroup();
+        hordeGroup = new HordeGroup(this);
 
         levelScript = new LevelScript();
 
@@ -133,7 +134,7 @@ public class LevelScreen implements Screen {
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
         hordeGroup.removeKilled();
-        hordeGroup.add(horde);
+        hordeGroup.addLinked(horde);
     }
 
     @Override
@@ -166,6 +167,7 @@ public class LevelScreen implements Screen {
         renderBackground();
         renderMap();
         renderSprites();
+        updateTotalScore();
         renderHub();
         renderMessages();
 
@@ -213,21 +215,22 @@ public class LevelScreen implements Screen {
         }
     }
 
-    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
-        Foe foe = foeDamageResult.getFoe();
-        int score = foeDamageResult.getScore();
-        if (foe != null && score > 0) {
-            totalScore += foeDamageResult.getScore();
-
-            int scoreHordeCombo = hordeGroup.processFoeDamageResult(foeDamageResult);
-            if (scoreHordeCombo > 0) {
-                totalScore += scoreHordeCombo;
-                scoreHordeComboString = String.valueOf(scoreHordeCombo);
-                scoreHordeComboDuration = SCORE_HORDE_COMBO_DURATION;
-            }
-
+    public void updateTotalScore() {
+        if (lastTotalScore != totalScore) {
+            lastTotalScore = totalScore;
             scoreString = String.valueOf(totalScore);
         }
+    }
+
+    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
+        totalScore += foeDamageResult.getScore();
+    }
+
+    public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
+        int hordeComboScore = hordeDamageResult.getComboScore();
+        totalScore += hordeComboScore;
+        scoreHordeComboString = String.valueOf(hordeComboScore);
+        scoreHordeComboDuration = SCORE_HORDE_COMBO_DURATION;
     }
 
     private float limitCameraTargetX(float x) {
