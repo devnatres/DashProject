@@ -46,6 +46,9 @@ public class Hero extends Agent {
     private final float dashRadio;
     private final Sprite dashHalo;
 
+    private final float scopeRadio;
+    private final float scopeRadio2;
+
     private final Animation walkingAnimation;
     private final Animation attackingAnimation;
     private float attackingTime;
@@ -93,6 +96,9 @@ public class Hero extends Agent {
         attackHalo = new Sprite(hyperStore.getTexture("attack_radio.png"));
         attackRadio = attackHalo.getWidth() / 2;
         attackRadio2 = attackRadio * attackRadio;
+
+        scopeRadio = dashRadio + attackRadio;
+        scopeRadio2 = scopeRadio * scopeRadio;
 
         damageImage = new Sprite(hyperStore.getTexture("shoot_damage.png"));
         healPointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
@@ -223,7 +229,7 @@ public class Hero extends Agent {
         Horde globalHorde = levelScreen.getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
-            if (foe.isVisible() && !foe.isDying() && (auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2)) {
+            if (!foe.isDying() && (auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2)) {
 
                 setAnimation(attackingAnimation);
                 attackingTime = attackingAnimation.getAnimationDuration();
@@ -256,6 +262,10 @@ public class Hero extends Agent {
             }
             healDuration = HEAL_DURATION;
         }
+    }
+
+    public boolean isFoeOnScope(Foe foe) {
+        return (auxPosition.dst2(foe.getAuxPosition()) <= scopeRadio2);
     }
 
     public boolean isDying() {

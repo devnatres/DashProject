@@ -71,6 +71,8 @@ public class LevelScreen implements Screen {
     private String scoreHordeComboString;
     private int scoreHordeComboDuration;
 
+    private boolean comboCameraChasing;
+
     public LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
 
@@ -148,8 +150,18 @@ public class LevelScreen implements Screen {
 
         levelScript.execute();
 
-        Vector2 heroCenter = hero.getAuxCenter();
-        moveCameraTo(heroCenter.x, heroCenter.y, Time.FAST_CAMERA_SPEED);
+        if (bulletTime == 0 || comboCameraChasing) {
+            chaseHeroWithCamera();
+        } else { // We can't still decide not to chase, we must check if there aren't foes on hero's visible scope
+            if (isAllFoesOutOfVisibleScope()) {
+                comboCameraChasing = true;
+                chaseHeroWithCamera();
+                if (comboCameraChasing) { // Can be modified in the method above
+                    activateBulletTime();
+                }
+            }
+        }
+
         mainCamera.update();
 
         //  TODO Optimize by sharing the same begin-end batch sequence.
@@ -179,8 +191,25 @@ public class LevelScreen implements Screen {
 
     }
 
+    private boolean isAllFoesOutOfVisibleScope() {
+        boolean allFoesOutOfVisibleScope = true;
+        Horde globalHorde = getGlobalHorde();
+        for (int i = 0; i < globalHorde.size(); i++){
+            Foe foe = globalHorde.getFoe(i);
+            if (foe.isOnCamera() && !foe.isDying() && hero.isFoeOnScope(foe)) {
+                allFoesOutOfVisibleScope = false;
+                break;
+            }
+        }
+        return allFoesOutOfVisibleScope;
+    }
+
     private void reset() {
         dashGame.setScreen(new MainMenuScreen(dashGame));
+    }
+
+    private void chaseHeroWithCamera() {
+        moveCameraTo(hero.getAuxCenter().x, hero.getAuxCenter().y, Time.FAST_CAMERA_SPEED);
     }
 
     @Override
@@ -201,17 +230,22 @@ public class LevelScreen implements Screen {
         posX = limitCameraTargetX(posX);
         posY = limitCameraTargetY(posY);
 
-        Vector3 vTarget = new Vector3(posX, posY, 0);
-        if (speed == 0 || Math.abs(vTarget.dst(mainCamera.position)) <= speed) {
-            mainCamera.position.set(vTarget);
-        } else {
-            Vector3 vJump = vTarget.sub(mainCamera.position).nor().scl(speed);
-            // Slow movement needs to be rounded to avoid seeing tile map flickering
-            if (speed < Time.MEDIUM_CAMERA_SPEED) {
-                mainCamera.translate(Math.round(vJump.x), Math.round(vJump.y));
+        if (posX != mainCamera.position.x || posY != mainCamera.position.y) {
+            Vector3 vTarget = new Vector3(posX, posY, 0);
+            if (speed == 0 || Math.abs(vTarget.dst(mainCamera.position)) <= speed) {
+                mainCamera.position.set(vTarget);
+                comboCameraChasing = false;
             } else {
-                mainCamera.translate(vJump.x, vJump.y);
+                Vector3 vJump = vTarget.sub(mainCamera.position).nor().scl(speed);
+                // Slow movement needs to be rounded to avoid seeing tile map flickering
+                if (speed < Time.MEDIUM_CAMERA_SPEED) {
+                    mainCamera.translate(Math.round(vJump.x), Math.round(vJump.y));
+                } else {
+                    mainCamera.translate(vJump.x, vJump.y);
+                }
             }
+        } else {
+            comboCameraChasing = false;
         }
     }
 
@@ -297,7 +331,7 @@ public class LevelScreen implements Screen {
 
         mainBatch.end();
 
-        if (bulletTime > 0f) {
+        if (bulletTime > 0f && !comboCameraChasing) {
             bulletTime--;
         }
     }
