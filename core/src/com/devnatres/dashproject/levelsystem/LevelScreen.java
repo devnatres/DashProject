@@ -133,7 +133,7 @@ public class LevelScreen implements Screen {
 
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
-        hordeGroup.removeKilled();
+        hordeGroup.removeKilledHordes();
         hordeGroup.addLinked(horde);
     }
 
@@ -332,7 +332,7 @@ public class LevelScreen implements Screen {
         if (touchDownPoint != null) {
             Vector3 clickCoordinates = new Vector3(touchDownPoint.x, touchDownPoint.y, 0);
             Vector3 position = mainCamera.unproject(clickCoordinates);
-            hero.programNextPosition(position.x, position.y);
+            hero.programNextPos(position.x, position.y);
         }
 
         //hero.act(delta);
@@ -340,6 +340,10 @@ public class LevelScreen implements Screen {
 
     public void activateBulletTime() {
         bulletTime = Time.BULLET_TIME;
+    }
+
+    public void deactivateBulletTime() {
+        bulletTime = 0;
     }
 
     public boolean isBulletTime() {

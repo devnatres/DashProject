@@ -36,7 +36,7 @@ public class HordeGroup {
         return globalHorde;
     }
 
-    public void removeKilled() {
+    public void removeKilledHordes() {
         for (int i = 0; i < hordes.size; i++) {
             Horde horde = hordes.get(i);
             if (horde.isKilled()) {
@@ -44,8 +44,7 @@ public class HordeGroup {
                 i--;
             }
         }
-
-        globalHorde.removeKilled();
+        globalHorde.removeKilledFoes();
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {

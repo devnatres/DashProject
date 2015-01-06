@@ -101,7 +101,7 @@ public class DashGame extends Game {
 	@Override
 	public void render() {
         //TODO Enable try
-        try {
+        //try {
             super.render(); // Render the Screen set in create()
             if (Debug.DEBUG) Debug.draw();
 
@@ -109,7 +109,8 @@ public class DashGame extends Game {
 
             if (deltaFrameTime < Time.FPS_TIME) {
                 // What to do if there is remaining time? Sleep. (But we could do other things.)
-                Thread.sleep((long) (Time.FPS_TIME - deltaFrameTime) * 1000);
+                // TODO Enable Thread.sleep
+                //Thread.sleep((long) (Time.FPS_TIME - deltaFrameTime) * 1000);
 
                 // Check if there is still remaining time. In that case we consume it.
                 timing();
@@ -119,10 +120,10 @@ public class DashGame extends Game {
             }
 
             initialFrameTime = currentFrameTime;
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             if (Debug.DEBUG) Debug.drawError(e.toString());
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 
     private void timing() {

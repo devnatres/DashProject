@@ -58,7 +58,7 @@ public class Hero extends Agent {
     private final Sprite healPointImage;
 
     private final Vector2 nextPositionFromInput = new Vector2();
-    private boolean thereIsNextPositionFromInput;
+    private boolean thereIsNextPosFromInput;
 
     private final Animation deadAnimation;
     private boolean dying;
@@ -114,19 +114,23 @@ public class Hero extends Agent {
         damageImage.setCenter(auxCenter.x, auxCenter.y);
     }
 
-    public void programNextPosition(float nextX, float nextY) {
+    public void programNextPos(float nextX, float nextY) {
         nextPositionFromInput.set(nextX, nextY);
-        thereIsNextPositionFromInput = true;
+        thereIsNextPosFromInput = true;
     }
 
-    private void setNextPositionIfAvailable(float targetCenterX, float targetCenterY) {
+    /**
+     * Move the hero to the position previously programmed (solicited) with programNextPos().
+     * @return true if the hero was moved
+     */
+    private boolean setNextPosIfAvailable(float targetCenterX, float targetCenterY) {
         if (Debug.DEBUG) Debug.addPoint(targetCenterX, targetCenterY, Color.WHITE);
 
-        if (!thereIsNextPositionFromInput) {
-            return;
+        if (!thereIsNextPosFromInput) {
+            return false;
         }
 
-        thereIsNextPositionFromInput = false;
+        thereIsNextPosFromInput = false;
 
         Vector2 vTarget = VectorPool.get();
         vTarget.set(targetCenterX, targetCenterY);
@@ -162,6 +166,8 @@ public class Hero extends Agent {
         }
 
         VectorPool.recycle(vTarget);
+
+        return true;
     }
 
     private float limitPositionX(float x) {
@@ -191,8 +197,13 @@ public class Hero extends Agent {
             }
         } else {
             super.act(delta);
-            setNextPositionIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
-            attack();
+            boolean moved = setNextPosIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
+            boolean attackReleased = attack();
+            if (attackReleased) {
+                levelScreen.activateBulletTime(); // Reboot if it was activated before
+            } else if (moved) {
+                levelScreen.deactivateBulletTime();
+            }
 
             if (attackingTime > 0) {
                 attackingTime--;
@@ -203,11 +214,12 @@ public class Hero extends Agent {
         }
     }
 
-    private void attack() {
-        if (levelScreen == null) {
-            return;
-        }
-
+    /**
+     * Attack any nearby foe.
+     * @return true if the attack was done
+     */
+    private boolean attack() {
+        boolean attackReleased = false;
         Horde globalHorde = levelScreen.getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
@@ -224,9 +236,10 @@ public class Hero extends Agent {
                     hitSound.play(.1f);
                 }
 
-                levelScreen.activateBulletTime();
+                attackReleased = true;
             }
         }
+        return attackReleased;
     }
 
     public void receiveDamage() {
