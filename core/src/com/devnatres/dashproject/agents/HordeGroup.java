@@ -36,6 +36,14 @@ public class HordeGroup {
         return globalHorde;
     }
 
+    public Horde getHorde(int index) {
+        return hordes.get(index);
+    }
+
+    public int size() {
+        return hordes.size;
+    }
+
     public void removeKilledHordes() {
         for (int i = 0; i < hordes.size; i++) {
             Horde horde = hordes.get(i);

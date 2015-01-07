@@ -1,10 +1,10 @@
 package com.devnatres.dashproject.agents;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.store.HyperStore;
@@ -30,9 +30,7 @@ public class Foe extends Agent {
     private boolean dying;
 
     private final LevelScreen levelScreen;
-    private final OrthographicCamera camera;
-    private final float halfCameraWidth;
-    private final float halfCameraHeight;
+    private final DnaCamera camera;
 
     private final int shakeDisplacements[] = new int[]{-1, 1};
     private int shakeIndex;
@@ -56,8 +54,6 @@ public class Foe extends Agent {
 
         this.levelScreen = levelScreen;
         camera = levelScreen.getCamera();
-        halfCameraWidth = camera.viewportWidth/2f;
-        halfCameraHeight = camera.viewportHeight/2f;
 
         foeDeadAnimation = EAnimations.FOE_ROBOT_DEAD.create(hyperStore);
         hero = levelScreen.getHero();
@@ -97,7 +93,7 @@ public class Foe extends Agent {
             return;
         }
 
-        if (isOnCamera()) {
+        if (camera.isOnCamera(this)) {
             if (fireWait > 0) {
                 fireWait--;
             }
@@ -175,7 +171,7 @@ public class Foe extends Agent {
         }
     }
 
-    public boolean isOnCamera() {
+/*    public boolean isOnCamera() {
         final float cameraLeft = camera.position.x - halfCameraWidth;
         final float cameraRight = camera.position.x + halfCameraWidth;
         final float cameraDown = camera.position.y - halfCameraHeight;
@@ -185,7 +181,7 @@ public class Foe extends Agent {
                 && (auxCenter.x <= cameraRight)
                 && (auxCenter.y >= cameraDown)
                 && (auxCenter.y <= cameraUp);
-    }
+    }*/
 
     @Override
     public void draw(Batch batch, float parentAlpha) {

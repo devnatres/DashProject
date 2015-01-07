@@ -1,6 +1,7 @@
 package com.devnatres.dashproject.agents;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
@@ -13,10 +14,15 @@ public class Horde {
     private HordeGroup hordeGroup;
     private final HordeDamageResult hordeDamageResult;
     private final LevelScreen levelScreen;
+    private final Hero hero;
+
+    private final Vector2 referencePosition;
 
     public Horde(LevelScreen levelScreen) {
         this.levelScreen = levelScreen;
         hordeDamageResult = new HordeDamageResult();
+        referencePosition = new Vector2();
+        hero = levelScreen.getHero();
     }
     /**
      * Add the foe to the horde but it is not notify to the foe.
@@ -77,5 +83,28 @@ public class Horde {
             }
         }
         hordeGroup.processHordeDamageResult(hordeDamageResult);
+    }
+
+    public Vector2 getReferencePosition() {
+        boolean initialized = false;
+        float minDistance2 = 0;
+        float currentDistance2;
+        for (int i = 0; i < foes.size; i++) {
+            Foe foe = foes.get(i);
+            if (!foe.isDying()) {
+                if (initialized) {
+                    currentDistance2 = hero.getAuxCenter().dst2(foe.getAuxCenter());
+                    if (currentDistance2 < minDistance2) {
+                        referencePosition.set(foe.getAuxCenter());
+                        minDistance2 = currentDistance2;
+                    }
+                } else {
+                    initialized = true;
+                    referencePosition.set(foe.getAuxCenter());
+                    minDistance2 = hero.getAuxCenter().dst2(foe.getAuxCenter());
+                }
+            }
+        }
+        return referencePosition;
     }
 }

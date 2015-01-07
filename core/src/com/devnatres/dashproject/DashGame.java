@@ -3,7 +3,6 @@ package com.devnatres.dashproject;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -23,7 +22,7 @@ public class DashGame extends Game {
     private SpriteBatch mainBatch;
     private BitmapFont mainFont;
     private ShapeRenderer mainShape;
-    private OrthographicCamera mainCamera;
+    private DnaCamera mainCamera;
 
     private HyperStore hyperStore;
 
@@ -59,11 +58,11 @@ public class DashGame extends Game {
         return mainShape;
     }
 
-    public OrthographicCamera getMainCamera() {
+    public DnaCamera getMainCamera() {
         return mainCamera;
     }
 
-    public OrthographicCamera getCenteredMainCamera() {
+    public DnaCamera getCenteredMainCamera() {
         mainCamera.setToOrtho(false, screenWidth, screenHeight);
         return mainCamera;
     }
@@ -85,7 +84,7 @@ public class DashGame extends Game {
         mainFont = new BitmapFont();
         mainShape = new ShapeRenderer();
 
-        mainCamera = new OrthographicCamera();
+        mainCamera = new DnaCamera();
         mainCamera.setToOrtho(false, screenWidth, screenHeight);
 
         hyperStore = new HyperStore();

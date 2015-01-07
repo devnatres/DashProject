@@ -5,20 +5,24 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.DnaAnimation;
+import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.agents.*;
+import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.gameconstants.Parameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
+import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.store.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
@@ -37,9 +41,9 @@ public class LevelScreen implements Screen {
     private final SpriteBatch mainBatch;
     private final ShapeRenderer mainShape;
     private final BitmapFont mainFont;
-    private final OrthographicCamera mainCamera;
+    private final DnaCamera mainCamera;
 
-    private final OrthographicCamera fixedCamera;
+    private final DnaCamera fixedCamera;
 
     private final HyperStore hyperStore;
 
@@ -73,6 +77,8 @@ public class LevelScreen implements Screen {
 
     private boolean comboCameraChasing;
 
+    private final DnaAnimation radar;
+
     public LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
 
@@ -87,7 +93,7 @@ public class LevelScreen implements Screen {
 
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
 
-        fixedCamera = new OrthographicCamera();
+        fixedCamera = new DnaCamera();
         fixedCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
 
         map = new LevelMap(levelName);
@@ -113,6 +119,8 @@ public class LevelScreen implements Screen {
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
         dissipatedMessage = hyperStore.getTexture("dissipated.png");
 
+        radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
+
         System.gc();
         inputTranslator.clear();
     }
@@ -121,7 +129,7 @@ public class LevelScreen implements Screen {
         return hero;
     }
 
-    public OrthographicCamera getCamera() {
+    public DnaCamera getCamera() {
         return mainCamera;
     }
 
@@ -179,6 +187,7 @@ public class LevelScreen implements Screen {
         renderBackground();
         renderMap();
         renderSprites();
+        renderFoeRadar();
         updateTotalScore();
         renderHub();
         renderMessages();
@@ -196,7 +205,7 @@ public class LevelScreen implements Screen {
         Horde globalHorde = getGlobalHorde();
         for (int i = 0; i < globalHorde.size(); i++){
             Foe foe = globalHorde.getFoe(i);
-            if (foe.isOnCamera() && !foe.isDying() && hero.isFoeOnScope(foe)) {
+            if (mainCamera.isOnCamera(foe) && !foe.isDying() && hero.isFoeOnScope(foe)) {
                 allFoesOutOfVisibleScope = false;
                 break;
             }
@@ -359,6 +368,83 @@ public class LevelScreen implements Screen {
         }
     }
 
+    private void renderFoeRadar() {
+        Horde globalHorde = hordeGroup.getGlobalHorde();
+        boolean thereIsFoeOnCamera = false;
+        for (int i = 0; i < globalHorde.size(); i++){
+            Foe foe = globalHorde.getFoe(i);
+            if (mainCamera.isOnCamera(foe) && !foe.isDying()) {
+                thereIsFoeOnCamera = true;
+                break;
+            }
+        }
+
+        if (!thereIsFoeOnCamera) {
+            mainBatch.begin();
+            for (int i = 0; i < hordeGroup.size(); i++){
+                Horde horde = hordeGroup.getHorde(i);
+                if (!horde.isKilled()) {
+                    radar.updateCurrentStateTime();
+                    renderFoeRadar_indicator(horde.getReferencePosition());
+                }
+            }
+            mainBatch.end();
+        }
+    }
+
+
+    private void renderFoeRadar_indicator(Vector2 referencePos) {
+        DirectionSelector directionSelector = mainCamera.getOutDirection(referencePos.x, referencePos.y);
+        TextureRegion textureRegion = radar.getCurrentKeyFrame();
+        float spriteLeft, spriteBottom;
+
+        if (directionSelector.isUp()) {
+            spriteBottom = mainCamera.getUp() - textureRegion.getRegionHeight();
+            if (directionSelector.isLeft()) {
+                spriteLeft = mainCamera.getLeft();
+            } else if (directionSelector.isRight()) {
+                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
+            } else {
+                spriteLeft = referencePos.x - textureRegion.getRegionWidth()/2f;
+                if (spriteLeft < mainCamera.getLeft()) {
+                    spriteLeft = mainCamera.getLeft();
+                } else if ((spriteLeft+textureRegion.getRegionWidth()) > mainCamera.getRight()) {
+                    spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
+                }
+            }
+        } else if (directionSelector.isDown()) {
+            spriteBottom = mainCamera.getDown();
+            if (directionSelector.isLeft()) {
+                spriteLeft = mainCamera.getLeft();
+            } else if (directionSelector.isRight()) {
+                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
+            } else {
+                spriteLeft = referencePos.x - textureRegion.getRegionWidth() / 2f;
+                if (spriteLeft < mainCamera.getLeft()) {
+                    spriteLeft = mainCamera.getLeft();
+                } else if ((spriteLeft+textureRegion.getRegionWidth()) > mainCamera.getRight()) {
+                    spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
+                }
+            }
+        } else {
+            if (directionSelector.isLeft()) {
+                spriteLeft = mainCamera.getLeft();
+                spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
+            } else { // isRight()
+                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
+                spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
+            }
+
+            if (spriteBottom < mainCamera.getDown()) {
+                spriteBottom = mainCamera.getDown();
+            } else if ((spriteBottom+textureRegion.getRegionHeight()) > mainCamera.getUp()) {
+                spriteBottom = mainCamera.getUp() - textureRegion.getRegionHeight();
+            }
+        }
+
+        mainBatch.draw(textureRegion, spriteLeft, spriteBottom);
+    }
+
     private void inputForHero() {
 
         Vector2 touchDownPoint = inputTranslator.getTouchDownPoint();
@@ -409,7 +495,7 @@ public class LevelScreen implements Screen {
                 hidden = true;
             }
 
-            if (!hidden && foe.isOnCamera()) {
+            if (!hidden && mainCamera.isOnCamera(foe)) {
                 mainShape.begin(ShapeRenderer.ShapeType.Line);
                 mainShape.line(foePosition.x, foePosition.y,
                         hero.getX() + hero.getWidth() / 2, hero.getY() + hero.getHeight() / 2);

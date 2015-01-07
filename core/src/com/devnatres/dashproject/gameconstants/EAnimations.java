@@ -1,10 +1,10 @@
 package com.devnatres.dashproject.gameconstants;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.store.HyperStore;
 
 /**
@@ -12,55 +12,61 @@ import com.devnatres.dashproject.store.HyperStore;
  */
 public enum EAnimations {
     HERO_WALKING {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_standing.png", 3, 1, 10f, PlayMode.LOOP_PINGPONG);
         }
     },
     HERO_ATTACKING {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_attacking.png", 2, 1, 15f, PlayMode.NORMAL);
         }
     },
     HERO_DASHING {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_dashing.png", 3, 1, 10f, PlayMode.NORMAL);
         }
     },
     HERO_DYING {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_dying.png", 3, 1, 15f, PlayMode.NORMAL);
         }
     },
 
     FOE_ROBOT_WALKING {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "foe_robot_walking.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);
         }
     },
 
     FOE_ROBOT_DEAD {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "foe_robot_cutting.png", 2, 1, 30f, PlayMode.NORMAL);
         }
     },
 
     SCORE_50 {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "score/score_50.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
         }
     },
 
     SCORE_100 {
-        public Animation create(HyperStore hyperStore) {
+        public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "score/score_100.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
+        }
+    },
+
+    RADAR_INDICATOR {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "radar_indicator.png", 4, 1, 5, PlayMode.LOOP_PINGPONG);
         }
     },
     ;
     private static int SCORE_DURATION = 90;
 
-    abstract public Animation create(HyperStore hyperStore);
+    abstract public DnaAnimation create(HyperStore hyperStore);
 
-    static private Animation createAnimation(HyperStore hyperStore,
+    static private DnaAnimation createAnimation(HyperStore hyperStore,
                                       String fileName,
                                       int columns, int rows,
                                       float frameDuration,
@@ -79,7 +85,7 @@ public enum EAnimations {
             }
         }
 
-        Animation animation = new Animation(frameDuration, frames, playMode);
+        DnaAnimation animation = new DnaAnimation(frameDuration, frames, playMode);
         return animation;
     }
 }

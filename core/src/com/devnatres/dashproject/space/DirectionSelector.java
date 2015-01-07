@@ -48,6 +48,10 @@ public class DirectionSelector {
         coverDirection |= RIGHT;
     }
 
+    public boolean hasDirection() {
+        return coverDirection != 0;
+    }
+
     private boolean isDirection(int coverMask) {
         return (coverDirection & coverMask) == coverMask;
     }
