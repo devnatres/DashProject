@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.store.HyperStore;
 
@@ -49,10 +50,13 @@ public class Foe extends Agent {
 
     private FoeDamageResult foeDamageResult;
 
+    private final LevelMap map;
+
     public Foe(HyperStore hyperStore, LevelScreen levelScreen) {
         super(EAnimations.FOE_ROBOT_WALKING.create(hyperStore));
 
         this.levelScreen = levelScreen;
+        map = levelScreen.getMap();
         camera = levelScreen.getCamera();
 
         foeDeadAnimation = EAnimations.FOE_ROBOT_DEAD.create(hyperStore);
@@ -98,10 +102,14 @@ public class Foe extends Agent {
                 fireWait--;
             }
             if (isHeroUncovered()) {
-                boolean isHeroMoved = !heroLastCenterPos.equals(hero.getAuxCenter());
-                if (isHeroMoved || fireWait == 0) {
-                    shotHero();
-                    fireWait = FIRE_WAIT;
+                boolean isHeroVisible = map.isLineCollision(auxCenter.x, auxCenter.y,
+                        hero.getAuxCenter().x, hero.getAuxCenter().y);
+                if (isHeroVisible) {
+                    boolean isHeroMoved = !heroLastCenterPos.equals(hero.getAuxCenter());
+                    if (isHeroMoved || fireWait == 0) {
+                        shotHero();
+                        fireWait = FIRE_WAIT;
+                    }
                 }
             }
         } else {
@@ -207,6 +215,7 @@ public class Foe extends Agent {
                 pumImage.draw(batch);
             }
         }
+
     }
 
 }

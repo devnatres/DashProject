@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.Debug;
 import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.agents.*;
@@ -78,6 +80,8 @@ public class LevelScreen implements Screen {
     private boolean comboCameraChasing;
 
     private final DnaAnimation radar;
+
+    private boolean skipCameraAssistant;
 
     public LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
@@ -158,7 +162,7 @@ public class LevelScreen implements Screen {
 
         levelScript.execute();
 
-        if (bulletTime == 0 || comboCameraChasing) {
+        if (skipCameraAssistant || bulletTime == 0 || comboCameraChasing) {
             chaseHeroWithCamera();
         } else { // We can't still decide not to chase, we must check if there aren't foes on hero's visible scope
             if (isAllFoesOutOfVisibleScope()) {
@@ -192,7 +196,9 @@ public class LevelScreen implements Screen {
         renderHub();
         renderMessages();
 
-        renderDebugger();
+        if (Debug.DEBUG) {
+            renderDebugger();
+        }
 
         if (resetCountDown == 0) {
             reset();
@@ -475,6 +481,7 @@ public class LevelScreen implements Screen {
     }
 
     private void renderDebugger() {
+
         mainShape.setProjectionMatrix(mainCamera.combined);
         Horde globalHorde = getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
@@ -500,6 +507,13 @@ public class LevelScreen implements Screen {
                 mainShape.line(foePosition.x, foePosition.y,
                         hero.getX() + hero.getWidth() / 2, hero.getY() + hero.getHeight() / 2);
                 mainShape.end();
+            }
+        }
+
+        if (Debug.DEBUG_COLLISIONS) {
+            Array<TestCell> lastCollisionTest = map.getLastCollisionTest();
+            for (int i = 0; i < lastCollisionTest.size; i++) {
+                lastCollisionTest.get(i).draw(mainCamera);
             }
         }
     }

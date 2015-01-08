@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Debug {
     public static final boolean DEBUG = true;
     private static final boolean DEBUG_POINTS = DEBUG && false;
+    public static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
     private static ArrayList<Vector2> points = new ArrayList<Vector2>();
     private static ArrayList<Color> pointColors = new ArrayList<Color>();

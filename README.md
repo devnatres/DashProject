@@ -9,7 +9,7 @@ The idea is to provide a frantic experience using a very simple control. The atm
 
 Each level consists in a top-down tiled map where you can freely move the hero looking for enemies (with a simple radar support) to defeat them in a race against time. The hero moves teleporting to nearby places. He attacks automatically to nearby enemies using swords. 
 
-He can take cover only when he is near to low obstacles. There aren't high obstacles, so the hero can be shot if he is not near an obstacle.
+There are high and low obstacles. The hero can take cover behind low obstacles only when he is near to them. 
 
 There will be combos and special attacks.
 

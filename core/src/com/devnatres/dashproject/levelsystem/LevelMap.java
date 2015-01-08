@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.Debug;
 import com.devnatres.dashproject.agents.Foe;
@@ -256,6 +257,20 @@ public class LevelMap implements Disposable {
         targetPosition.set(x, y);
         return Tools.getMoveToActionNext(sourcePosition, targetPosition, speed);
     }
+
+    public boolean isLineCollision(float x0, float y0, float x1, float y1) {
+        int col0 = (int)(x0 / tilePixelWidth);
+        int row0 = (int)(y0 / tilePixelHeight);
+        int col1 = (int)(x1 / tilePixelWidth);
+        int row1 = (int)(y1 / tilePixelHeight);
+
+        return blockMapSlider.isCellLineCollision(col0, row0, col1, row1);
+    }
+
+    public Array<TestCell> getLastCollisionTest() {
+        return blockMapSlider.getLastCollisionTest();
+    }
+
 
     @Override
     public void dispose() {
