@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.Debug;
 import com.devnatres.dashproject.agents.Foe;
@@ -25,6 +24,7 @@ import com.devnatres.dashproject.agents.Horde;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
+import com.devnatres.dashproject.space.BlockLayerWithHeight;
 import com.devnatres.dashproject.space.BlockMapSlider;
 import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.store.HyperStore;
@@ -32,13 +32,14 @@ import com.devnatres.dashproject.tools.Tools;
 
 import java.util.HashMap;
 
+import static com.devnatres.dashproject.space.BlockCell.EBlockHeight;
+
 /**
  * Created by DevNatres on 04/12/2014.
  */
 public class LevelMap implements Disposable {
     private final TiledMap tiledMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
-    private final TiledMapTileLayer blockLayer;
     private final BlockMapSlider blockMapSlider;
     private final MapProperties tiledMapProperties;
     private final int mapWidth;
@@ -62,9 +63,14 @@ public class LevelMap implements Disposable {
         mapPixelWidth = mapWidth * tilePixelWidth;
         mapPixelHeight = mapHeight * tilePixelHeight;
 
+        TiledMapTileLayer blockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("blocks");
+        TiledMapTileLayer lowBlockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("lowblocks");
 
-        blockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("blocks");
-        blockMapSlider = new BlockMapSlider(blockLayer);
+        // Only lowBlockLayer can be null (that layer is not mandatory).
+        // Any layer can be empty, i.e., it's not null but it doesn't have blocks.
+        blockMapSlider = new BlockMapSlider(
+                new BlockLayerWithHeight(blockLayer, EBlockHeight.HIGH),
+                new BlockLayerWithHeight(lowBlockLayer, EBlockHeight.LOW));
     }
 
     public Batch getBatch() {
@@ -122,9 +128,7 @@ public class LevelMap implements Disposable {
     }
 
     private boolean thereIsBlockAt(float x, float y) {
-        int xCell = (int)(x / tilePixelWidth);
-        int yCell = (int)(y / tilePixelHeight);
-        return blockLayer.getCell(xCell, yCell) != null;
+        return blockMapSlider.thereIsBlockAt(x, y);
     }
 
     public int getMapPixelWidth() {
@@ -266,11 +270,6 @@ public class LevelMap implements Disposable {
 
         return blockMapSlider.isCellLineCollision(col0, row0, col1, row1);
     }
-
-    public Array<TestCell> getLastCollisionTest() {
-        return blockMapSlider.getLastCollisionTest();
-    }
-
 
     @Override
     public void dispose() {

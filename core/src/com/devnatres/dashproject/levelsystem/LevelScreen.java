@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.Debug;
 import com.devnatres.dashproject.DnaAnimation;
@@ -507,13 +506,6 @@ public class LevelScreen implements Screen {
                 mainShape.line(foePosition.x, foePosition.y,
                         hero.getX() + hero.getWidth() / 2, hero.getY() + hero.getHeight() / 2);
                 mainShape.end();
-            }
-        }
-
-        if (Debug.DEBUG_COLLISIONS) {
-            Array<TestCell> lastCollisionTest = map.getLastCollisionTest();
-            for (int i = 0; i < lastCollisionTest.size; i++) {
-                lastCollisionTest.get(i).draw(mainCamera);
             }
         }
     }

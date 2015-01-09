@@ -2,50 +2,57 @@ package com.devnatres.dashproject.space;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.Debug;
 import com.devnatres.dashproject.gameconstants.EDirection;
-import com.devnatres.dashproject.levelsystem.TestCell;
+
+import static com.devnatres.dashproject.space.BlockCell.*;
 
 /**
  * Created by DevNatres on 07/12/2014.
  */
 public class BlockMapSlider {
-    private final DirectionSelector[][] slidingMap;
-    private final TiledMapTileLayer blockLayer;
+    private final BlockCell[][] blockMap;
     private final int mapWidth;
     private final int mapHeight;
-    private final float tilePixelWidth;
-    private final float tilePixelHeight;
-    private final float mapPixelWidth;
-    private final float mapPixelHeight;
+    private final int tilePixelWidth;
+    private final int tilePixelHeight;
+    private final int mapPixelWidth;
+    private final int mapPixelHeight;
 
     private final Rectangle slidingRectangle;
 
-    private final Array<TestCell> lastCollisionTest;
+    /**
+     * The layer in the first blockLayersWithHeight can not be null.
+     * Any layer can be empty, i.e., it's not null but it doesn't have blocks.
+     */
+    public BlockMapSlider(BlockLayerWithHeight... blockLayersWithHeight) {
+        TiledMapTileLayer firstBlockLayer = blockLayersWithHeight[0].getBlockLayer();
 
-    public BlockMapSlider(TiledMapTileLayer blockLayer) {
-        this.blockLayer = blockLayer;
-        mapWidth = blockLayer.getWidth();
-        mapHeight = blockLayer.getHeight();
-        tilePixelWidth = blockLayer.getTileWidth();
-        tilePixelHeight = blockLayer.getTileHeight();
+        mapWidth = firstBlockLayer.getWidth();
+        mapHeight = firstBlockLayer.getHeight();
+        tilePixelWidth = (int)firstBlockLayer.getTileWidth();
+        tilePixelHeight = (int)firstBlockLayer.getTileHeight();
         mapPixelWidth = mapWidth * tilePixelWidth;
         mapPixelHeight = mapHeight * tilePixelHeight;
 
         slidingRectangle = new Rectangle();
+        blockMap = new BlockCell[mapWidth][mapHeight];
 
-        slidingMap = new DirectionSelector[mapWidth][mapHeight];
+        for (int i = 0; i < blockLayersWithHeight.length; i++) {
+            TiledMapTileLayer blockLayer = blockLayersWithHeight[i].getBlockLayer();
+            EBlockHeight blockHeight = blockLayersWithHeight[i].getBlockHeight();
+            if (blockLayer!=null && blockHeight!=null) {
+                addBlockLayer(blockLayer, blockHeight);
+            }
+        }
 
-        addBlockLayer(blockLayer);
-
-        lastCollisionTest = new Array<TestCell>();
+        calculateSliders();
     }
 
     /**
      * Additional block layer must have the same dimensions of the one passed to the constructor
      */
-    public void addBlockLayer(TiledMapTileLayer blockLayer) {
+    public void addBlockLayer(TiledMapTileLayer blockLayer, EBlockHeight eBlockHeight) {
         if (mapWidth != blockLayer.getWidth()
             || mapHeight != blockLayer.getHeight()
             || tilePixelWidth != blockLayer.getTileWidth()
@@ -56,13 +63,22 @@ public class BlockMapSlider {
 
         for (int column = 0; column < mapWidth; column++) {
             for (int row = 0; row < mapHeight; row++) {
-                if (blockLayer.getCell(column, row) == null) {
+                if (blockLayer.getCell(column, row) != null) {
+                    blockMap[column][row] = new BlockCell(eBlockHeight);
+                }
+            }
+        }
+    }
+
+    private void calculateSliders() {
+        for (int column = 0; column < mapWidth; column++) {
+            for (int row = 0; row < mapHeight; row++) {
+                BlockCell blockCell = blockMap[column][row];
+                if (blockCell == null) {
                     continue;
                 }
 
-                DirectionSelector directionSelector = new DirectionSelector();
-                slidingMap[column][row] = directionSelector;
-
+                DirectionSelector directionSelector = blockCell.getDirectionSelector();
                 setSlidingDirectionIfNoNeighbour(directionSelector, column, row, EDirection.UP);
                 setSlidingDirectionIfNoNeighbour(directionSelector, column, row, EDirection.RIGHT);
                 setSlidingDirectionIfNoNeighbour(directionSelector, column, row, EDirection.DOWN);
@@ -76,16 +92,15 @@ public class BlockMapSlider {
      * If there isn't a block then set that direction in the specified DirectionSelector.
      */
     private void setSlidingDirectionIfNoNeighbour(DirectionSelector directionSelector,
-                                                  int column, int row,
-                                                  EDirection direction) {
+                                                      int column, int row,
+                                                      EDirection direction) {
         int checkColumn = column + direction.getXUnit();
         int checkRow = row + direction.getYUnit();
 
-        if (checkColumn < 0 || checkColumn >= mapWidth) return;
-        if (checkRow < 0 || checkRow >= mapHeight) return;
-
-        if (blockLayer.getCell(checkColumn, checkRow) == null) {
-            direction.setDirection(directionSelector);
+        if (checkColumn>=0 && checkColumn<mapWidth && checkRow>=0 && checkRow<mapHeight) {
+            if (blockMap[checkColumn][checkRow] == null) {
+                direction.setDirection(directionSelector);
+            }
         }
     }
 
@@ -129,8 +144,9 @@ public class BlockMapSlider {
         int countUp = 0, countRight = 0, countDown = 0, countLeft = 0;
         for (int column = minColumn; column <= maxColumn; column++) {
             for (int row = minRow; row <= maxRow; row++) {
-                DirectionSelector directionSelector = slidingMap[column][row];
-                if (directionSelector != null) {
+                BlockCell blockCell =  blockMap[column][row];
+                if (blockCell != null) {
+                    DirectionSelector directionSelector = blockCell.getDirectionSelector();
                     isBlockCollision = true;
                     if (directionSelector.isUp() && centerRow >= row) {
                         countUp++;
@@ -152,10 +168,10 @@ public class BlockMapSlider {
             }
         }
 
+        // If there are some sliders...
         boolean validPosition = true;
-        // If there are some sliders
         if (countUp != 0 || countRight != 0 || countDown != 0 || countLeft != 0) {
-            // Move to the most numerous direction of the extreme cell in that direction
+            // ...move to the most numerous direction of the extreme cell in that direction
             if (firstMax(countUp, countRight, countDown, countLeft)) {
                 float y = (extremeUp + 1) * tilePixelHeight;
                 if (y + rectangle.getHeight() > mapPixelHeight) {
@@ -196,7 +212,7 @@ public class BlockMapSlider {
 
                 for (int column = minColumn; column <= maxColumn; column++) {
                     for (int row = minRow; row <= maxRow; row++) {
-                        if (slidingMap[column][row] != null) return false;
+                        if (blockMap[column][row] != null) return false;
                     }
                 }
             }
@@ -237,10 +253,6 @@ public class BlockMapSlider {
 
         column = column0;
         row = row0;
-
-        if (Debug.DEBUG_COLLISIONS) {
-            lastCollisionTest.clear();
-        }
 
         if (isCellLineCollision_Collide(column, row, segmentChange, stepColumn, stepRow)) {
             return false;
@@ -289,19 +301,16 @@ public class BlockMapSlider {
     }
 
     private boolean isCellLineCollision_Collide(int column, int row, boolean segmentChange, int stepColumn, int stepRow) {
-        if (Debug.DEBUG_COLLISIONS) {
-            lastCollisionTest.add(new TestCell(column, row, 0));
-            if (segmentChange) {
-                lastCollisionTest.add(new TestCell(column-stepColumn, row, 1));
-                lastCollisionTest.add(new TestCell(column, row-stepRow, 1));
-            }
-        }
+        if (Debug.DEBUG) Debug.addTestCell(column, row, segmentChange, stepColumn, stepRow);
 
-        if (slidingMap[column][row] != null) {
+        BlockCell blockCell = blockMap[column][row];
+        if (blockCell != null && blockCell.isHeight(EBlockHeight.HIGH)) {
             return true;
         } else if (segmentChange) {
-            if (slidingMap[column-stepColumn][row] != null
-                || slidingMap[column][row-stepRow] != null) {
+            BlockCell antiAliasedBlockCell1 = blockMap[column-stepColumn][row];
+            BlockCell antiAliasedBlockCell2 = blockMap[column][row-stepRow];
+            if ((antiAliasedBlockCell1 != null && antiAliasedBlockCell1.isHeight(EBlockHeight.HIGH))
+                || (antiAliasedBlockCell2 != null && antiAliasedBlockCell2.isHeight(EBlockHeight.HIGH))) {
                 return true;
             }
         }
@@ -309,7 +318,22 @@ public class BlockMapSlider {
         return false;
     }
 
-    public Array<TestCell> getLastCollisionTest() {
-        return lastCollisionTest;
+    public boolean thereIsBlockAt(float x, float y) {
+        int column = (int)(x / tilePixelWidth);
+        int row = (int)(y / tilePixelHeight);
+
+        if (column < 0) {
+            column = 0;
+        } else if (column >= mapWidth) {
+            column = mapWidth - 1;
+        }
+
+        if (row < 0) {
+            row = 0;
+        } else if (row >= mapHeight) {
+            row = mapHeight - 1;
+        }
+        return blockMap[column][row] != null;
     }
+
 }

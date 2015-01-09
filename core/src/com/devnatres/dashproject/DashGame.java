@@ -91,7 +91,7 @@ public class DashGame extends Game {
 
         this.setScreen(new MainMenuScreen(this));
 
-        Debug.begin(mainCamera);
+        if (Debug.DEBUG) Debug.begin(mainCamera);
 
         initialFrameTime = System.nanoTime();
 
