@@ -13,7 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.Debug;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.agents.*;
@@ -53,6 +53,7 @@ public class LevelScreen implements Screen {
     private final Hero hero;
 
     private final Music badassMusic;
+    private final Music endOkMusic;
 
     private final InputTranslator inputTranslator;
 
@@ -69,6 +70,7 @@ public class LevelScreen implements Screen {
 
     private final LevelScript levelScript;
     private final Texture dissipatedMessage;
+    private final Texture youWinMessage;
 
     private int totalScore;
     private int lastTotalScore;
@@ -82,7 +84,12 @@ public class LevelScreen implements Screen {
 
     private boolean skipCameraAssistant;
 
-    public LevelScreen(DashGame game, String levelName) {
+    private EPlayMode playMode;
+
+    /**
+     * It can be only instantiated by other classes in the same package or derived classes.
+     */
+    protected LevelScreen(DashGame game, String levelName) {
         this.dashGame = game;
 
         screenWidth = game.getScreenWidth();
@@ -113,6 +120,7 @@ public class LevelScreen implements Screen {
 
         badassMusic = hyperStore.getMusic("music/badass.ogg");
         badassMusic.setLooping(true);
+        endOkMusic = hyperStore.getMusic("music/end_ok.ogg");
 
         inputTranslator = new InputTranslator();
 
@@ -120,12 +128,15 @@ public class LevelScreen implements Screen {
 
         backgroundTexture = hyperStore.getTexture("background.jpg");
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
-        dissipatedMessage = hyperStore.getTexture("dissipated.png");
+        dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
+        youWinMessage = hyperStore.getTexture("message_youwin.png");
 
         radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
 
         System.gc();
         inputTranslator.clear();
+
+        playMode = EPlayMode.GAME_PLAY;
     }
 
     public Hero getHero() {
@@ -146,7 +157,7 @@ public class LevelScreen implements Screen {
 
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
-        hordeGroup.removeKilledHordes();
+        //hordeGroup.removeKilledHordes();
         hordeGroup.addLinked(horde);
     }
 
@@ -159,19 +170,7 @@ public class LevelScreen implements Screen {
 
         clearScreen();
 
-        levelScript.execute();
-
-        if (skipCameraAssistant || bulletTime == 0 || comboCameraChasing) {
-            chaseHeroWithCamera();
-        } else { // We can't still decide not to chase, we must check if there aren't foes on hero's visible scope
-            if (isAllFoesOutOfVisibleScope()) {
-                comboCameraChasing = true;
-                chaseHeroWithCamera();
-                if (comboCameraChasing) { // Can be modified in the method above
-                    activateBulletTime();
-                }
-            }
-        }
+        playMode.properUpdate(this);
 
         mainCamera.update();
 
@@ -191,18 +190,56 @@ public class LevelScreen implements Screen {
         renderMap();
         renderSprites();
         renderFoeRadar();
-        updateTotalScore();
         renderHub();
-        renderMessages();
 
-        if (Debug.DEBUG) {
-            renderDebugger();
-        }
+        playMode.properDraw(this);
 
         if (resetCountDown == 0) {
             reset();
         }
 
+        if (Debug.DEBUG) renderDebugger();
+    }
+
+    protected void playModeUpdate_GamePlay() {
+        boolean thereIsNewScriptCmdExecuted = levelScript.execute();
+        if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
+            playMode = EPlayMode.SCORE_COUNT;
+            endOkMusic.play();
+        } else if (!hero.isVisible()) {
+            playMode = EPlayMode.HERO_DEAD;
+        } else {
+            inputForHero();
+            decideToChaseHeroWithCamera();
+        }
+    }
+
+    protected void playModeUpdate_HeroDead() {
+        if (resetCountDown > 0) {
+            resetCountDown--;
+        }
+    }
+
+    protected void playModeUpdate_ScoreCount() {
+
+    }
+
+    protected void playModeDraw_ScoreCount() {
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        mainBatch.draw(youWinMessage,
+                (screenWidth - dissipatedMessage.getWidth())/2,
+                (screenHeight - dissipatedMessage.getHeight())/2);
+        mainBatch.end();
+    }
+
+    protected void playModeDraw_HeroDead() {
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        mainBatch.draw(dissipatedMessage,
+                (screenWidth - dissipatedMessage.getWidth())/2,
+                (screenHeight - dissipatedMessage.getHeight())/2);
+        mainBatch.end();
     }
 
     private boolean isAllFoesOutOfVisibleScope() {
@@ -220,6 +257,20 @@ public class LevelScreen implements Screen {
 
     private void reset() {
         dashGame.setScreen(new MainMenuScreen(dashGame));
+    }
+
+    private void decideToChaseHeroWithCamera() {
+        if (skipCameraAssistant || bulletTime == 0 || comboCameraChasing) {
+            chaseHeroWithCamera();
+        } else { // We can't still decide not to chase, we must check if there aren't foes on hero's visible scope
+            if (isAllFoesOutOfVisibleScope()) {
+                comboCameraChasing = true;
+                chaseHeroWithCamera();
+                if (comboCameraChasing) { // Can be modified in the method above
+                    activateBulletTime();
+                }
+            }
+        }
     }
 
     private void chaseHeroWithCamera() {
@@ -335,8 +386,6 @@ public class LevelScreen implements Screen {
     }
 
     private void renderSprites() {
-        inputForHero();
-
         mainBatch.begin();
 
         agentRegistry.render(Time.FRAME, mainBatch);
@@ -348,6 +397,10 @@ public class LevelScreen implements Screen {
         if (bulletTime > 0f && !comboCameraChasing) {
             bulletTime--;
         }
+
+        hordeGroup.removeKilledHordes();
+
+        updateTotalScore();
     }
 
     private void renderSprites_Cover() {

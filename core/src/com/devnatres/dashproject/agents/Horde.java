@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.agents;
 
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**

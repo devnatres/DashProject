@@ -19,12 +19,18 @@ public class LevelScript {
         levelScript.add(cmd);
     }
 
-    public void execute() {
+    /**
+     * @return false if there weren't more commands to execute
+     */
+    public boolean execute() {
+        boolean executed = false;
         if (levelScriptIndex < levelScript.size) {
+            executed = true;
             ECmdState state = levelScript.get(levelScriptIndex).execute();
             if (state == ECmdState.TERMINATED) {
                 levelScriptIndex++;
             }
         }
+        return executed;
     }
 }

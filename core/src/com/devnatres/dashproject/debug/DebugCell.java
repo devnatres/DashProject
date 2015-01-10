@@ -1,11 +1,11 @@
-package com.devnatres.dashproject.levelsystem;
+package com.devnatres.dashproject.debug;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
  * Created by David on 08/01/2015.
  */
-public class TestCell {
+public class DebugCell {
     public static final int CELL_PIXEL_WIDTH = 32;
     public static final int CELL_PIXEL_HEIGHT = 32;
 
@@ -16,7 +16,7 @@ public class TestCell {
     private final ShapeRenderer shape;
 
 
-    public TestCell(int column, int row, int type) {
+    public DebugCell(int column, int row, int type) {
         this.column = column;
         this.row = row;
         this.type = type;

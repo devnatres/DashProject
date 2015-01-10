@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.devnatres.dashproject.Debug;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;

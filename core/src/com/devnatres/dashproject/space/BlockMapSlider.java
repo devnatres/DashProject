@@ -2,7 +2,7 @@ package com.devnatres.dashproject.space;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.devnatres.dashproject.Debug;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EDirection;
 
 import static com.devnatres.dashproject.space.BlockCell.*;

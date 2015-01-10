@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Disposable;
-import com.devnatres.dashproject.Debug;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.agents.Foe;
 import com.devnatres.dashproject.agents.Horde;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
