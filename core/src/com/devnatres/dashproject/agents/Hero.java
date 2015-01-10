@@ -19,15 +19,13 @@ import com.devnatres.dashproject.tools.VectorPool;
  * Created by DevNatres on 06/12/2014.
  */
 public class Hero extends Agent {
-    private static final boolean DEBUG_IMMORTAL = true;
+    private static final boolean DEBUG_IMMORTAL = false;
 
     private static final int DAMAGE_DURATION = 15;
     private static final int MAX_LIFE = 10;
-    private static final int HEAL_DURATION = 30;
     private static final int STANDARD_ATTACK_DAMAGE = 1;
 
     private int damageImageDuration;
-    private int healDuration = HEAL_DURATION * 2;
     private int life = MAX_LIFE;
 
     private final Sound dashSound;
@@ -58,7 +56,6 @@ public class Hero extends Agent {
     private final HyperStore hyperStore;
 
     private final Sprite damageImage;
-    private final Sprite healPointImage;
 
     private final Vector2 nextPositionFromInput = new Vector2();
     private boolean thereIsNextPosFromInput;
@@ -101,7 +98,6 @@ public class Hero extends Agent {
         scopeRadio2 = scopeRadio * scopeRadio;
 
         damageImage = new Sprite(hyperStore.getTexture("shoot_damage.png"));
-        healPointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
 
         centerReferences();
 
@@ -255,13 +251,16 @@ public class Hero extends Agent {
             if (life > 0) {
                 life--;
                 if (!DEBUG_IMMORTAL && life <= 0) {
-                    deadSound.play();
-                    dying = true;
-                    setAnimation(deadAnimation);
+                    die();
                 }
             }
-            healDuration = HEAL_DURATION;
         }
+    }
+
+    public void die() {
+        deadSound.play();
+        dying = true;
+        setAnimation(deadAnimation);
     }
 
     public int getLife() {
@@ -301,17 +300,6 @@ public class Hero extends Agent {
         if (damageImageDuration > 0) {
             damageImageDuration--;
             damageImage.draw(batch);
-        }
-
-        if (healDuration > 0) {
-            healDuration--;
-            float lifeWidth = healPointImage.getWidth() + 2;
-            float lifeX = auxCenter.x -(life*lifeWidth/2);
-            for (int i = 1; i <= life; i++) {
-                healPointImage.setPosition(lifeX + (i-1)*lifeWidth,
-                        getY() + getHeight() + 5);
-                healPointImage.draw(batch);
-            }
         }
     }
 

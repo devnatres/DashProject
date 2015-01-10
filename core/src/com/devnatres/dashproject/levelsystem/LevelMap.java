@@ -139,10 +139,15 @@ public class LevelMap implements Disposable {
         return mapPixelHeight;
     }
 
-    public void extractLevelScript(HyperStore hyperStore, LevelScreen levelScreen) {
+    /**
+     *
+     * @return number of hordes
+     */
+    public int extractLevelScript(HyperStore hyperStore, LevelScreen levelScreen) {
+        int hordeCount = 0;
         MapLayer mapLayer = tiledMap.getLayers().get("levelscript");
         if (mapLayer == null) {
-            return;
+            return hordeCount;
         }
 
         LevelScript levelScript = levelScreen.getLevelScript();
@@ -160,6 +165,7 @@ public class LevelMap implements Disposable {
 
             if (command[0].equals("createhorde")) {
                 for (int i = 1; i < command.length; i++) {
+                    hordeCount++;
                     int hordeNumber = Integer.parseInt(command[i]);
                     Horde horde = extractHorde(hordeNumber, hyperStore, levelScreen);
                     levelScript.addCmd(new CreateHordeCmd(levelScreen, horde));
@@ -175,6 +181,8 @@ public class LevelMap implements Disposable {
             }
             stepNumber++;
         }
+
+        return hordeCount;
     }
 
     public Horde extractHorde(int n, HyperStore hyperStore, LevelScreen levelScreen) {

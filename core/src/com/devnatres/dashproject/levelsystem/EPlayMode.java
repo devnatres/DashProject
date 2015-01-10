@@ -23,6 +23,16 @@ public enum EPlayMode {
             levelScreen.playModeDraw_HeroDead();
         }
     },
+    TIME_OUT {
+        @Override
+        public void properUpdate(LevelScreen levelScreen) {
+            levelScreen.playModeUpdate_TimeOut();
+        }
+        @Override
+        public void properDraw(LevelScreen levelScreen) {
+            levelScreen.playModeDraw_TimeOut();
+        }
+    },
     SCORE_COUNT {
         @Override
         public void properUpdate(LevelScreen levelScreen) {

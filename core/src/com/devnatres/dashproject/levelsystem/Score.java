@@ -28,6 +28,7 @@ public class Score {
     private int scoreCountPhaseDuration;
     private int scoreCountPhase;
 
+    private final LevelScreen levelScreen;
     private final Hero hero;
     private final HordeGroup hordeGroup;
 
@@ -49,6 +50,7 @@ public class Score {
     private boolean isFinalCountCalculated;
 
     public Score(HyperStore hyperStore, LevelScreen levelScreen) {
+        this.levelScreen = levelScreen;
         youWinMessage = hyperStore.getTexture("message_youwin.png");
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
@@ -142,8 +144,8 @@ public class Score {
                 + " = " + lifeScore);
         totalScore += lifeScore;
 
-        final int time = 3;
-        final int timeScore = time * TIME_SCORE_FACTOR;
+        final float time = ((int)(levelScreen.getTime()*10))/10f;
+        final int timeScore = (int)(time * TIME_SCORE_FACTOR);
         timeScoreString = String.valueOf("Time: "
                 + time
                 + " x " + TIME_SCORE_FACTOR

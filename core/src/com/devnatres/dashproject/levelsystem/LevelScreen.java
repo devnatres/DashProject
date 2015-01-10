@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -34,6 +35,8 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  */
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
+    private static final float STANDARD_TIME_PER_HORDE = 3f;
+    private static final float TIME_STEP = Time.FPS_TIME;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -69,6 +72,7 @@ public class LevelScreen implements Screen {
 
     private final LevelScript levelScript;
     private final Texture dissipatedMessage;
+    private final Texture timeoutMessage;
 
     private boolean comboCameraChasing;
 
@@ -79,6 +83,13 @@ public class LevelScreen implements Screen {
     private EPlayMode playMode;
 
     private final Score score;
+
+    private final Sprite lifePointImage;
+
+    private float time;
+    private String timeString;
+    private int hordeCount;
+
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
@@ -109,7 +120,7 @@ public class LevelScreen implements Screen {
 
         levelScript = new LevelScript();
 
-        extractScript();
+        hordeCount = extractScript();
 
         badassMusic = hyperStore.getMusic("music/badass.ogg");
         badassMusic.setLooping(true);
@@ -122,6 +133,7 @@ public class LevelScreen implements Screen {
         backgroundTexture = hyperStore.getTexture("background.jpg");
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
         dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
+        timeoutMessage = hyperStore.getTexture("message_timeout.png");
 
         radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
 
@@ -130,10 +142,18 @@ public class LevelScreen implements Screen {
 
         playMode = EPlayMode.GAME_PLAY;
         score = new Score(hyperStore, this);
+
+        lifePointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
+
+        time = hordeCount * STANDARD_TIME_PER_HORDE;
     }
 
     public Hero getHero() {
         return hero;
+    }
+
+    public float getTime() {
+        return time;
     }
 
     public DnaCamera getCamera() {
@@ -144,8 +164,8 @@ public class LevelScreen implements Screen {
         return levelScript;
     }
 
-    private void extractScript() {
-        map.extractLevelScript(hyperStore, this);
+    private int extractScript() {
+        return map.extractLevelScript(hyperStore, this);
     }
 
     public void addHorde(Horde horde) {
@@ -201,15 +221,19 @@ public class LevelScreen implements Screen {
             endOkMusic.play();
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
+        } else if (time == 0) {
+            hero.die();
+            playMode = EPlayMode.TIME_OUT;
         } else {
+            if (!isBulletTime() && time > 0) {
+                time -= TIME_STEP;
+                if (time < 0) {
+                    time = 0;
+                }
+                timeString = String.valueOf(((int)(time*10))/10f);
+            }
             inputForHero();
             decideToChaseHeroWithCamera();
-        }
-    }
-
-    protected void playModeUpdate_HeroDead() {
-        if (resetCountDown > 0) {
-            resetCountDown--;
         }
     }
 
@@ -223,12 +247,33 @@ public class LevelScreen implements Screen {
         mainBatch.end();
     }
 
+    protected void playModeUpdate_HeroDead() {
+        if (resetCountDown > 0) {
+            resetCountDown--;
+        }
+    }
+
     protected void playModeDraw_HeroDead() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(dissipatedMessage,
                 (screenWidth - dissipatedMessage.getWidth())/2,
                 (screenHeight - dissipatedMessage.getHeight())/2);
+        mainBatch.end();
+    }
+
+    protected void playModeUpdate_TimeOut() {
+        if (resetCountDown > 0) {
+            resetCountDown--;
+        }
+    }
+
+    protected void playModeDraw_TimeOut() {
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        mainBatch.draw(timeoutMessage,
+                (screenWidth - timeoutMessage.getWidth())/2,
+                (screenHeight - timeoutMessage.getHeight())/2);
         mainBatch.end();
     }
 
@@ -347,8 +392,20 @@ public class LevelScreen implements Screen {
     private void renderHub() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
+
         score.renderActionScore(mainBatch, mainFont);
+
+        mainFont.draw(mainBatch, timeString, screenWidth/2, screenHeight - 10);
+
+        int life = hero.getLife();
+        float lifeWidth = lifePointImage.getWidth() + 1;
+        for (int i = 1; i <= life; i++) {
+            lifePointImage.setPosition(380 + (i*lifeWidth), screenHeight - 20);
+            lifePointImage.draw(mainBatch);
+        }
+
         mainBatch.end();
+
     }
 
     private void renderSprites() {
