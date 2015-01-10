@@ -3,7 +3,7 @@ package com.devnatres.dashproject.levelscriptcmd;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
- * Created by David on 29/12/2014.
+ * Created by DevNatres on 29/12/2014.
  */
 abstract public class Cmd {
     public enum ECmdState {

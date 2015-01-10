@@ -6,7 +6,7 @@ import com.devnatres.dashproject.agents.Agent;
 import com.devnatres.dashproject.space.DirectionSelector;
 
 /**
- * Created by David on 07/01/2015.
+ * Created by DevNatres on 07/01/2015.
  */
 public class DnaCamera extends OrthographicCamera {
     private float halfCameraWidth;

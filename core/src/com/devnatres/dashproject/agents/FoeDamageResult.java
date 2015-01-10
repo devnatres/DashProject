@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.agents;
 
 /**
- * Created by David on 04/01/2015.
+ * Created by DevNatres on 04/01/2015.
  */
 public class FoeDamageResult {
     private int score;

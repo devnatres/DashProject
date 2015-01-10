@@ -8,7 +8,7 @@ import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.store.HyperStore;
 
 /**
- * Created by David on 15/12/2014.
+ * Created by DevNatres on 15/12/2014.
  */
 public enum EAnimations {
     HERO_WALKING {

@@ -34,7 +34,6 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  */
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
-    private static final int SCORE_HORDE_COMBO_DURATION = 90;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -70,13 +69,6 @@ public class LevelScreen implements Screen {
 
     private final LevelScript levelScript;
     private final Texture dissipatedMessage;
-    private final Texture youWinMessage;
-
-    private int totalScore;
-    private int lastTotalScore;
-    private String scoreString = "0";
-    private String scoreHordeComboString;
-    private int scoreHordeComboDuration;
 
     private boolean comboCameraChasing;
 
@@ -86,6 +78,7 @@ public class LevelScreen implements Screen {
 
     private EPlayMode playMode;
 
+    private final Score score;
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
@@ -129,7 +122,6 @@ public class LevelScreen implements Screen {
         backgroundTexture = hyperStore.getTexture("background.jpg");
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
         dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
-        youWinMessage = hyperStore.getTexture("message_youwin.png");
 
         radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
 
@@ -137,6 +129,7 @@ public class LevelScreen implements Screen {
         inputTranslator.clear();
 
         playMode = EPlayMode.GAME_PLAY;
+        score = new Score(hyperStore, this);
     }
 
     public Hero getHero() {
@@ -221,15 +214,12 @@ public class LevelScreen implements Screen {
     }
 
     protected void playModeUpdate_ScoreCount() {
-
     }
 
     protected void playModeDraw_ScoreCount() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
-        mainBatch.draw(youWinMessage,
-                (screenWidth - dissipatedMessage.getWidth())/2,
-                (screenHeight - dissipatedMessage.getHeight())/2);
+        score.renderFinalCount(mainBatch, mainFont);
         mainBatch.end();
     }
 
@@ -287,6 +277,10 @@ public class LevelScreen implements Screen {
         return map;
     }
 
+    public HordeGroup getHordeGroup() {
+        return hordeGroup;
+    }
+
     public Horde getGlobalHorde() {
         return hordeGroup.getGlobalHorde();
     }
@@ -314,22 +308,12 @@ public class LevelScreen implements Screen {
         }
     }
 
-    public void updateTotalScore() {
-        if (lastTotalScore != totalScore) {
-            lastTotalScore = totalScore;
-            scoreString = String.valueOf(totalScore);
-        }
-    }
-
     public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
-        totalScore += foeDamageResult.getScore();
+        score.sumFoeScore(foeDamageResult.getScore());
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
-        int hordeComboScore = hordeDamageResult.getComboScore();
-        totalScore += hordeComboScore;
-        scoreHordeComboString = String.valueOf(hordeComboScore);
-        scoreHordeComboDuration = SCORE_HORDE_COMBO_DURATION;
+        score.sumHordeComboScore(hordeDamageResult.getComboScore());
     }
 
     private float limitCameraTargetX(float x) {
@@ -363,26 +347,8 @@ public class LevelScreen implements Screen {
     private void renderHub() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
-        mainFont.draw(mainBatch, scoreString, 50, screenHeight - 10);
-        if (scoreHordeComboDuration > 0) {
-            mainFont.draw(mainBatch, scoreHordeComboString, screenWidth/2, screenHeight - 100);
-            scoreHordeComboDuration--;
-        }
+        score.renderActionScore(mainBatch, mainFont);
         mainBatch.end();
-    }
-
-    private void renderMessages() {
-        if (!hero.isVisible()) {
-            mainBatch.setProjectionMatrix(fixedCamera.combined);
-            mainBatch.begin();
-            mainBatch.draw(dissipatedMessage,
-                    (screenWidth - dissipatedMessage.getWidth())/2,
-                    (screenHeight - dissipatedMessage.getHeight())/2);
-            mainBatch.end();
-            if (resetCountDown > 0) {
-                resetCountDown--;
-            }
-        }
     }
 
     private void renderSprites() {
@@ -400,7 +366,7 @@ public class LevelScreen implements Screen {
 
         hordeGroup.removeKilledHordes();
 
-        updateTotalScore();
+        score.updateScore();
     }
 
     private void renderSprites_Cover() {

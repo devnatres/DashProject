@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by David on 22/12/2014.
+ * Created by DevNatres on 22/12/2014.
  */
 public class AgentRegistry {
 

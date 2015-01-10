@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.gameconstants.Time;
 
 /**
- * Created by David on 07/01/2015.
+ * Created by DevNatres on 07/01/2015.
  */
 public class DnaAnimation extends Animation {
     private float currentStateTime;

@@ -4,7 +4,7 @@ import com.devnatres.dashproject.agents.Horde;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
- * Created by David on 29/12/2014.
+ * Created by DevNatres on 29/12/2014.
  */
 public class WaitHordeKilledCmd extends Cmd {
 

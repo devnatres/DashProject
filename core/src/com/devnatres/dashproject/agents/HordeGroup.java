@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
- * Created by David on 05/01/2015.
+ * Created by DevNatres on 05/01/2015.
  */
 public class HordeGroup {
     private final Array<Horde> hordes = new Array();
@@ -13,13 +13,10 @@ public class HordeGroup {
     private int maxConsecutiveHordeComboCount;
     private int currentConsecutiveHordeComboCount;
     private final LevelScreen levelScreen;
-    private final HordeGroupDamageResult hordeGroupDamageResult;
 
     public HordeGroup(LevelScreen levelSCreen) {
         this.levelScreen = levelSCreen;
         globalHorde = new Horde(levelSCreen);
-
-        hordeGroupDamageResult = new HordeGroupDamageResult();
     }
 
     public void addLinked(Horde horde) {
@@ -65,5 +62,13 @@ public class HordeGroup {
             isFullHordeComboAvailable = false;
             currentConsecutiveHordeComboCount = 0;
         }
+    }
+
+    public int getMaxConsecutiveHordeComboCount() {
+        return maxConsecutiveHordeComboCount;
+    }
+
+    public boolean isFullHordeComboAvailable() {
+        return isFullHordeComboAvailable;
     }
 }

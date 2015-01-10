@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.agents;
 
 /**
- * Created by David on 05/01/2015.
+ * Created by DevNatres on 05/01/2015.
  */
 public class HordeDamageResult {
     private int foeScore;

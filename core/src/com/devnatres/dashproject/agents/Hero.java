@@ -264,6 +264,10 @@ public class Hero extends Agent {
         }
     }
 
+    public int getLife() {
+        return life;
+    }
+
     public boolean isFoeOnScope(Foe foe) {
         return (auxPosition.dst2(foe.getAuxPosition()) <= scopeRadio2);
     }

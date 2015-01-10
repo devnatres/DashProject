@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
- * Created by David on 28/12/2014.
+ * Created by DevNatres on 28/12/2014.
  */
 public class Horde {
     private final Array<Foe> foes = new Array();
@@ -82,7 +82,10 @@ public class Horde {
 
             }
         }
-        hordeGroup.processHordeDamageResult(hordeDamageResult);
+
+        if (isKilled()) {
+            hordeGroup.processHordeDamageResult(hordeDamageResult);
+        }
     }
 
     public Vector2 getReferencePosition() {

@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.space;
 
 /**
- * Created by David on 09/01/2015.
+ * Created by DevNatres on 09/01/2015.
  */
 public class BlockCell {
     public enum EBlockHeight {

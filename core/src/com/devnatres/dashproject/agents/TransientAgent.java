@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 /**
  * A transient agent sets itself invisible when its animation ends.
  *
- * Created by David on 22/12/2014.
+ * Created by DevNatres on 22/12/2014.
  *
  */
 public class TransientAgent extends Agent {

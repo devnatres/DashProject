@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import static com.devnatres.dashproject.levelscriptcmd.Cmd.*;
 
 /**
- * Created by David on 29/12/2014.
+ * Created by DevNatres on 29/12/2014.
  */
 public class LevelScript {
     private final Array<Cmd> levelScript;

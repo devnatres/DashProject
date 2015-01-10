@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.levelsystem;
 
 /**
- * Created by David on 10/01/2015.
+ * Created by DevNatres on 10/01/2015.
  */
 public enum EPlayMode {
     GAME_PLAY {

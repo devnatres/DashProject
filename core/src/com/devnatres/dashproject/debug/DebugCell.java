@@ -3,7 +3,7 @@ package com.devnatres.dashproject.debug;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
- * Created by David on 08/01/2015.
+ * Created by DevNatres on 08/01/2015.
  */
 public class DebugCell {
     public static final int CELL_PIXEL_WIDTH = 32;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import static com.devnatres.dashproject.space.BlockCell.*;
 
 /**
- * Created by David on 09/01/2015.
+ * Created by DevNatres on 09/01/2015.
  */
 public class BlockLayerWithHeight {
     private final TiledMapTileLayer blockLayer;

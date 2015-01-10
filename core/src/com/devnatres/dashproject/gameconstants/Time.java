@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.gameconstants;
 
 /**
- * Created by David on 16/12/2014.
+ * Created by DevNatres on 16/12/2014.
  */
 public final class Time {
     public static final float FPS = 60f;
