@@ -22,10 +22,6 @@
   </data>
  </layer>
  <objectgroup name="horde0">
-  <object gid="17" x="192" y="2048"/>
-  <object gid="17" x="288" y="2048"/>
- </objectgroup>
- <objectgroup name="horde1">
   <object name="foe0" gid="17" x="128" y="1728">
    <properties>
     <property name="step0" value="delaymove,60,4,59"/>
@@ -40,8 +36,9 @@
     <property name="step3" value="move,origin"/>
    </properties>
   </object>
+  <object gid="17" x="224" y="1920"/>
  </objectgroup>
- <objectgroup name="horde2">
+ <objectgroup name="horde1">
   <object type="robot" gid="17" x="352" y="416"/>
   <object type="robot" gid="17" x="288" y="320">
    <properties>
@@ -56,11 +53,34 @@
    </properties>
   </object>
  </objectgroup>
+ <objectgroup name="horde2">
+  <object gid="17" x="832" y="1504">
+   <properties>
+    <property name="step0" value="delaymove,60,31,46"/>
+    <property name="step1" value="delaymove,60,origin"/>
+   </properties>
+  </object>
+  <object gid="17" x="736" y="1696">
+   <properties>
+    <property name="step0" value="move,23,50"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object gid="17" x="736" y="1504">
+   <properties>
+    <property name="step0" value="move,23,48"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
  <objectgroup name="levelscript">
   <properties>
-   <property name="step0" value="createhorde,0,1"/>
-   <property name="step1" value="waithordekilled,0,1"/>
-   <property name="step2" value="createhorde,2"/>
+   <property name="step0" value="heroposition,7,63"/>
+   <property name="step1" value="createhorde,0"/>
+   <property name="step2" value="waithordekilled,0"/>
+   <property name="step3" value="createhorde,1"/>
+   <property name="step4" value="waithordekilled,1"/>
+   <property name="step5" value="createhorde,2"/>
   </properties>
  </objectgroup>
 </map>

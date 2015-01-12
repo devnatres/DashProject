@@ -218,10 +218,10 @@ public class LevelScreen implements Screen {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
-            endOkMusic.play();
+            //endOkMusic.play();
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
-        } else if (time == 0) {
+        } else if (!Debug.IMMORTAL && time == 0) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
         } else {
@@ -413,7 +413,7 @@ public class LevelScreen implements Screen {
 
         agentRegistry.render(Time.FRAME, mainBatch);
 
-        renderSprites_Cover();
+        //renderSprites_Cover();
 
         mainBatch.end();
 

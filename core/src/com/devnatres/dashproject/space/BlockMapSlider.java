@@ -318,7 +318,7 @@ public class BlockMapSlider {
         return false;
     }
 
-    public boolean thereIsBlockAt(float x, float y) {
+    public BlockCell getBlockAt(float x, float y) {
         int column = (int)(x / tilePixelWidth);
         int row = (int)(y / tilePixelHeight);
 
@@ -333,7 +333,8 @@ public class BlockMapSlider {
         } else if (row >= mapHeight) {
             row = mapHeight - 1;
         }
-        return blockMap[column][row] != null;
+        return blockMap[column][row];
     }
+
 
 }

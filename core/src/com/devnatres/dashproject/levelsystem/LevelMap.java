@@ -24,6 +24,7 @@ import com.devnatres.dashproject.agents.Horde;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
+import com.devnatres.dashproject.space.BlockCell;
 import com.devnatres.dashproject.space.BlockLayerWithHeight;
 import com.devnatres.dashproject.space.BlockMapSlider;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -86,18 +87,30 @@ public class LevelMap implements Disposable {
         return blockMapSlider.slideRectangle(rectangle);
     }
 
-    public void updateThisCoverDirection(DirectionSelector coverDirection, Rectangle rectangle) {
+    /**
+     * @param rectangle The dimensions and position of the volume
+     * @param coverDirection CoverDirection to be updated
+     * @param lowCoverDirection CoverDirection of low blocks to be updated
+     */
+    public void updateCoverDirection(Rectangle rectangle,
+                                     DirectionSelector coverDirection,
+                                     DirectionSelector lowCoverDirection) {
         final float centerRectangleX = rectangle.getX() + rectangle.getWidth()/2;
         final float centerRectangleY = rectangle.getY() + rectangle.getHeight()/2;
         final float marginX = tilePixelWidth / 2;
         final float marginY = tilePixelHeight / 2;
 
         coverDirection.clear();
+        lowCoverDirection.clear();
 
         // Left
         float xCheck = rectangle.getX() - marginX;
         float yCheck = centerRectangleY;
-        if (thereIsBlockAt(xCheck, yCheck)) {
+        BlockCell blockCell = getBlockAt(xCheck, yCheck);
+        if (blockCell != null) {
+            if (blockCell.isHeight(EBlockHeight.LOW)) {
+                lowCoverDirection.setLeft();
+            }
             coverDirection.setLeft();
         }
         if (Debug.DEBUG) Debug.addPoint(xCheck, yCheck, Color.GREEN);
@@ -105,7 +118,11 @@ public class LevelMap implements Disposable {
         // Up
         xCheck = centerRectangleX;
         yCheck = (rectangle.getY() + rectangle.getHeight() + marginY);
-        if (thereIsBlockAt(xCheck, yCheck)) {
+        blockCell = getBlockAt(xCheck, yCheck);
+        if (blockCell != null) {
+            if (blockCell.isHeight(EBlockHeight.LOW)) {
+                lowCoverDirection.setUp();
+            }
             coverDirection.setUp();
         }
         if (Debug.DEBUG) Debug.addPoint(xCheck, yCheck, Color.GREEN);
@@ -113,7 +130,11 @@ public class LevelMap implements Disposable {
         // Right
         xCheck = (rectangle.getX() + rectangle.getWidth() + marginX);
         yCheck = centerRectangleY;
-        if (thereIsBlockAt(xCheck, yCheck)) {
+        blockCell = getBlockAt(xCheck, yCheck);
+        if (blockCell != null) {
+            if (blockCell.isHeight(EBlockHeight.LOW)) {
+                lowCoverDirection.setRight();
+            }
             coverDirection.setRight();
         }
         if (Debug.DEBUG) Debug.addPoint(xCheck, yCheck, Color.GREEN);
@@ -121,14 +142,18 @@ public class LevelMap implements Disposable {
         // Down
         xCheck = centerRectangleX;
         yCheck = (rectangle.getY() - marginY);
-        if (thereIsBlockAt(xCheck, yCheck)) {
+        blockCell = getBlockAt(xCheck, yCheck);
+        if (blockCell != null) {
+            if (blockCell.isHeight(EBlockHeight.LOW)) {
+                lowCoverDirection.setDown();
+            }
             coverDirection.setDown();
         }
         if (Debug.DEBUG) Debug.addPoint(xCheck, yCheck, Color.GREEN);
     }
 
-    private boolean thereIsBlockAt(float x, float y) {
-        return blockMapSlider.thereIsBlockAt(x, y);
+    private BlockCell getBlockAt(float x, float y) {
+        return blockMapSlider.getBlockAt(x, y);
     }
 
     public int getMapPixelWidth() {
@@ -137,6 +162,14 @@ public class LevelMap implements Disposable {
 
     public int getMapPixelHeight() {
         return mapPixelHeight;
+    }
+
+    public int getTilePixelWidth() {
+        return tilePixelWidth;
+    }
+
+    public int getTilePixelHeight() {
+        return tilePixelHeight;
     }
 
     /**
@@ -178,7 +211,11 @@ public class LevelMap implements Disposable {
                     Horde horde = hordeHashMap.get(hordeNumber);
                     levelScript.addCmd(new WaitHordeKilledCmd(levelScreen, horde));
                 }
+            } else if (command[0].equals("heroposition")) {
+                levelScreen.getHero().setPosition(Integer.parseInt(command[1])*tilePixelWidth,
+                        (mapHeight - 1 - Integer.parseInt(command[2]))*tilePixelHeight);
             }
+
             stepNumber++;
         }
 

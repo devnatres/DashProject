@@ -21,6 +21,8 @@ public class Debug {
     private static final boolean DEBUG_POINTS = DEBUG && false;
     private static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
+    public static final boolean IMMORTAL = true;
+
     private static ArrayList<Vector2> points;
     private static ArrayList<Color> pointColors;
 

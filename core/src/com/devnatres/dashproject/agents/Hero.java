@@ -19,8 +19,6 @@ import com.devnatres.dashproject.tools.VectorPool;
  * Created by DevNatres on 06/12/2014.
  */
 public class Hero extends Agent {
-    private static final boolean DEBUG_IMMORTAL = false;
-
     private static final int DAMAGE_DURATION = 15;
     private static final int MAX_LIFE = 10;
     private static final int STANDARD_ATTACK_DAMAGE = 1;
@@ -35,6 +33,7 @@ public class Hero extends Agent {
     private final Sound deadSound;
 
     private final DirectionSelector coverDirection;
+    private final DirectionSelector lowCoverDirection;
     private final Rectangle nextArea;
 
     private final float attackRadio;
@@ -48,6 +47,7 @@ public class Hero extends Agent {
     private final float scopeRadio2;
 
     private final Animation walkingAnimation;
+    private final Animation crouchingAnimation;
     private final Animation attackingAnimation;
     private float attackingTime;
 
@@ -63,6 +63,8 @@ public class Hero extends Agent {
     private final Animation deadAnimation;
     private boolean dying;
 
+    private final LevelMap map;
+
     static {
         VectorPool.initialize();
     }
@@ -76,6 +78,7 @@ public class Hero extends Agent {
         this.levelScreen = levelScreen;
 
         walkingAnimation = getAnimation();
+        crouchingAnimation = EAnimations.HERO_CROUCHING.create(hyperStore);
         attackingAnimation = EAnimations.HERO_ATTACKING.create(hyperStore);
 
         dashSound = hyperStore.getSound("sounds/dash.ogg");
@@ -85,6 +88,7 @@ public class Hero extends Agent {
         deadSound = hyperStore.getSound("sounds/hit.ogg");
 
         coverDirection = new DirectionSelector();
+        lowCoverDirection = new DirectionSelector();
         nextArea = new Rectangle(auxArea);
 
         dashHalo = new Sprite(hyperStore.getTexture("dash_radio.png"));
@@ -102,6 +106,8 @@ public class Hero extends Agent {
         centerReferences();
 
         deadAnimation = EAnimations.HERO_DYING.create(hyperStore);
+
+        map = levelScreen.getMap();
     }
 
     @Override
@@ -162,7 +168,7 @@ public class Hero extends Agent {
 
             nextArea.setPosition(limitPositionX(nextArea.x), limitPositionY(nextArea.y));
             setPosition(nextArea.x, nextArea.y);
-            map.updateThisCoverDirection(coverDirection, auxArea);
+            map.updateCoverDirection(auxArea, coverDirection, lowCoverDirection);
         } else {
             failDashSound.play();
         }
@@ -210,9 +216,22 @@ public class Hero extends Agent {
             if (attackingTime > 0) {
                 attackingTime--;
                 if (attackingTime == 0) {
-                    setAnimation(walkingAnimation);
+                    assureNormalAnimation();
                 }
+            } else {
+                assureNormalAnimation();
             }
+        }
+    }
+
+    private void assureNormalAnimation() {
+        Animation animation = getAnimation();
+        if (lowCoverDirection.hasDirection()) {
+            if (animation != crouchingAnimation) {
+                setAnimation(crouchingAnimation);
+            }
+        } else if (animation != walkingAnimation) {
+            setAnimation(walkingAnimation);
         }
     }
 
@@ -225,8 +244,7 @@ public class Hero extends Agent {
         Horde globalHorde = levelScreen.getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
-            if (!foe.isDying() && (auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2)) {
-
+            if (!foe.isDying() && isFoeOnAttackRadio(foe) && isFoeInSight(foe)) {
                 setAnimation(attackingAnimation);
                 attackingTime = attackingAnimation.getAnimationDuration();
 
@@ -244,13 +262,32 @@ public class Hero extends Agent {
         return attackReleased;
     }
 
+    private boolean isFoeOnAttackRadio(Foe foe) {
+        return auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2;
+    }
+
+    private boolean isFoeInSight(Foe foe) {
+        final float heroLowX = auxArea.x;
+        final float heroHighX = auxArea.x + auxArea.width - 1;
+        final float heroLowY = auxArea.y;
+        final float heroHighY = auxArea.y + auxArea.height - 1;
+
+        final float foeLowX = foe.getX();
+        final float foeHighX = foe.getAuxPosition().x + foe.getWidth() - 1;
+        final float foeLowY = foe.getY();
+        final float foeHighY = foe.getY() + foe.getHeight() - 1;
+
+        return map.isLineCollision(heroLowX, heroLowY, foeLowX, foeLowY)
+                || map.isLineCollision(heroHighX, heroHighY, foeHighX, foeHighY);
+    }
+
     public void receiveDamage() {
         if (!dying) {
             damageImageDuration = DAMAGE_DURATION;
             failDashSound.play();
             if (life > 0) {
                 life--;
-                if (!DEBUG_IMMORTAL && life <= 0) {
+                if (!Debug.IMMORTAL && life <= 0) {
                     die();
                 }
             }

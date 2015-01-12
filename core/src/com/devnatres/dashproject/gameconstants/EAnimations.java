@@ -16,6 +16,11 @@ public enum EAnimations {
             return createAnimation(hyperStore, "mark_standing.png", 3, 1, 10f, PlayMode.LOOP_PINGPONG);
         }
     },
+    HERO_CROUCHING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "mark_crouched.png", 1, 1, 10f, PlayMode.LOOP_PINGPONG);
+        }
+    },
     HERO_ATTACKING {
         public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_attacking.png", 2, 1, 15f, PlayMode.NORMAL);
