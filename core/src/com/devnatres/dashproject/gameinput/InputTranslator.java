@@ -116,6 +116,10 @@ public class InputTranslator implements InputProcessor {
         }
     }
 
+    public boolean isTouchDown() {
+        return getTouchDownPoint() != null;
+    }
+
     public boolean isResetRequested() {
         return resetRequested;
     }
