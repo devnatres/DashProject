@@ -9,9 +9,9 @@ import com.devnatres.dashproject.levelsystem.LevelScreen;
 public class HordeGroup {
     private final Array<Horde> hordes = new Array();
     private final Horde globalHorde;
-    private boolean isFullHordeComboAvailable = true;
-    private int maxConsecutiveHordeComboCount;
-    private int currentConsecutiveHordeComboCount;
+    private boolean isFullHordeChainAvailable = true;
+    private int maxConsecutiveHordeChainCount;
+    private int currentConsecutiveHordeChainCount;
     private final LevelScreen levelScreen;
 
     public HordeGroup(LevelScreen levelSCreen) {
@@ -54,21 +54,21 @@ public class HordeGroup {
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
         if (hordeDamageResult.isDeadInHordeCombo()) {
-            currentConsecutiveHordeComboCount++;
-            if (currentConsecutiveHordeComboCount > maxConsecutiveHordeComboCount) {
-                maxConsecutiveHordeComboCount = currentConsecutiveHordeComboCount;
+            currentConsecutiveHordeChainCount++;
+            if (currentConsecutiveHordeChainCount > maxConsecutiveHordeChainCount) {
+                maxConsecutiveHordeChainCount = currentConsecutiveHordeChainCount;
             }
         } else {
-            isFullHordeComboAvailable = false;
-            currentConsecutiveHordeComboCount = 0;
+            isFullHordeChainAvailable = false;
+            currentConsecutiveHordeChainCount = 0;
         }
     }
 
-    public int getMaxConsecutiveHordeComboCount() {
-        return maxConsecutiveHordeComboCount;
+    public int getMaxConsecutiveHordeChainCount() {
+        return maxConsecutiveHordeChainCount;
     }
 
-    public boolean isFullHordeComboAvailable() {
-        return isFullHordeComboAvailable;
+    public boolean isFullHordeChainAvailable() {
+        return isFullHordeChainAvailable;
     }
 }

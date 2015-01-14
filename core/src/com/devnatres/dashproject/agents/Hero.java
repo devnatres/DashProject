@@ -207,9 +207,7 @@ public class Hero extends Agent {
             super.act(delta);
             boolean moved = setNextPosIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
             boolean attackReleased = attack();
-            if (attackReleased) {
-                levelScreen.activateBulletTime(); // Reboot if it was activated before
-            } else if (moved) {
+            if (!attackReleased && moved) {
                 levelScreen.deactivateBulletTime();
             }
 
@@ -256,6 +254,7 @@ public class Hero extends Agent {
                     hitSound.play(.1f);
                 }
 
+                levelScreen.activateBulletTime(); // Reboot if it was activated before
                 attackReleased = true;
             }
         }

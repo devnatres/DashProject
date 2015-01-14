@@ -16,10 +16,10 @@ public class Score {
     private static final int HORDE_COMBO_SCORE_DURATION = 90;
     private static final int SCORE_COUNT_PHASE_DURATION = 90;
 
-    private static final int MAX_HORDE_COMBO_SCORE_FACTOR = 500;
+    private static final int MAX_HORDE_CHAIN_SCORE_FACTOR = 500;
     private static final int LIFE_SCORE_FACTOR = 200;
     private static final int TIME_SCORE_FACTOR = 250;
-    private static final float FULL_HORDE_COMBO_SCORE_FACTOR = 1.5f;
+    private static final float FULL_HORDE_CHAIN_SCORE_FACTOR = 0.2f;
 
     private final Texture youWinMessage;
     private final int screenWidth;
@@ -42,7 +42,7 @@ public class Score {
     private String maxHordeComboScoreString;
     private String lifeScoreString;
     private String timeScoreString;
-    private String fullHordeComboScoreString;
+    private String fullHordeChainScoreString;
     private String totalScoreString;
 
     private int totalScore;
@@ -113,8 +113,8 @@ public class Score {
             font.draw(preparedBatch, timeScoreString, 50, 450);
         }
         if (scoreCountPhase > 5) {
-            if (fullHordeComboScoreString != "") {
-                font.draw(preparedBatch, fullHordeComboScoreString, 50, 400);
+            if (fullHordeChainScoreString != "") {
+                font.draw(preparedBatch, fullHordeChainScoreString, 50, 400);
             } else {
                 scoreCountPhaseDuration = 0;
             }
@@ -128,11 +128,11 @@ public class Score {
         actionScoreString = String.valueOf("Action: " + actionScore);
         totalScore = actionScore;
 
-        final int maxHordeCombo = hordeGroup.getMaxConsecutiveHordeComboCount();
-        final int maxHordeComboScore = maxHordeCombo * MAX_HORDE_COMBO_SCORE_FACTOR;
+        final int maxHordeCombo = hordeGroup.getMaxConsecutiveHordeChainCount();
+        final int maxHordeComboScore = maxHordeCombo * MAX_HORDE_CHAIN_SCORE_FACTOR;
         maxHordeComboScoreString = String.valueOf("Max. Horde Combo: "
                 + maxHordeCombo
-                + " x " + MAX_HORDE_COMBO_SCORE_FACTOR
+                + " x " + MAX_HORDE_CHAIN_SCORE_FACTOR
                 + " = " + maxHordeComboScore);
         totalScore += maxHordeComboScore;
 
@@ -152,15 +152,16 @@ public class Score {
                 + " = " + timeScore);
         totalScore += timeScore;
 
-        if (hordeGroup.isFullHordeComboAvailable()) {
-            int fullHordeComboScore = (int)(totalScore * FULL_HORDE_COMBO_SCORE_FACTOR);
-            fullHordeComboScoreString = "Full Horde Combo: "
-                    + totalScore
-                    + " x " + FULL_HORDE_COMBO_SCORE_FACTOR
-                    + " = " + fullHordeComboScore;
-            totalScore += fullHordeComboScore;
+
+        boolean isFullHordeChain = hordeGroup.isFullHordeChainAvailable();
+        if (isFullHordeChain) {
+            int fullHordeChainScore = (int) (totalScore * FULL_HORDE_CHAIN_SCORE_FACTOR);
+            fullHordeChainScoreString = "Full Horde Chain: "
+                    + " + " + FULL_HORDE_CHAIN_SCORE_FACTOR*100 + "%"
+                    + " = " + fullHordeChainScore;
+            totalScore += fullHordeChainScore;
         } else {
-            fullHordeComboScoreString = "";
+            fullHordeChainScoreString = "Full Horde Chain: Not achieved";
         }
 
         totalScoreString = "TOTAL: " + String.valueOf(totalScore);
