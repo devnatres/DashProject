@@ -9,11 +9,11 @@ import com.devnatres.dashproject.DashGame;
 abstract public class LevelCreator {
 
     /**
-     * Creates a new level, not always from LevelScreen class. It depends on "levelName".
+     * Creates a new level, not always from LevelScreen class. It depends on "levelId".
      *
      */
-    public static Screen createLevel(DashGame game, String levelName) {
-        return new LevelScreen(game, levelName);
+    public static Screen createLevel(DashGame game, LevelId levelId) {
+        return new LevelScreen(game, levelId);
     }
 
     private LevelCreator() {}

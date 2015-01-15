@@ -31,9 +31,11 @@ public class DashGame extends Game {
     private TextureRegion textureRegion;
     private Sprite sprite;
 
-    long initialFrameTime = System.nanoTime();
-    long currentFrameTime;
-    float deltaFrameTime;
+    private long initialFrameTime = System.nanoTime();
+    private long currentFrameTime;
+    private float deltaFrameTime;
+
+    private GameState gameState;
 
     public int getScreenWidth() {
         return screenWidth;
@@ -72,8 +74,14 @@ public class DashGame extends Game {
         return hyperStore;
     }
 
+    public GameState getGameState() {
+        return gameState;
+    }
+
 	@Override
 	public void create() {
+
+
         VectorPool.initialize();
 
         screenWidth = Gdx.graphics.getWidth();
@@ -92,10 +100,11 @@ public class DashGame extends Game {
 
         this.setScreen(new MainMenuScreen(this));
 
-        if (Debug.DEBUG) Debug.begin(mainCamera);
+        gameState = new GameState();
 
         initialFrameTime = System.nanoTime();
 
+        if (Debug.DEBUG) Debug.begin(mainCamera);
 	}
 
 	@Override

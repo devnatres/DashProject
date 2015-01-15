@@ -51,7 +51,7 @@ public class LevelMap implements Disposable {
     private final int mapPixelHeight;
 
     public LevelMap(String levelName) {
-        String levelFileName = "levels/" + levelName + ".tmx";
+        String levelFileName = "maps/" + levelName + ".tmx";
 
         tiledMap = new TmxMapLoader().load(levelFileName);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
@@ -176,9 +176,9 @@ public class LevelMap implements Disposable {
      *
      * @return number of hordes
      */
-    public int extractLevelScript(HyperStore hyperStore, LevelScreen levelScreen) {
+    public int extractLevelScript(HyperStore hyperStore, LevelScreen levelScreen, String scriptName) {
         int hordeCount = 0;
-        MapLayer mapLayer = tiledMap.getLayers().get("levelscript");
+        MapLayer mapLayer = tiledMap.getLayers().get(scriptName);
         if (mapLayer == null) {
             return hordeCount;
         }

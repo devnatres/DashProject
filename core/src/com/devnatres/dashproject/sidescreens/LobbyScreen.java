@@ -8,61 +8,65 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.GameState;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
+import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.store.HyperStore;
 
 /**
  * Created by DevNatres on 14/01/2015.
  */
 public class LobbyScreen implements Screen {
-    final DashGame game;
-    final SpriteBatch mainBatch;
-    final BitmapFont mainFont;
-    final OrthographicCamera mainCamera;
+    private final DashGame game;
+    private final SpriteBatch mainBatch;
+    private final BitmapFont mainFont;
+    private final OrthographicCamera mainCamera;
 
-    final Texture heroTexture;
-    final Texture background;
-    final HyperStore lobbyHyperStore;
+    private final Texture heroTexture;
+    private final Texture background;
+    private final HyperStore lobbyHyperStore;
 
-    int currentLevelNumber;
+    private final InputTranslator inputTranslator;
+    private final GameState gameState;
 
-    final InputTranslator inputTranslator;
-
-    public LobbyScreen(DashGame game) {
-        this.game = game;
-        mainBatch = game.getMainBatch();
-        mainFont = game.getMainFont();
-        mainCamera = game.getCenteredMainCamera();
+    public LobbyScreen(DashGame dashGame) {
+        this.game = dashGame;
+        mainBatch = dashGame.getMainBatch();
+        mainFont = dashGame.getMainFont();
+        mainCamera = dashGame.getCenteredMainCamera();
 
         lobbyHyperStore = new HyperStore();
         heroTexture = lobbyHyperStore.getTexture("mark.png");
         background = lobbyHyperStore.getTexture("lobby_background.png");
 
-        currentLevelNumber = 1;
+        gameState = dashGame.getGameState();
 
         inputTranslator = new InputTranslator();
     }
+
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mainCamera.update(); // It isn't necessary if we don't change properties like position but it's a good practice
-        mainBatch.setProjectionMatrix(mainCamera.combined); // Use the coordinate system specified by the camera
+        String levelName = gameState.getCurrentLevelName();
+
+        mainCamera.update();
+        mainBatch.setProjectionMatrix(mainCamera.combined);
 
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
         mainFont.draw(mainBatch, "Total score: ", 200, 700);
         mainFont.draw(mainBatch, "Progress: x.y%", 200, 650);
-        mainFont.draw(mainBatch, "Select level: " + currentLevelNumber, 200, 300);
+        mainFont.draw(mainBatch, "Select level: " + levelName, 200, 300);
         mainBatch.end();
 
         if (inputTranslator.isTouchDown()) {
-            final String levelString = "level" + String.format("%04d", currentLevelNumber);
-            game.setScreen(LevelCreator.createLevel(game, levelString));
+            LevelId levelId = new LevelId(levelName);
+            game.setScreen(LevelCreator.createLevel(game, levelId));
             dispose();
         }
     }

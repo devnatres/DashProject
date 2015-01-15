@@ -90,10 +90,12 @@ public class LevelScreen implements Screen {
     private String timeString;
     private int hordeCount;
 
+    private final LevelId levelId;
+
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
-    protected LevelScreen(DashGame game, String levelName) {
+    protected LevelScreen(DashGame game, LevelId levelId) {
         this.dashGame = game;
 
         screenWidth = game.getScreenWidth();
@@ -103,6 +105,8 @@ public class LevelScreen implements Screen {
         mainFont = game.getMainFont();
         mainCamera = game.getMainCamera();
 
+        this.levelId = levelId;
+
         hyperStore = game.getHyperStore();
 
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
@@ -110,7 +114,7 @@ public class LevelScreen implements Screen {
         fixedCamera = new DnaCamera();
         fixedCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
 
-        map = new LevelMap(levelName);
+        map = new LevelMap(levelId.getMapName());
 
         agentRegistry = new AgentRegistry();
 
@@ -165,7 +169,7 @@ public class LevelScreen implements Screen {
     }
 
     private int extractScript() {
-        return map.extractLevelScript(hyperStore, this);
+        return map.extractLevelScript(hyperStore, this, levelId.getScriptName());
     }
 
     public void addHorde(Horde horde) {
@@ -218,6 +222,7 @@ public class LevelScreen implements Screen {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
+            dashGame.getGameState().notifyCurrentLevelSuccess();
             //endOkMusic.play();
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;

@@ -73,7 +73,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="levelscript">
+ <objectgroup name="levelscript0">
   <properties>
    <property name="step0" value="heroposition,7,63"/>
    <property name="step1" value="createhorde,0"/>
