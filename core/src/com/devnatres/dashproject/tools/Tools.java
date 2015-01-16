@@ -11,6 +11,51 @@ import java.util.Random;
 abstract public class Tools {
     private static final Random random = new Random();
 
+    /**
+     * A check character is added to plainString.
+     * The new string is encrypted a returned.
+     */
+    public static String encryptWithCheck(String plainString, String password) {
+        int plainCheck = 0;
+        String cipherString = new String();
+
+        for (int i = 0; i < plainString.length(); i++) {
+            char character = plainString.charAt(i);
+            plainCheck ^= character;
+
+            char passwordChar = password.charAt((i+1) % password.length());
+            int cipherChar = character ^ passwordChar;
+            cipherString += (char)cipherChar;
+        }
+        int cipherCheck = plainCheck ^ password.charAt(0);
+        cipherString = (char)cipherCheck + cipherString;
+
+        return cipherString;
+    }
+
+    public static String decryptCheckedCipherString(String checkedCipherString, String password) {
+        char cipherCheck = checkedCipherString.charAt(0);
+        int plainCheck = cipherCheck ^ password.charAt(0);
+        int plainCheckCalculated = 0;
+        String plainString = new String();
+
+        for (int i = 1; i < checkedCipherString.length(); i++) {
+            char character = checkedCipherString.charAt(i);
+
+            char passwordChar = password.charAt(i % password.length());
+            int plainChar = character ^ passwordChar;
+            plainString += (char)plainChar;
+
+            plainCheckCalculated ^= (char)plainChar;
+        }
+
+        if (plainCheck != plainCheckCalculated) {
+            return "";
+        } else {
+            return plainString;
+        }
+    }
+
     public static float limit_f(float value, float min, float max) {
         if (value < min) {
             return min;

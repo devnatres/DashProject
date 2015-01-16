@@ -59,7 +59,6 @@ public class LevelScreen implements Screen {
 
     private final InputTranslator inputTranslator;
 
-    private final Texture backgroundTexture;
     private final Texture grayScreenTexture;
 
     private final float screenWidth;
@@ -134,7 +133,6 @@ public class LevelScreen implements Screen {
 
         mainShape.setColor(Color.WHITE);
 
-        backgroundTexture = hyperStore.getTexture("background.jpg");
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
         dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
         timeoutMessage = hyperStore.getTexture("message_timeout.png");
@@ -174,7 +172,6 @@ public class LevelScreen implements Screen {
 
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
-        //hordeGroup.removeKilledHordes();
         hordeGroup.addLinked(horde);
     }
 
@@ -385,9 +382,6 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackground() {
-        mainBatch.begin();
-        mainBatch.draw(backgroundTexture, 300, 0);
-        mainBatch.end();
     }
 
     private void renderMap() {

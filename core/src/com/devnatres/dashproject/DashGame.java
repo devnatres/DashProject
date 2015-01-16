@@ -80,8 +80,6 @@ public class DashGame extends Game {
 
 	@Override
 	public void create() {
-
-
         VectorPool.initialize();
 
         screenWidth = Gdx.graphics.getWidth();

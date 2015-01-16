@@ -51,7 +51,7 @@ public class LobbyScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        String levelName = gameState.getCurrentLevelName();
+        LevelId levelId = gameState.getCurrentLevelId();
 
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
@@ -61,11 +61,10 @@ public class LobbyScreen implements Screen {
         mainBatch.draw(heroTexture, 50, 600);
         mainFont.draw(mainBatch, "Total score: ", 200, 700);
         mainFont.draw(mainBatch, "Progress: x.y%", 200, 650);
-        mainFont.draw(mainBatch, "Select level: " + levelName, 200, 300);
+        mainFont.draw(mainBatch, "Select level: " + levelId.getLevelName(), 200, 300);
         mainBatch.end();
 
         if (inputTranslator.isTouchDown()) {
-            LevelId levelId = new LevelId(levelName);
             game.setScreen(LevelCreator.createLevel(game, levelId));
             dispose();
         }
