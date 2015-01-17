@@ -1,6 +1,7 @@
 package com.devnatres.dashproject;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelId;
@@ -17,15 +18,24 @@ public class GameState {
     private int currentLevelIndex;
 
     private final Array<LevelId> levelIds;
+    private final Array<Integer> levelRecords;
+
+    private final Preferences preferences;
 
     public GameState() {
+        preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
+        levelRecords = new Array();
         levelIds = new Array();
 
         final Array<String> levelSequence = readLevelSequence();
 
         maxLevelIndex = levelSequence.size - 1;
         for (int i = 0; i <= maxLevelIndex; i++) {
-            levelIds.add(new LevelId(levelSequence.get(i)));
+            LevelId levelId = new LevelId(levelSequence.get(i));
+            levelIds.add(levelId);
+
+            String value = preferences.getString(levelId.getLevelKey()+"_"+"score", "0");
+            levelRecords.add(Integer.parseInt(value));
         }
     }
 
@@ -33,6 +43,7 @@ public class GameState {
         Array<String> lines = new Array();
         FileHandle file = Gdx.files.internal("maps/level.seq");
         BufferedReader reader = new BufferedReader(file.reader());
+
         try {
             String line = reader.readLine();
             while (line != null) {
@@ -54,6 +65,18 @@ public class GameState {
 
     public LevelId getCurrentLevelId() {
         return levelIds.get(currentLevelIndex);
+    }
+
+    public int getCurrentLevelScore() {
+        // TODO Avoid generating string each time
+        String scoreString = preferences.getString(levelIds.get(currentLevelIndex).getLevelKey()+"_"+"score", "0");
+        return Integer.parseInt(scoreString);
+    }
+
+    public void updateCurrentLevelScore(int score) {
+        // TODO Avoid generating string each time
+        preferences.putString(levelIds.get(currentLevelIndex).getLevelKey()+"_"+"score", ""+score);
+        preferences.flush();
     }
 
 }

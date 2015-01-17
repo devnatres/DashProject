@@ -124,7 +124,7 @@ public class Score {
         }
     }
 
-    private void calculateFinalCount() {
+    public void calculateFinalCount() {
         actionScoreString = String.valueOf("Action: " + actionScore);
         totalScore = actionScore;
 
@@ -167,5 +167,9 @@ public class Score {
         totalScoreString = "TOTAL: " + String.valueOf(totalScore);
 
         isFinalCountCalculated = true;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
     }
 }

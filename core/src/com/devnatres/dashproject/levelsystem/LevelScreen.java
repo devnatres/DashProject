@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.DnaCamera;
@@ -219,8 +220,10 @@ public class LevelScreen implements Screen {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
+            score.calculateFinalCount();
+            dashGame.getGameState().updateCurrentLevelScore(score.getTotalScore());
             dashGame.getGameState().notifyCurrentLevelSuccess();
-            //endOkMusic.play();
+            GlobalAudio.playOnly(endOkMusic);
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
         } else if (!Debug.IMMORTAL && time == 0) {
@@ -293,6 +296,7 @@ public class LevelScreen implements Screen {
     }
 
     private void reset() {
+        GlobalAudio.stopMusic();
         dashGame.setScreen(new MainMenuScreen(dashGame));
     }
 
@@ -587,7 +591,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
-        //badassMusic.play();
+        badassMusic.play();
     }
 
     @Override

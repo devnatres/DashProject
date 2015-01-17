@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelMap;
@@ -164,13 +165,15 @@ public class Hero extends Agent {
                 levelScreen.register(dashShadow, AgentRegistry.EAgentLayer.TRUNK);
             }
 
-            dashSound.play(.1f);
+            //dashSound.play(.1f);
+            GlobalAudio.play(dashSound, .1f);
 
             nextArea.setPosition(limitPositionX(nextArea.x), limitPositionY(nextArea.y));
             setPosition(nextArea.x, nextArea.y);
             map.updateCoverDirection(auxArea, coverDirection, lowCoverDirection);
         } else {
-            failDashSound.play();
+            //failDashSound.play();
+            GlobalAudio.play(failDashSound);
         }
 
         VectorPool.recycle(vTarget);
@@ -249,9 +252,11 @@ public class Hero extends Agent {
                 foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
                 if (levelScreen.isBulletTime()) {
-                    comboSound.play(.1f);
+                    //comboSound.play(.1f);
+                    GlobalAudio.play(comboSound, .1f);
                 } else {
-                    hitSound.play(.1f);
+                    //hitSound.play(.1f);
+                    GlobalAudio.play(hitSound, .1f);
                 }
 
                 levelScreen.activateBulletTime(); // Reboot if it was activated before
@@ -283,7 +288,8 @@ public class Hero extends Agent {
     public void receiveDamage() {
         if (!dying) {
             damageImageDuration = DAMAGE_DURATION;
-            failDashSound.play();
+            //failDashSound.play();
+            GlobalAudio.play(failDashSound);
             if (life > 0) {
                 life--;
                 if (!Debug.IMMORTAL && life <= 0) {
@@ -294,7 +300,8 @@ public class Hero extends Agent {
     }
 
     public void die() {
-        deadSound.play();
+        //deadSound.play();
+        GlobalAudio.play(deadSound);
         dying = true;
         setAnimation(deadAnimation);
     }

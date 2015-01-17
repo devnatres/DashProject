@@ -20,9 +20,11 @@ public class LevelId {
     private final int trophyB;
     private final int trophyC;
     private final String name;
+    private final String key;
 
     public LevelId(String levelString) {
         final String[] fragments = levelString.split(",");
+        key = fragments[LEVEL_INDEX];
 
         final String[] mapScriptFragment = fragments[LEVEL_INDEX].split("\\.");
         mapName = "map" + String.format("%03d", Integer.parseInt(mapScriptFragment[0]));
@@ -46,6 +48,11 @@ public class LevelId {
 
     public String getLevelName() {
         return name;
+    }
+
+
+    public String getLevelKey() {
+        return key;
     }
 
 }

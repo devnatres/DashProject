@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
+import com.devnatres.dashproject.GlobalAudio;
 
 /**
  * Created by DevNatres on 06/12/2014.
@@ -37,14 +38,16 @@ public class HyperStore implements Disposable {
         soundStore = new Store<Sound>(new Store.Generable<Sound>() {
             @Override
             public Sound generate(String resourceFileName) {
-                return Gdx.audio.newSound(Gdx.files.internal(resourceFileName));
+                //return Gdx.audio.newSound(Gdx.files.internal(resourceFileName));
+                return GlobalAudio.newSound(resourceFileName);
             }
         });
 
         musicStore = new Store<Music>(new Store.Generable<Music>() {
             @Override
             public Music generate(String resourceFileName) {
-                return Gdx.audio.newMusic(Gdx.files.internal(resourceFileName));
+                //return Gdx.audio.newMusic(Gdx.files.internal(resourceFileName));
+                return GlobalAudio.newMusic(resourceFileName);
             }
         });
 
@@ -54,7 +57,7 @@ public class HyperStore implements Disposable {
     @Override
     public void dispose() {
         textureStore.dispose();
-        soundStore.dispose();
-        musicStore.dispose();
+        soundStore.disposeGlobalSound();
+        musicStore.disposeGlobalMusic();
     }
 }

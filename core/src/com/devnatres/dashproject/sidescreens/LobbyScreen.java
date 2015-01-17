@@ -62,6 +62,7 @@ public class LobbyScreen implements Screen {
         mainFont.draw(mainBatch, "Total score: ", 200, 700);
         mainFont.draw(mainBatch, "Progress: x.y%", 200, 650);
         mainFont.draw(mainBatch, "Select level: " + levelId.getLevelName(), 200, 300);
+        mainFont.draw(mainBatch, "Record: " + gameState.getCurrentLevelScore(), 200, 250);
         mainBatch.end();
 
         if (inputTranslator.isTouchDown()) {

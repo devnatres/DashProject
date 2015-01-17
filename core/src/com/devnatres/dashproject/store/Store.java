@@ -1,6 +1,9 @@
 package com.devnatres.dashproject.store;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Disposable;
+import com.devnatres.dashproject.GlobalAudio;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,7 +44,26 @@ public class Store<T extends Disposable> implements Disposable {
             T value = (T)entry.getValue();
             value.dispose();
         }
+        store.clear();
+    }
 
+    public void disposeGlobalMusic() {
+        Iterator iterator = store.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            T value = (T)entry.getValue();
+            GlobalAudio.dispose((Music)value);
+        }
+        store.clear();
+    }
+
+    public void disposeGlobalSound() {
+        Iterator iterator = store.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            T value = (T)entry.getValue();
+            GlobalAudio.dispose((Sound)value);
+        }
         store.clear();
     }
 }
