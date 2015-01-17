@@ -9,6 +9,8 @@ import com.devnatres.dashproject.GlobalAudio;
 
 /**
  * Created by DevNatres on 06/12/2014.
+ *
+ * Music and sound are obtained from GlobalAudio class.
  */
 public class HyperStore implements Disposable {
     private final Store<Texture> textureStore;
@@ -19,10 +21,16 @@ public class HyperStore implements Disposable {
         return textureStore.getResource(resourceFileName);
     }
 
+    /**
+     * @return sound from GlobalAudio class
+     */
     public Sound getSound(String resourceFileName) {
         return soundStore.getResource(resourceFileName);
     }
 
+    /**
+     * @return music from GlobalAudio class
+     */
     public Music getMusic(String resourceFileName) {
         return musicStore.getResource(resourceFileName);
     }
@@ -54,6 +62,10 @@ public class HyperStore implements Disposable {
 
     }
 
+    /**
+     * Music and sound are disposed with GlobalAudio class.
+     * Other kind of resources are disposed as usual.
+     */
     @Override
     public void dispose() {
         textureStore.dispose();

@@ -3,30 +3,51 @@ package com.devnatres.dashproject.sidescreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.DnaCamera;
+import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.Time;
+import com.devnatres.dashproject.gameinput.Button;
+import com.devnatres.dashproject.gameinput.IExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.store.HyperStore;
 
 /**
  * Created by DevNatres on 30/11/2014.
  */
-public class MainMenuScreen implements Screen {
-    final DashGame game;
-    final SpriteBatch mainBatch;
-    final BitmapFont mainFont;
-    final OrthographicCamera mainCamera;
+public class MainMenuScreen implements Screen, IExecutable {
+    private static int PLAY_BUTTON_ACTION = 0;
 
-    final InputTranslator inputTranslator;
+    private final DashGame game;
+    private final SpriteBatch mainBatch;
+    private final BitmapFont mainFont;
+    private final DnaCamera mainCamera;
+    private final HyperStore hyperStore;
+
+    private final InputTranslator inputTranslator;
+
+    private final Button playButton;
 
     public MainMenuScreen(DashGame game) {
         this.game = game;
         mainBatch = game.getMainBatch();
         mainFont = game.getMainFont();
         mainCamera = game.getCenteredMainCamera();
+        hyperStore = game.getHyperStore();
 
         inputTranslator = new InputTranslator();
+
+        playButton = new Button(200, 500,
+                EAnimations.BUTTON_PLAY_STANDBY.create(hyperStore),
+                EAnimations.BUTTON_PLAY_PUSHED.create(hyperStore),
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                10,
+                this,
+                PLAY_BUTTON_ACTION);
+        playButton.setPosition(200, 500);
     }
 
     @Override
@@ -34,22 +55,20 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        playButton.act(Time.FRAME, touchDownPointOnCamera);
+
         mainCamera.update(); // It isn't necessary if we don't change properties like position but it's a good practice
         mainBatch.setProjectionMatrix(mainCamera.combined); // Use the coordinate system specified by the camera
 
         mainBatch.begin();
         mainFont.draw(mainBatch, "Dash Project", 50, 750);
-        mainFont.draw(mainBatch, "Play", 200, 500);
-        mainFont.draw(mainBatch, "Options", 200, 450);
-        mainFont.draw(mainBatch, "Credits", 200, 400);
-        mainFont.draw(mainBatch, "Exit", 200, 350);
+        playButton.draw(mainBatch);
+//        mainFont.draw(mainBatch, "Play", 200, 500);
+//        mainFont.draw(mainBatch, "Options", 200, 450);
+//        mainFont.draw(mainBatch, "Credits", 200, 400);
+//        mainFont.draw(mainBatch, "Exit", 200, 350);
         mainBatch.end();
-
-        if (inputTranslator.isTouchDown()) {
-            //game.setScreen(LevelCreator.createLevel(game, "level0001"));
-            game.setScreen(new LobbyScreen(game));
-            dispose();
-        }
     }
 
     @Override
@@ -79,5 +98,13 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public void execute(int actionId) {
+        if (actionId == PLAY_BUTTON_ACTION) {
+            game.setScreen(new LobbyScreen(game));
+            dispose();
+        }
     }
 }

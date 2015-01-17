@@ -530,16 +530,10 @@ public class LevelScreen implements Screen {
     }
 
     private void inputForHero() {
-
-        Vector2 touchDownPoint = inputTranslator.getTouchDownPoint();
-
-        if (touchDownPoint != null) {
-            Vector3 clickCoordinates = new Vector3(touchDownPoint.x, touchDownPoint.y, 0);
-            Vector3 position = mainCamera.unproject(clickCoordinates);
-            hero.programNextPos(position.x, position.y);
+        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        if (touchDownPointOnCamera != null) {
+            hero.programNextPos(touchDownPointOnCamera.x, touchDownPointOnCamera.y);
         }
-
-        //hero.act(delta);
     }
 
     public void activateBulletTime() {

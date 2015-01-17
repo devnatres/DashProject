@@ -12,7 +12,7 @@ abstract public class Tools {
     private static final Random random = new Random();
 
     /**
-     * A check character is added to plainString.
+     * A checkInput character is added to plainString.
      * The new string is encrypted a returned.
      */
     public static String encryptWithCheck(String plainString, String password) {

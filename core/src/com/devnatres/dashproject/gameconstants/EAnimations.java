@@ -66,6 +66,17 @@ public enum EAnimations {
             return createAnimation(hyperStore, "radar_indicator.png", 4, 1, 5, PlayMode.LOOP_PINGPONG);
         }
     },
+
+    BUTTON_PLAY_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "buttons/button_play_standby.png", 3, 1, 5, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    BUTTON_PLAY_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "buttons/button_play_pushed.png", 3, 1, 5, PlayMode.LOOP_PINGPONG);
+        }
+    },
     ;
     private static int SCORE_DURATION = 90;
 

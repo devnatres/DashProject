@@ -3,11 +3,11 @@ package com.devnatres.dashproject.sidescreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.GameState;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
@@ -21,7 +21,7 @@ public class LobbyScreen implements Screen {
     private final DashGame game;
     private final SpriteBatch mainBatch;
     private final BitmapFont mainFont;
-    private final OrthographicCamera mainCamera;
+    private final DnaCamera mainCamera;
 
     private final Texture heroTexture;
     private final Texture background;
