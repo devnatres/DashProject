@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelId;
+import com.devnatres.dashproject.tools.Tools;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,12 +58,6 @@ public class GameState {
         return lines;
     }
 
-    public void notifyCurrentLevelSuccess() {
-        if (currentLevelIndex < maxLevelIndex) {
-            currentLevelIndex++;
-        }
-    }
-
     public LevelId getCurrentLevelId() {
         return levelIds.get(currentLevelIndex);
     }
@@ -77,6 +72,15 @@ public class GameState {
         // TODO Avoid generating string each time
         preferences.putString(levelIds.get(currentLevelIndex).getLevelKey()+"_"+"score", ""+score);
         preferences.flush();
+
+        if (currentLevelIndex < maxLevelIndex) {
+            currentLevelIndex++;
+        }
+    }
+
+    public void displaceCurrentLevel(int displacement) {
+        currentLevelIndex += displacement;
+        currentLevelIndex = Tools.limitInteger(currentLevelIndex, 0, maxLevelIndex);
     }
 
 }

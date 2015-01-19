@@ -69,16 +69,63 @@ public enum EAnimations {
 
     BUTTON_PLAY_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "buttons/button_play_standby.png", 3, 1, 5, PlayMode.LOOP_PINGPONG);
+            return createButtonAnimation(hyperStore, "buttons/button_play_standby.png");
         }
     },
     BUTTON_PLAY_PUSHED {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "buttons/button_play_pushed.png", 3, 1, 5, PlayMode.LOOP_PINGPONG);
+            return createButtonAnimation(hyperStore, "buttons/button_play_pushed.png");
+        }
+    },
+
+    BUTTON_GO_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_go_standby.png");
+        }
+    },
+    BUTTON_GO_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_go_pushed.png");
+        }
+    },
+
+    BUTTON_BACK_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_back_standby.png");
+        }
+    },
+    BUTTON_BACK_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_back_pushed.png");
+        }
+    },
+
+    BUTTON_ARROW_UP {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_arrow_up.png");
+        }
+    },
+    BUTTON_ARROW_UP2 {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_arrow_up2.png");
+        }
+    },
+    BUTTON_ARROW_DOWN {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_arrow_down.png");
+        }
+    },
+    BUTTON_ARROW_DOWN2 {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_arrow_down2.png");
         }
     },
     ;
     private static int SCORE_DURATION = 90;
+
+    public static DnaAnimation createButtonAnimation(HyperStore hyperStore, String fileName) {
+        return createAnimation(hyperStore, fileName, 3, 1, 5, PlayMode.LOOP_PINGPONG);
+    }
 
     abstract public DnaAnimation create(HyperStore hyperStore);
 

@@ -6,9 +6,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.GameState;
+import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.Time;
+import com.devnatres.dashproject.gameinput.Button;
+import com.devnatres.dashproject.gameinput.IExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
@@ -17,8 +22,17 @@ import com.devnatres.dashproject.store.HyperStore;
 /**
  * Created by DevNatres on 14/01/2015.
  */
-public class LobbyScreen implements Screen {
-    private final DashGame game;
+public class LobbyScreen implements Screen, IExecutable {
+    private static int GO_BUTTON_ACTION = 0;
+    private static int BACK_BUTTON_ACTION = 1;
+    private static int UP_BUTTON_ACTION = 2;
+    private static int UP2_BUTTON_ACTION = 3;
+    private static int DOWN_BUTTON_ACTION = 4;
+    private static int DOWN2_BUTTON_ACTION = 5;
+
+    private static int ARROW_BUTTON_X = 420;
+
+    private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final BitmapFont mainFont;
     private final DnaCamera mainCamera;
@@ -30,11 +44,22 @@ public class LobbyScreen implements Screen {
     private final InputTranslator inputTranslator;
     private final GameState gameState;
 
+    private final HyperStore hyperStore;
+    private final Button goButton;
+    private final Button backButton;
+    private final Button upButton;
+    private final Button up2Button;
+    private final Button downButton;
+    private final Button down2Button;
+
+    private LevelId currentLevelId;
+
     public LobbyScreen(DashGame dashGame) {
-        this.game = dashGame;
+        this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
         mainFont = dashGame.getMainFont();
         mainCamera = dashGame.getCenteredMainCamera();
+        hyperStore = dashGame.getHyperStore();
 
         lobbyHyperStore = new HyperStore();
         heroTexture = lobbyHyperStore.getTexture("mark.png");
@@ -43,6 +68,55 @@ public class LobbyScreen implements Screen {
         gameState = dashGame.getGameState();
 
         inputTranslator = new InputTranslator();
+
+        goButton = new Button(380, 64,
+                EAnimations.BUTTON_GO_STANDBY.create(hyperStore),
+                EAnimations.BUTTON_GO_PUSHED.create(hyperStore),
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                10,
+                this,
+                GO_BUTTON_ACTION);
+
+        backButton = new Button(100, 64,
+                EAnimations.BUTTON_BACK_STANDBY.create(hyperStore),
+                EAnimations.BUTTON_BACK_PUSHED.create(hyperStore),
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                10,
+                this,
+                BACK_BUTTON_ACTION);
+
+        up2Button = new Button(ARROW_BUTTON_X, 510,
+                EAnimations.BUTTON_ARROW_UP2.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this,
+                UP2_BUTTON_ACTION);
+
+        upButton = new Button(ARROW_BUTTON_X, 430,
+                EAnimations.BUTTON_ARROW_UP.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this,
+                UP_BUTTON_ACTION);
+
+        downButton = new Button(ARROW_BUTTON_X, 300,
+                EAnimations.BUTTON_ARROW_DOWN.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this,
+                DOWN_BUTTON_ACTION);
+
+        down2Button = new Button(ARROW_BUTTON_X, 210,
+                EAnimations.BUTTON_ARROW_DOWN2.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this,
+                DOWN2_BUTTON_ACTION);
+
     }
 
 
@@ -50,25 +124,38 @@ public class LobbyScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        LevelId levelId = gameState.getCurrentLevelId();
-
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
+
+        currentLevelId = gameState.getCurrentLevelId();
+
+        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        goButton.act(Time.FRAME, touchDownPointOnCamera);
+        backButton.act(Time.FRAME, touchDownPointOnCamera);
+        upButton.act(Time.FRAME, touchDownPointOnCamera);
+        up2Button.act(Time.FRAME, touchDownPointOnCamera);
+        downButton.act(Time.FRAME, touchDownPointOnCamera);
+        down2Button.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
         mainFont.draw(mainBatch, "Total score: ", 200, 700);
         mainFont.draw(mainBatch, "Progress: x.y%", 200, 650);
-        mainFont.draw(mainBatch, "Select level: " + levelId.getLevelName(), 200, 300);
+        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName(), 200, 300);
         mainFont.draw(mainBatch, "Record: " + gameState.getCurrentLevelScore(), 200, 250);
+        goButton.draw(mainBatch);
+        backButton.draw(mainBatch);
+        up2Button.draw(mainBatch);
+        upButton.draw(mainBatch);
+        downButton.draw(mainBatch);
+        down2Button.draw(mainBatch);
         mainBatch.end();
 
-        if (inputTranslator.isTouchDown()) {
-            game.setScreen(LevelCreator.createLevel(game, levelId));
+        /*if (inputTranslator.isTouchDown()) {
+            dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
             dispose();
-        }
+        }*/
     }
 
     @Override
@@ -99,5 +186,24 @@ public class LobbyScreen implements Screen {
     @Override
     public void dispose() {
         lobbyHyperStore.dispose();
+    }
+
+    @Override
+    public void execute(int actionId) {
+        if (actionId == GO_BUTTON_ACTION) {
+            dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
+            dispose();
+        } else if (actionId == BACK_BUTTON_ACTION) {
+            dashGame.setScreen(new MainMenuScreen(dashGame));
+        } else if (actionId == UP2_BUTTON_ACTION) {
+            gameState.displaceCurrentLevel(2);
+        } else if (actionId == UP_BUTTON_ACTION) {
+            gameState.displaceCurrentLevel(1);
+        } else if (actionId == DOWN_BUTTON_ACTION) {
+            gameState.displaceCurrentLevel(-1);
+        } else if (actionId == DOWN2_BUTTON_ACTION) {
+            gameState.displaceCurrentLevel(-2);
+        }
+
     }
 }

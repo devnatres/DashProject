@@ -14,17 +14,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.GlobalAudio;
-import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.DnaCamera;
+import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.agents.*;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.gameconstants.Parameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
-import com.devnatres.dashproject.sidescreens.MainMenuScreen;
+import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.store.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
@@ -222,7 +222,6 @@ public class LevelScreen implements Screen {
             playMode = EPlayMode.SCORE_COUNT;
             score.calculateFinalCount();
             dashGame.getGameState().updateCurrentLevelScore(score.getTotalScore());
-            dashGame.getGameState().notifyCurrentLevelSuccess();
             GlobalAudio.playOnly(endOkMusic);
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
@@ -297,7 +296,7 @@ public class LevelScreen implements Screen {
 
     private void reset() {
         GlobalAudio.stopMusic();
-        dashGame.setScreen(new MainMenuScreen(dashGame));
+        dashGame.setScreen(new LobbyScreen(dashGame));
     }
 
     private void decideToChaseHeroWithCamera() {
@@ -370,13 +369,13 @@ public class LevelScreen implements Screen {
     private float limitCameraTargetX(float x) {
         final float minX = screenWidth/2;
         final float maxX = map.getMapPixelWidth() - screenWidth/2;
-        return Math.round(Tools.limit_f(x, minX, maxX));
+        return Math.round(Tools.limitFloat(x, minX, maxX));
     }
 
     private float limitCameraTargetY(float y) {
         final float minY = screenHeight/2;
         final float maxY = map.getMapPixelHeight() - screenHeight/2;
-        return Math.round(Tools.limit_f(y, minY, maxY));
+        return Math.round(Tools.limitFloat(y, minY, maxY));
     }
 
     private void clearScreen() {

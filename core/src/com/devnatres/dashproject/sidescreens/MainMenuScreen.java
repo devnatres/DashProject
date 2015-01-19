@@ -40,26 +40,24 @@ public class MainMenuScreen implements Screen, IExecutable {
 
         inputTranslator = new InputTranslator();
 
-        playButton = new Button(200, 500,
+        playButton = new Button(240, 500,
                 EAnimations.BUTTON_PLAY_STANDBY.create(hyperStore),
                 EAnimations.BUTTON_PLAY_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this,
                 PLAY_BUTTON_ACTION);
-        playButton.setPosition(200, 500);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        mainCamera.update();
+        mainBatch.setProjectionMatrix(mainCamera.combined);
 
         Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
         playButton.act(Time.FRAME, touchDownPointOnCamera);
-
-        mainCamera.update(); // It isn't necessary if we don't change properties like position but it's a good practice
-        mainBatch.setProjectionMatrix(mainCamera.combined); // Use the coordinate system specified by the camera
 
         mainBatch.begin();
         mainFont.draw(mainBatch, "Dash Project", 50, 750);
@@ -104,7 +102,6 @@ public class MainMenuScreen implements Screen, IExecutable {
     public void execute(int actionId) {
         if (actionId == PLAY_BUTTON_ACTION) {
             game.setScreen(new LobbyScreen(game));
-            dispose();
         }
     }
 }

@@ -13,6 +13,28 @@ import java.util.Map;
  * Created by DevNatres on 05/12/2014.
  */
 public class Store<T extends Disposable> implements Disposable {
+    public enum EGlobalResourceType {
+        NONE {
+            @Override
+            void dispose(Disposable disposable) {
+                disposable.dispose();
+            }
+        },
+        GLOBAL_SOUND {
+            @Override
+            void dispose(Disposable disposable) {
+                GlobalAudio.dispose((Sound)disposable);
+            }
+        },
+        GLOBAL_MUSIC {
+            @Override
+            void dispose(Disposable disposable) {
+                GlobalAudio.dispose((Music)disposable);
+            }
+        };
+        abstract void dispose(Disposable disposable);
+    }
+
     public interface Generable<T> {
         public T generate(String resourceFileName);
     }
@@ -36,34 +58,22 @@ public class Store<T extends Disposable> implements Disposable {
         return resource;
     }
 
+    /**
+     * Dispose the resource as usual if globalResourceType is NONE.
+     * Dispose the resource through its global resource generator if other type than NONE is specified.
+     */
+    public void dispose(EGlobalResourceType globalResourceType) {
+        Iterator iterator = store.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry)iterator.next();
+            T value = (T)entry.getValue();
+            globalResourceType.dispose(value);
+        }
+        store.clear();
+    }
+
     @Override
     public void dispose() {
-        Iterator iterator = store.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-            T value = (T)entry.getValue();
-            value.dispose();
-        }
-        store.clear();
-    }
-
-    public void disposeGlobalMusic() {
-        Iterator iterator = store.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-            T value = (T)entry.getValue();
-            GlobalAudio.dispose((Music)value);
-        }
-        store.clear();
-    }
-
-    public void disposeGlobalSound() {
-        Iterator iterator = store.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry)iterator.next();
-            T value = (T)entry.getValue();
-            GlobalAudio.dispose((Sound)value);
-        }
-        store.clear();
+        dispose(EGlobalResourceType.NONE);
     }
 }

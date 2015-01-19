@@ -130,7 +130,7 @@ public class Score {
 
         final int maxHordeCombo = hordeGroup.getMaxConsecutiveHordeChainCount();
         final int maxHordeComboScore = maxHordeCombo * MAX_HORDE_CHAIN_SCORE_FACTOR;
-        maxHordeComboScoreString = String.valueOf("Max. Horde Combo: "
+        maxHordeComboScoreString = String.valueOf("Max. Horde Chain: "
                 + maxHordeCombo
                 + " x " + MAX_HORDE_CHAIN_SCORE_FACTOR
                 + " = " + maxHordeComboScore);

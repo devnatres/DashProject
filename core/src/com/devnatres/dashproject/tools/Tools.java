@@ -56,7 +56,17 @@ abstract public class Tools {
         }
     }
 
-    public static float limit_f(float value, float min, float max) {
+    public static float limitFloat(float value, float min, float max) {
+        if (value < min) {
+            return min;
+        } else if (value > max) {
+            return max;
+        }
+
+        return value;
+    }
+
+    public static int limitInteger(int value, int min, int max) {
         if (value < min) {
             return min;
         } else if (value > max) {

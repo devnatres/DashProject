@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.store.Store.EGlobalResourceType;
 
 /**
  * Created by DevNatres on 06/12/2014.
@@ -69,7 +70,7 @@ public class HyperStore implements Disposable {
     @Override
     public void dispose() {
         textureStore.dispose();
-        soundStore.disposeGlobalSound();
-        musicStore.disposeGlobalMusic();
+        soundStore.dispose(EGlobalResourceType.GLOBAL_SOUND);
+        musicStore.dispose(EGlobalResourceType.GLOBAL_MUSIC);
     }
 }

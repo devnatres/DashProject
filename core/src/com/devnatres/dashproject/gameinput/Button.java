@@ -71,6 +71,7 @@ public class Button extends Agent {
     private void executeCountDown(float delta) {
         if (elapsedTime <= 0) {
             executable.execute(actionId);
+            isPushed = false;
         } else {
             elapsedTime -= delta;
         }
