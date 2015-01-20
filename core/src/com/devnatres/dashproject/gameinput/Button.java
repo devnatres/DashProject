@@ -12,9 +12,9 @@ import com.devnatres.dashproject.agents.Agent;
 public class Button extends Agent {
     private float centerX;
     private float centerY;
+    private DnaAnimation standbyAnimation;
     private DnaAnimation pushAnimation;
-    private final IExecutable executable;
-    private final int actionId;
+    private final IButtonExecutable executable;
     private final Sound sound;
     private boolean isPushed = false;
     private float elapsedTime;
@@ -28,17 +28,16 @@ public class Button extends Agent {
      * @param sound sound to be played when pushed
      * @param elapsedTime time to wait after pushed (push animation will be displayed if any)
      * @param executable executable object to call its execute(actionId) method when pushed and after elapsed time
-     * @param actionId action id that identifies the concrete action to performance in the execute(actionId) method
      */
     public Button(float centerX, float centerY,
                   DnaAnimation standbyAnimation,
                   DnaAnimation pushAnimation,
                   Sound sound,
                   int elapsedTime,
-                  IExecutable executable,
-                  int actionId) {
+                  IButtonExecutable executable) {
 
         super(standbyAnimation);
+        this.standbyAnimation = standbyAnimation;
 
         this.centerX = centerX;
         this.centerY = centerY;
@@ -48,7 +47,6 @@ public class Button extends Agent {
         this.sound = sound;
         this.elapsedTime = elapsedTime;
         this.executable = executable;
-        this.actionId = actionId;
     }
 
     public void act(float delta, Vector2 touchPoint) {
@@ -70,8 +68,9 @@ public class Button extends Agent {
 
     private void executeCountDown(float delta) {
         if (elapsedTime <= 0) {
-            executable.execute(actionId);
+            executable.execute(this);
             isPushed = false;
+            setAnimation(standbyAnimation);
         } else {
             elapsedTime -= delta;
         }

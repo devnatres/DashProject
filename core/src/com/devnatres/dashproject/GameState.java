@@ -23,8 +23,13 @@ public class GameState {
 
     private final Preferences preferences;
 
+    private boolean isSoundActivated;
+
     public GameState() {
         preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
+        isSoundActivated = preferences.getBoolean("sound", true);
+        updateGlobalSound();
+
         levelRecords = new Array();
         levelIds = new Array();
 
@@ -83,4 +88,24 @@ public class GameState {
         currentLevelIndex = Tools.limitInteger(currentLevelIndex, 0, maxLevelIndex);
     }
 
+    public void activateSound(boolean isSoundActivated) {
+        this.isSoundActivated = isSoundActivated;
+
+        updateGlobalSound();
+
+        preferences.putBoolean("sound", isSoundActivated);
+        preferences.flush();
+    }
+
+    private void updateGlobalSound() {
+        if (isSoundActivated) {
+            GlobalAudio.enableAudio();
+        } else {
+            GlobalAudio.disableAudio();
+        }
+    }
+
+    public boolean isSoundActivated() {
+        return isSoundActivated;
+    }
 }

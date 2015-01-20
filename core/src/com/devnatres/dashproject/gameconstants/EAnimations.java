@@ -78,6 +78,39 @@ public enum EAnimations {
         }
     },
 
+    BUTTON_OPTIONS_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_options_standby.png");
+        }
+    },
+    BUTTON_OPTIONS_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_options_pushed.png");
+        }
+    },
+
+    BUTTON_CREDITS_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_credits_standby.png");
+        }
+    },
+    BUTTON_CREDITS_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_credits_pushed.png");
+        }
+    },
+
+    BUTTON_EXIT_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_exit_standby.png");
+        }
+    },
+    BUTTON_EXIT_PUSHED {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_exit_pushed.png");
+        }
+    },
+
     BUTTON_GO_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_go_standby.png");
@@ -97,6 +130,22 @@ public enum EAnimations {
     BUTTON_BACK_PUSHED {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_back_pushed.png");
+        }
+    },
+
+    BUTTON_OPT_SOUND {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_opt_sound.png");
+        }
+    },
+    BUTTON_OPT_CAMERA {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_opt_camera.png");
+        }
+    },
+    BUTTON_OPT_BACK {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_opt_back.png");
         }
     },
 

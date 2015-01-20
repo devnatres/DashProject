@@ -13,7 +13,7 @@ import com.devnatres.dashproject.GameState;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
-import com.devnatres.dashproject.gameinput.IExecutable;
+import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
@@ -22,14 +22,7 @@ import com.devnatres.dashproject.store.HyperStore;
 /**
  * Created by DevNatres on 14/01/2015.
  */
-public class LobbyScreen implements Screen, IExecutable {
-    private static int GO_BUTTON_ACTION = 0;
-    private static int BACK_BUTTON_ACTION = 1;
-    private static int UP_BUTTON_ACTION = 2;
-    private static int UP2_BUTTON_ACTION = 3;
-    private static int DOWN_BUTTON_ACTION = 4;
-    private static int DOWN2_BUTTON_ACTION = 5;
-
+public class LobbyScreen implements Screen, IButtonExecutable {
     private static int ARROW_BUTTON_X = 420;
 
     private final DashGame dashGame;
@@ -74,48 +67,42 @@ public class LobbyScreen implements Screen, IExecutable {
                 EAnimations.BUTTON_GO_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
-                this,
-                GO_BUTTON_ACTION);
+                this);
 
         backButton = new Button(100, 64,
                 EAnimations.BUTTON_BACK_STANDBY.create(hyperStore),
                 EAnimations.BUTTON_BACK_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
-                this,
-                BACK_BUTTON_ACTION);
+                this);
 
         up2Button = new Button(ARROW_BUTTON_X, 510,
                 EAnimations.BUTTON_ARROW_UP2.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
-                this,
-                UP2_BUTTON_ACTION);
+                this);
 
         upButton = new Button(ARROW_BUTTON_X, 430,
                 EAnimations.BUTTON_ARROW_UP.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
-                this,
-                UP_BUTTON_ACTION);
+                this);
 
         downButton = new Button(ARROW_BUTTON_X, 300,
                 EAnimations.BUTTON_ARROW_DOWN.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
-                this,
-                DOWN_BUTTON_ACTION);
+                this);
 
         down2Button = new Button(ARROW_BUTTON_X, 210,
                 EAnimations.BUTTON_ARROW_DOWN2.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
-                this,
-                DOWN2_BUTTON_ACTION);
+                this);
 
     }
 
@@ -189,19 +176,19 @@ public class LobbyScreen implements Screen, IExecutable {
     }
 
     @Override
-    public void execute(int actionId) {
-        if (actionId == GO_BUTTON_ACTION) {
+    public void execute(Button button) {
+        if (button == goButton) {
             dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
             dispose();
-        } else if (actionId == BACK_BUTTON_ACTION) {
+        } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
-        } else if (actionId == UP2_BUTTON_ACTION) {
+        } else if (button == up2Button) {
             gameState.displaceCurrentLevel(2);
-        } else if (actionId == UP_BUTTON_ACTION) {
+        } else if (button == upButton) {
             gameState.displaceCurrentLevel(1);
-        } else if (actionId == DOWN_BUTTON_ACTION) {
+        } else if (button == downButton) {
             gameState.displaceCurrentLevel(-1);
-        } else if (actionId == DOWN2_BUTTON_ACTION) {
+        } else if (button == down2Button) {
             gameState.displaceCurrentLevel(-2);
         }
 

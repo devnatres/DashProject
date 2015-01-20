@@ -52,6 +52,10 @@ public class Agent extends Actor {
         setPosition(x - getWidth()/2, y - getHeight()/2);
     }
 
+    public void setCenter(Vector2 center) {
+        setCenter(center.x, center.y);
+    }
+
     @Override
     public void positionChanged() {
         auxPosition.set(getX(), getY());
