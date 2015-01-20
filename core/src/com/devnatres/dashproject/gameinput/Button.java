@@ -16,6 +16,7 @@ public class Button extends Agent {
     private DnaAnimation pushAnimation;
     private final IButtonExecutable executable;
     private final Sound sound;
+    private boolean isAutomaticSoundOn = true;
     private boolean isPushed = false;
     private float elapsedTime;
 
@@ -57,7 +58,9 @@ public class Button extends Agent {
         } else {
             if (touchPoint != null && auxArea.contains(touchPoint)) {
                 isPushed = true;
-                GlobalAudio.play(sound);
+                if (isAutomaticSoundOn) {
+                    GlobalAudio.play(sound);
+                }
                 if (pushAnimation != null) {
                     setAnimation(pushAnimation);
                 }
@@ -74,5 +77,17 @@ public class Button extends Agent {
         } else {
             elapsedTime -= delta;
         }
+    }
+
+    public void setAutomaticSoundOn() {
+        isAutomaticSoundOn = true;
+    }
+
+    public void setAutomaticSoundOff() {
+        isAutomaticSoundOn = false;
+    }
+
+    public void playSound() {
+        GlobalAudio.play(sound);
     }
 }

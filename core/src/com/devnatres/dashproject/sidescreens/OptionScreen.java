@@ -63,6 +63,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
+        soundButton.setAutomaticSoundOff();
 
         cameraButton = new Button(240, 500,
                 EAnimations.BUTTON_OPT_CAMERA.create(hyperStore),
@@ -144,6 +145,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         } else if (button == soundButton) {
             gameState.activateSound(!gameState.isSoundActivated());
+            soundButton.playSound();
         } else if (button == cameraButton) {
             cameraActivated = !cameraActivated;
         }
