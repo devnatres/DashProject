@@ -2,12 +2,14 @@ package com.devnatres.dashproject.sidescreens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.DnaCamera;
+import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
@@ -31,6 +33,8 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     private final Button optionsButton;
     private final Button creditsButton;
     private final Button exitButton;
+
+    private final Music music;
 
     public MainMenuScreen(DashGame dashGame) {
         this.dashGame = dashGame;
@@ -68,6 +72,8 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
+
+        music = hyperStore.getMusic("music/menu.ogg");
     }
 
     @Override
@@ -99,7 +105,9 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
 
     @Override
     public void show() {
-
+        if (!music.isPlaying()) {
+            GlobalAudio.playOnly(music);
+        }
     }
 
     @Override

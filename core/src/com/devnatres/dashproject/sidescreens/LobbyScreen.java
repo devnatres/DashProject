@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.DnaCamera;
 import com.devnatres.dashproject.GameState;
+import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
@@ -127,10 +128,30 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
-        mainFont.draw(mainBatch, "Total score: ", 200, 700);
-        mainFont.draw(mainBatch, "Progress: x.y%", 200, 650);
-        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName(), 200, 300);
-        mainFont.draw(mainBatch, "Record: " + gameState.getCurrentLevelScore(), 200, 250);
+
+        mainFont.draw(mainBatch, "Total score: ", 200, 750);
+        mainFont.draw(mainBatch, "Progress: x.y%", 200, 700);
+        mainFont.draw(mainBatch, "Trophies: ", 200, 650);
+
+        int levelDataX1 = 50;
+        int levelDataX2 = 150;
+        int levelDataX3 = 250;
+        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName(), levelDataX1, 550);
+
+        int levelDataY = 480;
+        mainFont.draw(mainBatch, "Records", levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "Last results", levelDataX3, levelDataY);
+
+        mainFont.draw(mainBatch, "Action: ", levelDataX1, levelDataY-50);
+        mainFont.draw(mainBatch, "Time: ", levelDataX1, levelDataY-100);
+        mainFont.draw(mainBatch, "Life: ", levelDataX1, levelDataY-150);
+        mainFont.draw(mainBatch, "Max.Chain: ", levelDataX1, levelDataY-200);
+        mainFont.draw(mainBatch, "Full Chain: ", levelDataX1, levelDataY-250);
+
+        mainFont.draw(mainBatch, "TOTAL: ", levelDataX1, levelDataY-300);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastScore(), levelDataX2, levelDataY-300);
+
+
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);
         up2Button.draw(mainBatch);
@@ -138,21 +159,15 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         downButton.draw(mainBatch);
         down2Button.draw(mainBatch);
         mainBatch.end();
-
-        /*if (inputTranslator.isTouchDown()) {
-            dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
-            dispose();
-        }*/
     }
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override
     public void show() {
-
+        GlobalAudio.stopMusic();
     }
 
     @Override
@@ -162,12 +177,10 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
@@ -191,6 +204,5 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         } else if (button == down2Button) {
             gameState.displaceCurrentLevel(-2);
         }
-
     }
 }

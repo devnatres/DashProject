@@ -6,35 +6,35 @@ package com.devnatres.dashproject.agents;
 public class HordeDamageResult {
     private int foeScore;
     private int comboScore;
-    private int deadInComboFoeCount;
-    private boolean isHordeCombo;
+    private int deadInComboCount;
+    private boolean isChain;
 
     public void sumFoeScore(int score) {
         foeScore += score;
     }
 
-    public void sumDeadInComboFoe() {
-        deadInComboFoeCount++;
+    public void sumDeadInCombo() {
+        deadInComboCount++;
     }
 
     public void markHordeCombo() {
-        isHordeCombo = true;
+        isChain = true;
     }
 
     public void setComboScore(int score) {
         comboScore = score;
     }
 
-    public boolean isDeadInHordeCombo() {
-        return isHordeCombo;
+    public boolean isDeadInChain() {
+        return isChain;
     }
 
     public int getFoeScore() {
         return foeScore;
     }
 
-    public int getDeadInComboFoeCount() {
-        return deadInComboFoeCount;
+    public int getDeadInComboCount() {
+        return deadInComboCount;
     }
 
     public int getComboScore() {

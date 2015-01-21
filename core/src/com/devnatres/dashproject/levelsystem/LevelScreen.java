@@ -13,10 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.DnaAnimation;
-import com.devnatres.dashproject.DnaCamera;
-import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.*;
 import com.devnatres.dashproject.agents.*;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
@@ -46,6 +43,7 @@ public class LevelScreen implements Screen {
     private final ShapeRenderer mainShape;
     private final BitmapFont mainFont;
     private final DnaCamera mainCamera;
+    private final GameState gameState;
 
     private final DnaCamera fixedCamera;
 
@@ -104,6 +102,7 @@ public class LevelScreen implements Screen {
         mainShape = game.getMainShape();
         mainFont = game.getMainFont();
         mainCamera = game.getMainCamera();
+        gameState = game.getGameState();
 
         this.levelId = levelId;
 
@@ -149,6 +148,8 @@ public class LevelScreen implements Screen {
         lifePointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
 
         time = hordeCount * STANDARD_TIME_PER_HORDE;
+
+        skipCameraAssistant = !gameState.isCameraAssistantActivated();
     }
 
     public Hero getHero() {
@@ -221,7 +222,7 @@ public class LevelScreen implements Screen {
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
             score.calculateFinalCount();
-            dashGame.getGameState().updateCurrentLevelScore(score.getTotalScore());
+            gameState.updateCurrentLevelScore(score.getTotalScore());
             GlobalAudio.playOnly(endOkMusic);
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
@@ -363,7 +364,7 @@ public class LevelScreen implements Screen {
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
-        score.sumHordeComboScore(hordeDamageResult.getComboScore());
+        score.sumChainScore(hordeDamageResult.getComboScore());
     }
 
     private float limitCameraTargetX(float x) {

@@ -179,18 +179,6 @@ public class Foe extends Agent {
         }
     }
 
-/*    public boolean isOnCamera() {
-        final float cameraLeft = camera.position.x - halfCameraWidth;
-        final float cameraRight = camera.position.x + halfCameraWidth;
-        final float cameraDown = camera.position.y - halfCameraHeight;
-        final float cameraUp = camera.position.y + halfCameraHeight ;
-
-        return (auxCenter.x >= cameraLeft)
-                && (auxCenter.x <= cameraRight)
-                && (auxCenter.y >= cameraDown)
-                && (auxCenter.y <= cameraUp);
-    }*/
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isDying() && shakeTotalDuration < SHAKE_TOTAL_DURATION) {

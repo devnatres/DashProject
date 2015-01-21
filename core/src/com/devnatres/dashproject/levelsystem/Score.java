@@ -13,13 +13,13 @@ import com.devnatres.dashproject.store.HyperStore;
  */
 public class Score {
     private static final int MAX_SCORE_COUNT_PHASE = 7;
-    private static final int HORDE_COMBO_SCORE_DURATION = 90;
+    private static final int CHAIN_SCORE_DURATION = 90;
     private static final int SCORE_COUNT_PHASE_DURATION = 90;
 
-    private static final int MAX_HORDE_CHAIN_SCORE_FACTOR = 500;
+    private static final int MAX_CHAIN_SCORE_FACTOR = 500;
     private static final int LIFE_SCORE_FACTOR = 200;
     private static final int TIME_SCORE_FACTOR = 250;
-    private static final float FULL_HORDE_CHAIN_SCORE_FACTOR = 0.2f;
+    private static final float FULL_CHAIN_SCORE_FACTOR = 0.2f;
 
     private final Texture youWinMessage;
     private final int screenWidth;
@@ -35,14 +35,14 @@ public class Score {
     private int actionScore;
     private int lastActionScore;
     private String actionScoreHubString = "0";
-    private String hordeComboScoreString;
-    private int hordeComboScoreDuration;
+    private String chainScoreString;
+    private int chainScoreDuration;
 
     private String actionScoreString;
-    private String maxHordeComboScoreString;
+    private String maxChainScoreString;
     private String lifeScoreString;
     private String timeScoreString;
-    private String fullHordeChainScoreString;
+    private String fullChainScoreString;
     private String totalScoreString;
 
     private int totalScore;
@@ -69,17 +69,17 @@ public class Score {
         actionScore += foeScore;
     }
 
-    public void sumHordeComboScore(int hordeComboScore) {
-        actionScore += hordeComboScore;
-        hordeComboScoreString = String.valueOf(hordeComboScore);
-        hordeComboScoreDuration = HORDE_COMBO_SCORE_DURATION;
+    public void sumChainScore(int chainScore) {
+        actionScore += chainScore;
+        chainScoreString = String.valueOf(chainScore);
+        chainScoreDuration = CHAIN_SCORE_DURATION;
     }
 
     public void renderActionScore(Batch preparedBatch, BitmapFont font) {
         font.draw(preparedBatch, actionScoreHubString, 10, screenHeight - 10);
-        if (hordeComboScoreDuration > 0) {
-            font.draw(preparedBatch, hordeComboScoreString, screenWidth/2, screenHeight - 100);
-            hordeComboScoreDuration--;
+        if (chainScoreDuration > 0) {
+            font.draw(preparedBatch, chainScoreString, screenWidth/2, screenHeight - 100);
+            chainScoreDuration--;
         }
     }
 
@@ -104,17 +104,18 @@ public class Score {
             font.draw(preparedBatch, actionScoreString, 50, 600);
         }
         if (scoreCountPhase > 2) {
-            font.draw(preparedBatch, maxHordeComboScoreString, 50, 550);
+            font.draw(preparedBatch, timeScoreString, 50, 550);
+
         }
         if (scoreCountPhase > 3) {
             font.draw(preparedBatch, lifeScoreString, 50, 500);
         }
         if (scoreCountPhase > 4) {
-            font.draw(preparedBatch, timeScoreString, 50, 450);
+            font.draw(preparedBatch, maxChainScoreString, 50, 450);
         }
         if (scoreCountPhase > 5) {
-            if (fullHordeChainScoreString != "") {
-                font.draw(preparedBatch, fullHordeChainScoreString, 50, 400);
+            if (fullChainScoreString != "") {
+                font.draw(preparedBatch, fullChainScoreString, 50, 400);
             } else {
                 scoreCountPhaseDuration = 0;
             }
@@ -128,13 +129,13 @@ public class Score {
         actionScoreString = String.valueOf("Action: " + actionScore);
         totalScore = actionScore;
 
-        final int maxHordeCombo = hordeGroup.getMaxConsecutiveHordeChainCount();
-        final int maxHordeComboScore = maxHordeCombo * MAX_HORDE_CHAIN_SCORE_FACTOR;
-        maxHordeComboScoreString = String.valueOf("Max. Horde Chain: "
-                + maxHordeCombo
-                + " x " + MAX_HORDE_CHAIN_SCORE_FACTOR
-                + " = " + maxHordeComboScore);
-        totalScore += maxHordeComboScore;
+        final float time = ((int)(levelScreen.getTime()*10))/10f;
+        final int timeScore = (int)(time * TIME_SCORE_FACTOR);
+        timeScoreString = String.valueOf("Time: "
+                + time
+                + " x " + TIME_SCORE_FACTOR
+                + " = " + timeScore);
+        totalScore += timeScore;
 
         final int life = hero.getLife();
         final int lifeScore = life * LIFE_SCORE_FACTOR;
@@ -144,24 +145,23 @@ public class Score {
                 + " = " + lifeScore);
         totalScore += lifeScore;
 
-        final float time = ((int)(levelScreen.getTime()*10))/10f;
-        final int timeScore = (int)(time * TIME_SCORE_FACTOR);
-        timeScoreString = String.valueOf("Time: "
-                + time
-                + " x " + TIME_SCORE_FACTOR
-                + " = " + timeScore);
-        totalScore += timeScore;
+        final int maxChain = hordeGroup.getMaxConsecutiveChainCount();
+        final int maxChainScore = maxChain * MAX_CHAIN_SCORE_FACTOR;
+        maxChainScoreString = String.valueOf("Max.Chain: "
+                + maxChain
+                + " x " + MAX_CHAIN_SCORE_FACTOR
+                + " = " + maxChainScore);
+        totalScore += maxChainScore;
 
-
-        boolean isFullHordeChain = hordeGroup.isFullHordeChainAvailable();
-        if (isFullHordeChain) {
-            int fullHordeChainScore = (int) (totalScore * FULL_HORDE_CHAIN_SCORE_FACTOR);
-            fullHordeChainScoreString = "Full Horde Chain: "
-                    + " + " + FULL_HORDE_CHAIN_SCORE_FACTOR*100 + "%"
-                    + " = " + fullHordeChainScore;
-            totalScore += fullHordeChainScore;
+        boolean isFullChain = hordeGroup.isFullChainAvailable();
+        if (isFullChain) {
+            int fullChainScore = (int) (totalScore * FULL_CHAIN_SCORE_FACTOR);
+            fullChainScoreString = "Full Chain: "
+                    + " + " + FULL_CHAIN_SCORE_FACTOR *100 + "%"
+                    + " = " + fullChainScore;
+            totalScore += fullChainScore;
         } else {
-            fullHordeChainScoreString = "Full Horde Chain: Not achieved";
+            fullChainScoreString = "Full Chain: Not achieved";
         }
 
         totalScoreString = "TOTAL: " + String.valueOf(totalScore);

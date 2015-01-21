@@ -14,6 +14,39 @@ import java.io.IOException;
  * Created by DevNatres on 15/01/2015.
  */
 public class GameState {
+    private enum ELevelKeys {
+        LAST_TOTAL {
+            @Override
+            String key(LevelId levelId) {
+                return levelId.getLevelKey() + "_last_score";
+            }
+        },
+        BEST_TOTAL {
+            @Override
+            String key(LevelId levelId) {
+                return levelId.getLevelKey() + "_best_score";
+            }
+        },
+        ;
+        abstract String key(LevelId levelId);
+    }
+
+    private enum EOptionKeys {
+        CAMERA_ASSISTANT {
+            @Override
+            String key() {
+                return "camera_assistant";
+            }
+        },
+        SOUND {
+            @Override
+            String key() {
+                return "sound";
+            }
+        },
+        ;
+        abstract String key();
+    }
 
     private final int maxLevelIndex;
     private int currentLevelIndex;
@@ -24,11 +57,15 @@ public class GameState {
     private final Preferences preferences;
 
     private boolean isSoundActivated;
+    private boolean isCameraAssistantActivated;
 
     public GameState() {
         preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
-        isSoundActivated = preferences.getBoolean("sound", true);
+
+        isSoundActivated = preferences.getBoolean(EOptionKeys.SOUND.key(), true);
         updateGlobalSound();
+
+        isCameraAssistantActivated = preferences.getBoolean(EOptionKeys.CAMERA_ASSISTANT.key(), true);
 
         levelRecords = new Array();
         levelIds = new Array();
@@ -40,7 +77,7 @@ public class GameState {
             LevelId levelId = new LevelId(levelSequence.get(i));
             levelIds.add(levelId);
 
-            String value = preferences.getString(levelId.getLevelKey()+"_"+"score", "0");
+            String value = preferences.getString(ELevelKeys.BEST_TOTAL.key(levelId), "0");
             levelRecords.add(Integer.parseInt(value));
         }
     }
@@ -67,15 +104,22 @@ public class GameState {
         return levelIds.get(currentLevelIndex);
     }
 
-    public int getCurrentLevelScore() {
-        // TODO Avoid generating string each time
-        String scoreString = preferences.getString(levelIds.get(currentLevelIndex).getLevelKey()+"_"+"score", "0");
+    public int getCurrentLevelLastScore() {
+        LevelId levelId = levelIds.get(currentLevelIndex);
+        String scoreString = preferences.getString(ELevelKeys.LAST_TOTAL.key(levelId), "0");
         return Integer.parseInt(scoreString);
     }
 
     public void updateCurrentLevelScore(int score) {
-        // TODO Avoid generating string each time
-        preferences.putString(levelIds.get(currentLevelIndex).getLevelKey()+"_"+"score", ""+score);
+        LevelId levelId = levelIds.get(currentLevelIndex);
+
+        String bestScoreString = preferences.getString(ELevelKeys.BEST_TOTAL.key(levelId), "0");
+        int bestScore = Integer.parseInt(bestScoreString);
+
+        preferences.putString(ELevelKeys.LAST_TOTAL.key(levelId), ""+score);
+        if (score > bestScore) {
+            preferences.putString(ELevelKeys.BEST_TOTAL.key(levelId), ""+score);
+        }
         preferences.flush();
 
         if (currentLevelIndex < maxLevelIndex) {
@@ -93,7 +137,7 @@ public class GameState {
 
         updateGlobalSound();
 
-        preferences.putBoolean("sound", isSoundActivated);
+        preferences.putBoolean(EOptionKeys.SOUND.key(), isSoundActivated);
         preferences.flush();
     }
 
@@ -107,5 +151,16 @@ public class GameState {
 
     public boolean isSoundActivated() {
         return isSoundActivated;
+    }
+
+    public void activateCameraAssistant(boolean isCameraAssistantActivated) {
+        this.isCameraAssistantActivated = isCameraAssistantActivated;
+
+        preferences.putBoolean(EOptionKeys.CAMERA_ASSISTANT.key(), isCameraAssistantActivated);
+        preferences.flush();
+    }
+
+    public boolean isCameraAssistantActivated() {
+        return isCameraAssistantActivated;
     }
 }

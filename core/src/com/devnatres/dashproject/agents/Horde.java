@@ -74,8 +74,8 @@ public class Horde {
         hordeDamageResult.sumFoeScore(foeDamageResult.getScore());
 
         if (killedFoesCount == 1 || foeDamageResult.isDeadInCombo()) {
-            hordeDamageResult.sumDeadInComboFoe();
-            if (hordeDamageResult.getDeadInComboFoeCount() == foesCount) {
+            hordeDamageResult.sumDeadInCombo();
+            if (hordeDamageResult.getDeadInComboCount() == foesCount) {
                 hordeDamageResult.markHordeCombo();
                 hordeDamageResult.setComboScore((int)(hordeDamageResult.getFoeScore() * 1.5));
                 levelScreen.processHordeDamageResult(hordeDamageResult);

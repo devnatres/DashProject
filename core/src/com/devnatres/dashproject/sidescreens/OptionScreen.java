@@ -38,8 +38,6 @@ public class OptionScreen implements Screen, IButtonExecutable {
     private Agent cameraSymbol;
     private Agent offSymbol;
 
-    private boolean cameraActivated = true;
-
     public OptionScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
@@ -102,7 +100,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         }
         cameraButton.draw(mainBatch);
         cameraSymbol.draw(mainBatch);
-        if (!cameraActivated) {
+        if (!gameState.isCameraAssistantActivated()) {
             offSymbol.setCenter(cameraSymbol.getAuxCenter());
             offSymbol.draw(mainBatch);
         }
@@ -147,7 +145,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
             gameState.activateSound(!gameState.isSoundActivated());
             soundButton.playSound();
         } else if (button == cameraButton) {
-            cameraActivated = !cameraActivated;
+            gameState.activateCameraAssistant(!gameState.isCameraAssistantActivated());
         }
     }
 }

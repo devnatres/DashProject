@@ -95,10 +95,8 @@ public class DashGame extends Game {
         mainCamera.setToOrtho(false, screenWidth, screenHeight);
 
         hyperStore = new HyperStore();
-
+        gameState = new GameState(); // It must be created before any Screen
         this.setScreen(new MainMenuScreen(this));
-
-        gameState = new GameState();
 
         initialFrameTime = System.nanoTime();
 
