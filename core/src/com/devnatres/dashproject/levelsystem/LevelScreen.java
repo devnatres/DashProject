@@ -222,7 +222,7 @@ public class LevelScreen implements Screen {
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
             score.calculateFinalCount();
-            gameState.updateCurrentLevelScore(score.getTotalScore());
+            gameState.updateCurrentLevelScore(score);
             GlobalAudio.playOnly(endOkMusic);
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;

@@ -129,7 +129,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
 
-        mainFont.draw(mainBatch, "Total score: ", 200, 750);
+        mainFont.draw(mainBatch, "Total score: " + gameState.getTotalBestScore(), 200, 750);
         mainFont.draw(mainBatch, "Progress: x.y%", 200, 700);
         mainFont.draw(mainBatch, "Trophies: ", 200, 650);
 
@@ -139,18 +139,38 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName(), levelDataX1, 550);
 
         int levelDataY = 480;
-        mainFont.draw(mainBatch, "Records", levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "Last results", levelDataX3, levelDataY);
+        mainFont.draw(mainBatch, "Last", levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "Records", levelDataX3, levelDataY);
 
-        mainFont.draw(mainBatch, "Action: ", levelDataX1, levelDataY-50);
-        mainFont.draw(mainBatch, "Time: ", levelDataX1, levelDataY-100);
-        mainFont.draw(mainBatch, "Life: ", levelDataX1, levelDataY-150);
-        mainFont.draw(mainBatch, "Max.Chain: ", levelDataX1, levelDataY-200);
-        mainFont.draw(mainBatch, "Full Chain: ", levelDataX1, levelDataY-250);
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Action: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastActionScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestActionScore(), levelDataX3, levelDataY);
 
-        mainFont.draw(mainBatch, "TOTAL: ", levelDataX1, levelDataY-300);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastScore(), levelDataX2, levelDataY-300);
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Time: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTimeScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTimeScore(), levelDataX3, levelDataY);
 
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Life: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastLifeScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestLifeScore(), levelDataX3, levelDataY);
+
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Max.Chain: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastChainScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestChainScore(), levelDataX3, levelDataY);
+
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Full Chain: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastFullChainScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestFullChainScore(), levelDataX3, levelDataY);
+
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "TOTAL: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTotalScore(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTotalScore(), levelDataX3, levelDataY);
 
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);

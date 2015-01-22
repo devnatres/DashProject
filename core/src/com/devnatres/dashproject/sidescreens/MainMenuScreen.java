@@ -106,6 +106,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     @Override
     public void show() {
         if (!music.isPlaying()) {
+            music.setLooping(true);
             GlobalAudio.playOnly(music);
         }
     }

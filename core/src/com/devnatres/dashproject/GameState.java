@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelId;
+import com.devnatres.dashproject.levelsystem.Score;
 import com.devnatres.dashproject.tools.Tools;
 
 import java.io.BufferedReader;
@@ -14,45 +15,44 @@ import java.io.IOException;
  * Created by DevNatres on 15/01/2015.
  */
 public class GameState {
-    private enum ELevelKeys {
-        LAST_TOTAL {
-            @Override
-            String key(LevelId levelId) {
-                return levelId.getLevelKey() + "_last_score";
-            }
-        },
-        BEST_TOTAL {
-            @Override
-            String key(LevelId levelId) {
-                return levelId.getLevelKey() + "_best_score";
-            }
-        },
-        ;
-        abstract String key(LevelId levelId);
+    private static final String ACTION_SCORE_SUBKEY = "_action_score";
+    private static final String TIME_SCORE_SUBKEY = "_time_score";
+    private static final String LIFE_SCORE_SUBKEY = "_life_score";
+    private static final String CHAIN_SCORE_SUBKEY = "_chain_score";
+    private static final String FULLCHAIN_SCORE_SUBKEY = "_fullchain_score";
+    private static final String TOTAL_SCORE_SUBKEY = "_total_score";
+
+    private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
+    private static final String SOUND_KEY = "sound";
+
+    private static String keyLast(LevelId levelId, String scoreString) {
+        return levelId.getLevelKey() + "_last" + scoreString;
     }
 
-    private enum EOptionKeys {
-        CAMERA_ASSISTANT {
-            @Override
-            String key() {
-                return "camera_assistant";
-            }
-        },
-        SOUND {
-            @Override
-            String key() {
-                return "sound";
-            }
-        },
-        ;
-        abstract String key();
+    private static String keyBest(LevelId levelId, String scoreString) {
+        return levelId.getLevelKey() + "_best" + scoreString;
     }
 
     private final int maxLevelIndex;
-    private int currentLevelIndex;
+    private int levelIndex;
 
-    private final Array<LevelId> levelIds;
-    private final Array<Integer> levelRecords;
+    private final Array<LevelId> levelIds = new Array();
+    
+    private final Array<Integer> lastActionScore = new Array();
+    private final Array<Integer> lastTimeScore = new Array();
+    private final Array<Integer> lastLifeScore = new Array();
+    private final Array<Integer> lastChainScore = new Array();
+    private final Array<Integer> lastFullChainScore = new Array();
+    private final Array<Integer> lastTotalScore = new Array();
+
+    private final Array<Integer> bestActionScore = new Array();
+    private final Array<Integer> bestTimeScore = new Array();
+    private final Array<Integer> bestLifeScore = new Array();
+    private final Array<Integer> bestChainScore = new Array();
+    private final Array<Integer> bestFullChainScore = new Array();
+    private final Array<Integer> bestTotalScore = new Array();
+
+    private int totalBestScore;
 
     private final Preferences preferences;
 
@@ -62,13 +62,10 @@ public class GameState {
     public GameState() {
         preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
 
-        isSoundActivated = preferences.getBoolean(EOptionKeys.SOUND.key(), true);
+        isSoundActivated = preferences.getBoolean(SOUND_KEY, true);
         updateGlobalSound();
 
-        isCameraAssistantActivated = preferences.getBoolean(EOptionKeys.CAMERA_ASSISTANT.key(), true);
-
-        levelRecords = new Array();
-        levelIds = new Array();
+        isCameraAssistantActivated = preferences.getBoolean(CAMERA_ASSISTANT_KEY, true);
 
         final Array<String> levelSequence = readLevelSequence();
 
@@ -77,9 +74,22 @@ public class GameState {
             LevelId levelId = new LevelId(levelSequence.get(i));
             levelIds.add(levelId);
 
-            String value = preferences.getString(ELevelKeys.BEST_TOTAL.key(levelId), "0");
-            levelRecords.add(Integer.parseInt(value));
+            lastActionScore.add(preferences.getInteger(keyLast(levelId, ACTION_SCORE_SUBKEY), 0));
+            lastTimeScore.add(preferences.getInteger(keyLast(levelId, TIME_SCORE_SUBKEY), 0));
+            lastLifeScore.add(preferences.getInteger(keyLast(levelId, LIFE_SCORE_SUBKEY), 0));
+            lastChainScore.add(preferences.getInteger(keyLast(levelId, CHAIN_SCORE_SUBKEY), 0));
+            lastFullChainScore.add(preferences.getInteger(keyLast(levelId, FULLCHAIN_SCORE_SUBKEY), 0));
+            lastTotalScore.add(preferences.getInteger(keyLast(levelId, TOTAL_SCORE_SUBKEY), 0));
+
+            bestActionScore.add(preferences.getInteger(keyBest(levelId, ACTION_SCORE_SUBKEY), 0));
+            bestTimeScore.add(preferences.getInteger(keyBest(levelId, TIME_SCORE_SUBKEY), 0));
+            bestLifeScore.add(preferences.getInteger(keyBest(levelId, LIFE_SCORE_SUBKEY), 0));
+            bestChainScore.add(preferences.getInteger(keyBest(levelId, CHAIN_SCORE_SUBKEY), 0));
+            bestFullChainScore.add(preferences.getInteger(keyBest(levelId, FULLCHAIN_SCORE_SUBKEY), 0));
+            bestTotalScore.add(preferences.getInteger(keyBest(levelId, TOTAL_SCORE_SUBKEY), 0));
         }
+
+        updateTotalBestScore();
     }
 
     private Array<String> readLevelSequence() {
@@ -100,36 +110,103 @@ public class GameState {
         return lines;
     }
 
-    public LevelId getCurrentLevelId() {
-        return levelIds.get(currentLevelIndex);
-    }
-
-    public int getCurrentLevelLastScore() {
-        LevelId levelId = levelIds.get(currentLevelIndex);
-        String scoreString = preferences.getString(ELevelKeys.LAST_TOTAL.key(levelId), "0");
-        return Integer.parseInt(scoreString);
-    }
-
-    public void updateCurrentLevelScore(int score) {
-        LevelId levelId = levelIds.get(currentLevelIndex);
-
-        String bestScoreString = preferences.getString(ELevelKeys.BEST_TOTAL.key(levelId), "0");
-        int bestScore = Integer.parseInt(bestScoreString);
-
-        preferences.putString(ELevelKeys.LAST_TOTAL.key(levelId), ""+score);
-        if (score > bestScore) {
-            preferences.putString(ELevelKeys.BEST_TOTAL.key(levelId), ""+score);
+    private void updateTotalBestScore() {
+        totalBestScore = 0;
+        for (int i = 0; i <= maxLevelIndex; i++) {
+            totalBestScore += bestTotalScore.get(i);
         }
+    }
+
+    public LevelId getCurrentLevelId() {
+        return levelIds.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastActionScore() {
+        return lastActionScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastTimeScore() {
+        return lastTimeScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastLifeScore() {
+        return lastLifeScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastChainScore() {
+        return lastChainScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastFullChainScore() {
+        return lastFullChainScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelLastTotalScore() {
+        return lastTotalScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestActionScore() {
+        return bestActionScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestTimeScore() {
+        return bestTimeScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestLifeScore() {
+        return bestLifeScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestChainScore() {
+        return bestChainScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestFullChainScore() {
+        return bestFullChainScore.get(levelIndex);
+    }
+
+    public int getCurrentLevelBestTotalScore() {
+        return bestTotalScore.get(levelIndex);
+    }
+
+    public int getTotalBestScore() {
+        return totalBestScore;
+    }
+
+    public void updateCurrentLevelScore(Score score) {
+        LevelId levelId = levelIds.get(levelIndex);
+
+        putScore(levelId, ACTION_SCORE_SUBKEY, lastActionScore, bestActionScore, score.getActionScore());
+        putScore(levelId, TIME_SCORE_SUBKEY, lastTimeScore, bestTimeScore, score.getTimeScore());
+        putScore(levelId, LIFE_SCORE_SUBKEY, lastLifeScore, bestLifeScore, score.getLifeScore());
+        putScore(levelId, CHAIN_SCORE_SUBKEY, lastChainScore, bestChainScore, score.getChainScore());
+        putScore(levelId, FULLCHAIN_SCORE_SUBKEY, lastFullChainScore, bestFullChainScore, score.getFullChainScore());
+        putScore(levelId, TOTAL_SCORE_SUBKEY, lastTotalScore, bestTotalScore, score.getTotalScore());
         preferences.flush();
 
-        if (currentLevelIndex < maxLevelIndex) {
-            currentLevelIndex++;
+        updateTotalBestScore();
+
+        if (levelIndex < maxLevelIndex) {
+            levelIndex++;
         }
+    }
+
+    private void putScore(LevelId levelId,
+                          String scoreSubKey,
+                          Array<Integer> lastScoreArray,
+                          Array<Integer> bestScoreArray,
+                          int newScore) {
+        if (newScore > bestScoreArray.get(levelIndex)) {
+            bestScoreArray.set(levelIndex, newScore);
+            preferences.putInteger(keyBest(levelId, scoreSubKey), newScore);
+        }
+        lastScoreArray.set(levelIndex, newScore);
+        preferences.putInteger(keyLast(levelId, scoreSubKey), newScore);
     }
 
     public void displaceCurrentLevel(int displacement) {
-        currentLevelIndex += displacement;
-        currentLevelIndex = Tools.limitInteger(currentLevelIndex, 0, maxLevelIndex);
+        levelIndex += displacement;
+        levelIndex = Tools.limitInteger(levelIndex, 0, maxLevelIndex);
     }
 
     public void activateSound(boolean isSoundActivated) {
@@ -137,7 +214,7 @@ public class GameState {
 
         updateGlobalSound();
 
-        preferences.putBoolean(EOptionKeys.SOUND.key(), isSoundActivated);
+        preferences.putBoolean(SOUND_KEY, isSoundActivated);
         preferences.flush();
     }
 
@@ -156,7 +233,7 @@ public class GameState {
     public void activateCameraAssistant(boolean isCameraAssistantActivated) {
         this.isCameraAssistantActivated = isCameraAssistantActivated;
 
-        preferences.putBoolean(EOptionKeys.CAMERA_ASSISTANT.key(), isCameraAssistantActivated);
+        preferences.putBoolean(CAMERA_ASSISTANT_KEY, isCameraAssistantActivated);
         preferences.flush();
     }
 

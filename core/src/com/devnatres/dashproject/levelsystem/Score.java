@@ -32,7 +32,6 @@ public class Score {
     private final Hero hero;
     private final HordeGroup hordeGroup;
 
-    private int actionScore;
     private int lastActionScore;
     private String actionScoreHubString = "0";
     private String chainScoreString;
@@ -45,6 +44,11 @@ public class Score {
     private String fullChainScoreString;
     private String totalScoreString;
 
+    private int actionScore;
+    private int timeScore;
+    private int lifeScore;
+    private int chainScore;
+    private int fullChainScore;
     private int totalScore;
 
     private boolean isFinalCountCalculated;
@@ -130,7 +134,7 @@ public class Score {
         totalScore = actionScore;
 
         final float time = ((int)(levelScreen.getTime()*10))/10f;
-        final int timeScore = (int)(time * TIME_SCORE_FACTOR);
+        timeScore = (int)(time * TIME_SCORE_FACTOR);
         timeScoreString = String.valueOf("Time: "
                 + time
                 + " x " + TIME_SCORE_FACTOR
@@ -138,7 +142,7 @@ public class Score {
         totalScore += timeScore;
 
         final int life = hero.getLife();
-        final int lifeScore = life * LIFE_SCORE_FACTOR;
+        lifeScore = life * LIFE_SCORE_FACTOR;
         lifeScoreString = String.valueOf("Life: "
                 + life
                 + " x " + LIFE_SCORE_FACTOR
@@ -146,27 +150,48 @@ public class Score {
         totalScore += lifeScore;
 
         final int maxChain = hordeGroup.getMaxConsecutiveChainCount();
-        final int maxChainScore = maxChain * MAX_CHAIN_SCORE_FACTOR;
+        chainScore = maxChain * MAX_CHAIN_SCORE_FACTOR;
         maxChainScoreString = String.valueOf("Max.Chain: "
                 + maxChain
                 + " x " + MAX_CHAIN_SCORE_FACTOR
-                + " = " + maxChainScore);
-        totalScore += maxChainScore;
+                + " = " + chainScore);
+        totalScore += chainScore;
 
         boolean isFullChain = hordeGroup.isFullChainAvailable();
         if (isFullChain) {
-            int fullChainScore = (int) (totalScore * FULL_CHAIN_SCORE_FACTOR);
+            fullChainScore = (int)(totalScore * FULL_CHAIN_SCORE_FACTOR);
             fullChainScoreString = "Full Chain: "
                     + " + " + FULL_CHAIN_SCORE_FACTOR *100 + "%"
                     + " = " + fullChainScore;
             totalScore += fullChainScore;
         } else {
+            fullChainScore = 0;
             fullChainScoreString = "Full Chain: Not achieved";
         }
 
         totalScoreString = "TOTAL: " + String.valueOf(totalScore);
 
         isFinalCountCalculated = true;
+    }
+
+    public int getActionScore() {
+        return actionScore;
+    }
+
+    public int getTimeScore() {
+        return timeScore;
+    }
+
+    public int getLifeScore() {
+        return lifeScore;
+    }
+
+    public int getChainScore() {
+        return chainScore;
+    }
+
+    public int getFullChainScore() {
+        return fullChainScore;
     }
 
     public int getTotalScore() {
