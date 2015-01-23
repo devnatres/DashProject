@@ -130,13 +130,24 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.draw(heroTexture, 50, 600);
 
         mainFont.draw(mainBatch, "Total score: " + gameState.getTotalBestScore(), 200, 750);
-        mainFont.draw(mainBatch, "Progress: x.y%", 200, 700);
-        mainFont.draw(mainBatch, "Trophies: ", 200, 650);
+        mainFont.draw(mainBatch, "Progress: " + gameState.getCompletedLevels() + "/" + gameState.getMaxLevels(), 200, 700);
+        mainFont.draw(mainBatch, "A: " + gameState.getTrophyACount()
+                + "  B: " + gameState.getTrophyBCount()
+                + "  C: " + gameState.getTrophyCCount()
+                , 200, 650);
 
         int levelDataX1 = 50;
         int levelDataX2 = 150;
         int levelDataX3 = 250;
-        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName(), levelDataX1, 550);
+        String newLevel = "";
+        if (gameState.getLevelIndex() == gameState.getCompletedLevels()) {
+            newLevel = " (NEW!)";
+        }
+        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName() + newLevel, levelDataX1, 550);
+        mainFont.draw(mainBatch, "A: " + gameState.getCurrentLevelTrophyA()
+                        + "  B: " + gameState.getCurrentLevelTrophyB()
+                        + "  C: " + gameState.getCurrentLevelTrophyC()
+                , levelDataX1, 525);
 
         int levelDataY = 480;
         mainFont.draw(mainBatch, "Last", levelDataX2, levelDataY);
@@ -171,6 +182,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainFont.draw(mainBatch, "TOTAL: ", levelDataX1, levelDataY);
         mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTotalScore(), levelDataX2, levelDataY);
         mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTotalScore(), levelDataX3, levelDataY);
+
+        levelDataY -= 50;
+        mainFont.draw(mainBatch, "Trophy: ", levelDataX1, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTrophy(), levelDataX2, levelDataY);
+        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTrophy(), levelDataX3, levelDataY);
 
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);

@@ -24,6 +24,7 @@ public class GameState {
 
     private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
     private static final String SOUND_KEY = "sound";
+    private static final String COMPLETED_LEVELS_KEY = "completed_levels";
 
     private static String keyLast(LevelId levelId, String scoreString) {
         return levelId.getLevelKey() + "_last" + scoreString;
@@ -35,6 +36,7 @@ public class GameState {
 
     private final int maxLevelIndex;
     private int levelIndex;
+    private int completedLevels;
 
     private final Array<LevelId> levelIds = new Array();
     
@@ -58,6 +60,10 @@ public class GameState {
 
     private boolean isSoundActivated;
     private boolean isCameraAssistantActivated;
+
+    private int trophyACount;
+    private int trophyBCount;
+    private int trophyCCount;
 
     public GameState() {
         preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
@@ -89,7 +95,10 @@ public class GameState {
             bestTotalScore.add(preferences.getInteger(keyBest(levelId, TOTAL_SCORE_SUBKEY), 0));
         }
 
-        updateTotalBestScore();
+        completedLevels = preferences.getInteger(COMPLETED_LEVELS_KEY, 0);
+        levelIndex = Tools.limitInteger(completedLevels, 0, maxLevelIndex);
+
+        updateGlobalStatistics();
     }
 
     private Array<String> readLevelSequence() {
@@ -110,10 +119,23 @@ public class GameState {
         return lines;
     }
 
-    private void updateTotalBestScore() {
+    private void updateGlobalStatistics() {
         totalBestScore = 0;
+        trophyACount = 0;
+        trophyBCount = 0;
+        trophyCCount = 0;
         for (int i = 0; i <= maxLevelIndex; i++) {
             totalBestScore += bestTotalScore.get(i);
+
+            int points = bestTotalScore.get(i);
+            String trophy = obtainTrophy(i, points);
+            if (trophy == "A") {
+                trophyACount++;
+            } else if (trophy == "B") {
+                trophyBCount++;
+            } else if (trophy == "C") {
+                trophyCCount++;
+            }
         }
     }
 
@@ -173,6 +195,64 @@ public class GameState {
         return totalBestScore;
     }
 
+    public int getCompletedLevels() {
+        return completedLevels;
+    }
+
+    public int getMaxLevels() {
+        return maxLevelIndex+1;
+    }
+
+    public int getLevelIndex() {
+        return levelIndex;
+    }
+
+    public int getTrophyACount() {
+        return trophyACount;
+    }
+
+    public int getTrophyBCount() {
+        return trophyBCount;
+    }
+
+    public int getTrophyCCount() {
+        return trophyCCount;
+    }
+
+    public int getCurrentLevelTrophyA() {
+        return levelIds.get(levelIndex).getTrophyA();
+    }
+
+    public int getCurrentLevelTrophyB() {
+        return levelIds.get(levelIndex).getTrophyB();
+    }
+
+    public int getCurrentLevelTrophyC() {
+        return levelIds.get(levelIndex).getTrophyC();
+    }
+
+    public String getCurrentLevelLastTrophy() {
+        int points = lastTotalScore.get(levelIndex);
+        return obtainTrophy(levelIndex, points);
+    }
+
+    public String getCurrentLevelBestTrophy() {
+        int points = bestTotalScore.get(levelIndex);
+        return obtainTrophy(levelIndex, points);
+    }
+
+    private String obtainTrophy(int index, int points) {
+        if (points >= levelIds.get(index).getTrophyA()) {
+            return "A";
+        } else if (points >= levelIds.get(index).getTrophyB()) {
+            return "B";
+        } else if (points >= levelIds.get(index).getTrophyC()) {
+            return "C";
+        } else {
+            return "";
+        }
+    }
+
     public void updateCurrentLevelScore(Score score) {
         LevelId levelId = levelIds.get(levelIndex);
 
@@ -182,13 +262,19 @@ public class GameState {
         putScore(levelId, CHAIN_SCORE_SUBKEY, lastChainScore, bestChainScore, score.getChainScore());
         putScore(levelId, FULLCHAIN_SCORE_SUBKEY, lastFullChainScore, bestFullChainScore, score.getFullChainScore());
         putScore(levelId, TOTAL_SCORE_SUBKEY, lastTotalScore, bestTotalScore, score.getTotalScore());
-        preferences.flush();
 
-        updateTotalBestScore();
+        updateGlobalStatistics();
+
+        if (levelIndex == completedLevels) {
+            completedLevels++;
+            preferences.putInteger(COMPLETED_LEVELS_KEY, completedLevels);
+        }
 
         if (levelIndex < maxLevelIndex) {
             levelIndex++;
         }
+
+        preferences.flush();
     }
 
     private void putScore(LevelId levelId,
@@ -205,8 +291,9 @@ public class GameState {
     }
 
     public void displaceCurrentLevel(int displacement) {
+        int limit = Tools.min(maxLevelIndex, completedLevels);
         levelIndex += displacement;
-        levelIndex = Tools.limitInteger(levelIndex, 0, maxLevelIndex);
+        levelIndex = Tools.limitInteger(levelIndex, 0, limit);
     }
 
     public void activateSound(boolean isSoundActivated) {

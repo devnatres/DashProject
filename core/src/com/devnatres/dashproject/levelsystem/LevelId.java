@@ -55,4 +55,15 @@ public class LevelId {
         return key;
     }
 
+    public int getTrophyA() {
+        return trophyA;
+    }
+
+    public int getTrophyB() {
+        return trophyB;
+    }
+
+    public int getTrophyC() {
+        return trophyC;
+    }
 }

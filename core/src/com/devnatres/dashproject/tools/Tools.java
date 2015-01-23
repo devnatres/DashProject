@@ -76,6 +76,10 @@ abstract public class Tools {
         return value;
     }
 
+    public static int min(int a, int b) {
+        return a < b ? a : b;
+    }
+
     public static MoveToAction getMoveToAction(Vector2 sourcePosition, Vector2 targetPosition, float speed) {
         MoveToAction moveToAction = new MoveToAction();
         moveToAction.setPosition(targetPosition.x, targetPosition.y);
