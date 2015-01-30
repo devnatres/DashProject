@@ -6,45 +6,35 @@ package com.devnatres.dashproject.levelsystem;
 public enum EPlayMode {
     GAME_PLAY {
         @Override
-        public void properUpdate(LevelScreen levelScreen) {
-            levelScreen.playModeUpdate_GamePlay();
-        }
-        @Override
-        public void properDraw(LevelScreen levelScreen) {
+        public void render(LevelScreen levelScreen) {
+            levelScreen.renderPlayMode_GamePlay();
         }
     },
     HERO_DEAD {
         @Override
-        public void properUpdate(LevelScreen levelScreen) {
-            levelScreen.playModeUpdate_HeroDead();
-        }
-        @Override
-        public void properDraw(LevelScreen levelScreen) {
-            levelScreen.playModeDraw_HeroDead();
+        public void render(LevelScreen levelScreen) {
+            levelScreen.renderPlayMode_HeroDead();
         }
     },
     TIME_OUT {
         @Override
-        public void properUpdate(LevelScreen levelScreen) {
-            levelScreen.playModeUpdate_TimeOut();
-        }
-        @Override
-        public void properDraw(LevelScreen levelScreen) {
-            levelScreen.playModeDraw_TimeOut();
+        public void render(LevelScreen levelScreen) {
+            levelScreen.renderPlayMode_TimeOut();
         }
     },
     SCORE_COUNT {
         @Override
-        public void properUpdate(LevelScreen levelScreen) {
-            levelScreen.playModeUpdate_ScoreCount();
-        }
-        @Override
-        public void properDraw(LevelScreen levelScreen) {
-            levelScreen.playModeDraw_ScoreCount();
+        public void render(LevelScreen levelScreen) {
+            levelScreen.renderPlayMode_ScoreCount();
         }
     },
+    PAUSE {
+        @Override
+        public void render(LevelScreen levelScreen) {
+            levelScreen.renderPlayMode_Pause();
+        }
+    }
     ;
 
-    abstract public void properUpdate(LevelScreen levelScreen);
-    abstract public void properDraw(LevelScreen levelScreen);
+    abstract public void render(LevelScreen levelScreen);
 }

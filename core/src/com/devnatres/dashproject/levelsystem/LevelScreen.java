@@ -179,45 +179,30 @@ public class LevelScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (inputTranslator.isResetRequested()) {
+        if (inputTranslator.isResetRequested() || resetCountDown == 0) {
             reset();
             return;
         }
 
         clearScreen();
+        playMode.render(this);
 
-        playMode.properUpdate(this);
+        if (Debug.DEBUG) renderDebugger();
+    }
 
+    private void renderStandardComponents() {
+        // TODO Optimize by sharing the same begin-end batch sequence (see design.odt)
         mainCamera.update();
-
-        //  TODO Optimize by sharing the same begin-end batch sequence.
-        // A)
-        // pass the mainBatch to the map,
-        // and override OrthogonalTiledMapRenderer's (BatchTiledMapRenderer, actually)
-        // beginRender() and endRender() methods.
-        // B)
-        // renderer.getSpriteBatch().begin()
-        // renderer.rendererTileLayer((TiledMapTileLayer) map.getLayers().get("background"));
-        // player.draw(renderer.getSpriteBatch());
-        // renderer.rendererTileLayer((TiledMapTileLayer) map.getLayers().get("foreground"));
-        // renderer.getSpriteBatch().end()
         mainBatch.setProjectionMatrix(mainCamera.combined);
+
         renderBackground();
         renderMap();
         renderSprites();
         renderFoeRadar();
         renderHub();
-
-        playMode.properDraw(this);
-
-        if (resetCountDown == 0) {
-            reset();
-        }
-
-        if (Debug.DEBUG) renderDebugger();
     }
 
-    protected void playModeUpdate_GamePlay() {
+    protected void renderPlayMode_GamePlay() {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
             playMode = EPlayMode.SCORE_COUNT;
@@ -240,25 +225,17 @@ public class LevelScreen implements Screen {
             inputForHero();
             decideToChaseHeroWithCamera();
         }
+
+        renderStandardComponents();
     }
 
-    protected void playModeUpdate_ScoreCount() {
-    }
-
-    protected void playModeDraw_ScoreCount() {
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
-        score.renderFinalCount(mainBatch, mainFont);
-        mainBatch.end();
-    }
-
-    protected void playModeUpdate_HeroDead() {
+    protected void renderPlayMode_HeroDead() {
         if (resetCountDown > 0) {
             resetCountDown--;
         }
-    }
 
-    protected void playModeDraw_HeroDead() {
+        renderStandardComponents();
+
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(dissipatedMessage,
@@ -267,19 +244,32 @@ public class LevelScreen implements Screen {
         mainBatch.end();
     }
 
-    protected void playModeUpdate_TimeOut() {
+    protected void renderPlayMode_TimeOut() {
         if (resetCountDown > 0) {
             resetCountDown--;
         }
-    }
 
-    protected void playModeDraw_TimeOut() {
+        renderStandardComponents();
+
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(timeoutMessage,
                 (screenWidth - timeoutMessage.getWidth())/2,
                 (screenHeight - timeoutMessage.getHeight())/2);
         mainBatch.end();
+    }
+
+    protected void renderPlayMode_ScoreCount() {
+        renderStandardComponents();
+
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        score.renderFinalCount(mainBatch, mainFont);
+        mainBatch.end();
+    }
+
+    protected void renderPlayMode_Pause() {
+
     }
 
     private boolean isAllFoesOutOfVisibleScope() {
