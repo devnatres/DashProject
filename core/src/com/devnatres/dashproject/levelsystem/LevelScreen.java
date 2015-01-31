@@ -36,6 +36,8 @@ public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
     private static final float STANDARD_TIME_PER_HORDE = 3f;
     private static final float TIME_STEP = Time.FPS_TIME;
+    private static final int MIN_FINAL_TIME = 120;
+    private static final int MIN_READY_TIME = 15;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -72,6 +74,7 @@ public class LevelScreen implements Screen {
     private final LevelScript levelScript;
     private final Texture dissipatedMessage;
     private final Texture timeoutMessage;
+    private final Texture readyMessage;
 
     private boolean comboCameraChasing;
 
@@ -92,6 +95,8 @@ public class LevelScreen implements Screen {
     private final LevelId levelId;
 
     private final GameMenu gameMenu;
+
+    private int waitingTime;
 
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
@@ -139,13 +144,16 @@ public class LevelScreen implements Screen {
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
         dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
         timeoutMessage = hyperStore.getTexture("message_timeout.png");
+        readyMessage = hyperStore.getTexture("message_ready.png");
 
         radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
 
         System.gc();
         inputTranslator.clear();
 
-        playMode = EPlayMode.GAME_PLAY;
+        playMode = EPlayMode.READY;
+        waitingTime = MIN_READY_TIME;
+        timeString = "0";
         score = new Score(hyperStore, this);
 
         lifePointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
@@ -207,6 +215,26 @@ public class LevelScreen implements Screen {
         renderHub();
     }
 
+    protected void renderPlayMode_Ready() {
+        renderStandardComponents();
+
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        mainBatch.begin();
+        mainBatch.draw(readyMessage,
+                (screenWidth - readyMessage.getWidth())/2,
+                (screenHeight - readyMessage.getHeight())/2);
+        mainBatch.end();
+
+        if (waitingTime == 0 && inputTranslator.isTouchDown()) {
+            playMode = EPlayMode.GAME_PLAY;
+        } else {
+            inputTranslator.clear();
+            if (waitingTime > 0) {
+                waitingTime--;
+            }
+        }
+    }
+
     protected void renderPlayMode_GamePlay() {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
@@ -214,6 +242,7 @@ public class LevelScreen implements Screen {
             score.calculateFinalCount();
             gameState.updateCurrentLevelScore(score);
             GlobalAudio.playOnly(endOkMusic);
+            waitingTime = MIN_FINAL_TIME;
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
         } else if (!Debug.IMMORTAL && time == 0) {
@@ -273,6 +302,15 @@ public class LevelScreen implements Screen {
         mainBatch.begin();
         score.renderFinalCount(mainBatch, mainFont);
         mainBatch.end();
+
+        if (waitingTime == 0 && inputTranslator.isTouchDown()) {
+            menuReset();
+        } else {
+            inputTranslator.clear();
+            if (waitingTime > 0) {
+                waitingTime--;
+            }
+        }
     }
 
     protected void renderPlayMode_Menu() {

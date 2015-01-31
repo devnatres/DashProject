@@ -13,7 +13,7 @@ public enum EPlayMode {
     READY {
         @Override
         public void render(LevelScreen levelScreen) {
-            
+            levelScreen.renderPlayMode_Ready();
         }
     },
     HERO_DEAD {
