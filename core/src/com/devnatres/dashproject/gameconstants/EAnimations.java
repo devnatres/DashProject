@@ -149,6 +149,42 @@ public enum EAnimations {
         }
     },
 
+    BUTTON_MENU_RESUME {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_resume.png");
+        }
+    },
+    BUTTON_MENU_RESET {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_reset.png");
+        }
+    },
+    BUTTON_MENU_MENU {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_menu.png");
+        }
+    },
+    BUTTON_MENU_EXIT {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_exit.png");
+        }
+    },
+    BUTTON_MENU_SOUND {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_sound.png");
+        }
+    },
+    BUTTON_MENU_YES {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_yes.png");
+        }
+    },
+    BUTTON_MENU_NO {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_menu_no.png");
+        }
+    },
+
     BUTTON_ARROW_UP {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_arrow_up.png");

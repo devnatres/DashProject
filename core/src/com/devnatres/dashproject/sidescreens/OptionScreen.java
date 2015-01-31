@@ -34,9 +34,9 @@ public class OptionScreen implements Screen, IButtonExecutable {
     private final Button cameraButton;
     private final Button backButton;
 
-    private Agent soundSymbol;
-    private Agent cameraSymbol;
-    private Agent offSymbol;
+    private final Agent soundSymbol;
+    private final Agent cameraSymbol;
+    private final Agent offSymbol;
 
     public OptionScreen(DashGame dashGame) {
         this.dashGame = dashGame;

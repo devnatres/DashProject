@@ -10,6 +10,12 @@ public enum EPlayMode {
             levelScreen.renderPlayMode_GamePlay();
         }
     },
+    READY {
+        @Override
+        public void render(LevelScreen levelScreen) {
+            
+        }
+    },
     HERO_DEAD {
         @Override
         public void render(LevelScreen levelScreen) {
@@ -28,10 +34,10 @@ public enum EPlayMode {
             levelScreen.renderPlayMode_ScoreCount();
         }
     },
-    PAUSE {
+    MENU {
         @Override
         public void render(LevelScreen levelScreen) {
-            levelScreen.renderPlayMode_Pause();
+            levelScreen.renderPlayMode_Menu();
         }
     }
     ;

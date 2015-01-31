@@ -22,6 +22,7 @@ import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
+import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.store.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
@@ -90,6 +91,8 @@ public class LevelScreen implements Screen {
 
     private final LevelId levelId;
 
+    private final GameMenu gameMenu;
+
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
@@ -150,6 +153,8 @@ public class LevelScreen implements Screen {
         time = hordeCount * STANDARD_TIME_PER_HORDE;
 
         skipCameraAssistant = !gameState.isCameraAssistantActivated();
+
+        gameMenu = new GameMenu(this, hyperStore, gameState);
     }
 
     public Hero getHero() {
@@ -180,7 +185,7 @@ public class LevelScreen implements Screen {
     @Override
     public void render(float delta) {
         if (inputTranslator.isResetRequested() || resetCountDown == 0) {
-            reset();
+            menuReset();
             return;
         }
 
@@ -214,6 +219,8 @@ public class LevelScreen implements Screen {
         } else if (!Debug.IMMORTAL && time == 0) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
+        } else if (inputTranslator.isMenuRequested()) {
+            playMode = EPlayMode.MENU;
         } else {
             if (!isBulletTime() && time > 0) {
                 time -= TIME_STEP;
@@ -268,8 +275,12 @@ public class LevelScreen implements Screen {
         mainBatch.end();
     }
 
-    protected void renderPlayMode_Pause() {
-
+    protected void renderPlayMode_Menu() {
+        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        gameMenu.check(inputTranslator, fixedCamera);
+        mainBatch.begin();
+        gameMenu.paint(mainBatch);
+        mainBatch.end();
     }
 
     private boolean isAllFoesOutOfVisibleScope() {
@@ -285,7 +296,15 @@ public class LevelScreen implements Screen {
         return allFoesOutOfVisibleScope;
     }
 
-    private void reset() {
+    public void menuResume() {
+        playMode = EPlayMode.GAME_PLAY;
+    }
+
+    public void menuMainMenu() {
+        dashGame.setScreen(new MainMenuScreen(dashGame));
+    }
+
+    public void menuReset() {
         GlobalAudio.stopMusic();
         dashGame.setScreen(new LobbyScreen(dashGame));
     }

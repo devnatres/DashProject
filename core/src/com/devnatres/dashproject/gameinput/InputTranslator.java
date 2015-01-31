@@ -24,6 +24,8 @@ public class InputTranslator implements InputProcessor {
 
     private boolean resetRequested;
     private final int resetKeycode;
+    private boolean menuRequested;
+    private final int menuKeycode;
 
     private final Vector3 clickCoordinates;
     private final Vector2 touchDownPointOnCamera;
@@ -33,7 +35,8 @@ public class InputTranslator implements InputProcessor {
         clickCoordinates = new Vector3();
         touchDownPointOnCamera = new Vector2();
 
-        resetKeycode = (Gdx.app.getType() == Application.ApplicationType.Android) ? Input.Keys.MENU : Input.Keys.R;
+        resetKeycode = (Gdx.app.getType() == Application.ApplicationType.Android) ? Input.Keys.BACK : Input.Keys.R;
+        menuKeycode = (Gdx.app.getType() == Application.ApplicationType.Android) ? Input.Keys.MENU : Input.Keys.M;
 
         Gdx.input.setInputProcessor(this);
     }
@@ -45,12 +48,15 @@ public class InputTranslator implements InputProcessor {
         isDragged = false;
         touchDownPointPrepared = false;
         resetRequested = false;
+        menuRequested = false;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == resetKeycode) {
             resetRequested = true;
+        } else if (keycode == menuKeycode) {
+            menuRequested = true;
         }
         return false;
     }
@@ -140,7 +146,14 @@ public class InputTranslator implements InputProcessor {
     }
 
     public boolean isResetRequested() {
-        return resetRequested;
+        boolean value = resetRequested;
+        resetRequested = false;
+        return value;
     }
 
+    public boolean isMenuRequested() {
+        boolean value = menuRequested;
+        menuRequested = false;
+        return value;
+    }
 }
