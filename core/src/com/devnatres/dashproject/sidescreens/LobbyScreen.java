@@ -228,7 +228,6 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     public void execute(Button button) {
         if (button == goButton) {
             dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
-            dispose();
         } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         } else if (button == up2Button) {

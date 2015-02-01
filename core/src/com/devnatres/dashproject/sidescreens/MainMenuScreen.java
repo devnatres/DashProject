@@ -136,6 +136,8 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
             dashGame.setScreen(new LobbyScreen(dashGame));
         } else if (button == optionsButton) {
             dashGame.setScreen(new OptionScreen(dashGame));
+        } else if (button == creditsButton) {
+            dashGame.setScreen(new CreditScreen(dashGame));
         } else if (button == exitButton) {
             Gdx.app.exit();
         }
