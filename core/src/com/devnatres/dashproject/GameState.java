@@ -108,7 +108,7 @@ public class GameState {
 
         try {
             String line = reader.readLine();
-            while (line != null) {
+            while (line != null && line.length()>2) {
                 lines.add(line);
                 line = reader.readLine();
             }

@@ -34,10 +34,11 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  */
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
-    private static final float STANDARD_TIME_PER_HORDE = 3f;
+    private static final float STANDARD_INITIAL_TIME = 3f;
     private static final float TIME_STEP = Time.FPS_TIME;
     private static final int MIN_FINAL_TIME = 120;
     private static final int MIN_READY_TIME = 15;
+    private static final float TIME_BONUS = 3f;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -90,7 +91,10 @@ public class LevelScreen implements Screen {
 
     private float time;
     private String timeString;
-    private int hordeCount;
+
+    private int maxHordeCount;
+    private int lastHordeCount;
+    private int currentHordeCount;
 
     private final LevelId levelId;
 
@@ -131,7 +135,9 @@ public class LevelScreen implements Screen {
 
         levelScript = new LevelScript();
 
-        hordeCount = extractScript();
+        maxHordeCount = extractScript();
+        lastHordeCount = maxHordeCount;
+        currentHordeCount = maxHordeCount;
 
         badassMusic = hyperStore.getMusic("music/badass.ogg");
         badassMusic.setLooping(true);
@@ -153,12 +159,12 @@ public class LevelScreen implements Screen {
 
         playMode = EPlayMode.READY;
         waitingTime = MIN_READY_TIME;
-        timeString = "0";
         score = new Score(hyperStore, this);
 
         lifePointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
 
-        time = hordeCount * STANDARD_TIME_PER_HORDE;
+        time = levelId.getInitialTime();
+        timeString = String.valueOf(((int)(time*10))/10f);
 
         skipCameraAssistant = !gameState.isCameraAssistantActivated();
 
@@ -256,6 +262,11 @@ public class LevelScreen implements Screen {
                 if (time < 0) {
                     time = 0;
                 }
+                timeString = String.valueOf(((int)(time*10))/10f);
+            }
+            if (lastHordeCount > currentHordeCount && currentHordeCount > 0) {
+                lastHordeCount = currentHordeCount;
+                time += TIME_BONUS;
                 timeString = String.valueOf(((int)(time*10))/10f);
             }
             inputForHero();
@@ -471,7 +482,8 @@ public class LevelScreen implements Screen {
             bulletTime--;
         }
 
-        hordeGroup.removeKilledHordes();
+        int removedHordes = hordeGroup.removeKilledHordes();
+        currentHordeCount -= removedHordes;
 
         score.updateScore();
     }

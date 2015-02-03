@@ -41,15 +41,19 @@ public class HordeGroup {
         return hordes.size;
     }
 
-    public void removeKilledHordes() {
+    public int removeKilledHordes() {
+        int removedHordes = 0;
         for (int i = 0; i < hordes.size; i++) {
             Horde horde = hordes.get(i);
             if (horde.isKilled()) {
                 hordes.removeIndex(i);
                 i--;
+                removedHordes++;
             }
         }
         globalHorde.removeKilledFoes();
+
+        return removedHordes;
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {

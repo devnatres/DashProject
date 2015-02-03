@@ -66,4 +66,8 @@ public class LevelId {
     public int getTrophyC() {
         return trophyC;
     }
+
+    public float getInitialTime() {
+        return initialTime;
+    }
 }
