@@ -285,13 +285,13 @@ public class Hero extends Agent {
                 || map.isLineCollision(heroHighX, heroHighY, foeHighX, foeHighY);
     }
 
-    public void receiveDamage() {
+    public void receiveDamage(int damage) {
         if (!dying) {
             damageImageDuration = DAMAGE_DURATION;
             //failDashSound.play();
             GlobalAudio.play(failDashSound);
             if (life > 0) {
-                life--;
+                life -= damage;
                 if (!Debug.IMMORTAL && life <= 0) {
                     die();
                 }

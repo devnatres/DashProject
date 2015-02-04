@@ -34,7 +34,6 @@ import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
  */
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
-    private static final float STANDARD_INITIAL_TIME = 3f;
     private static final float TIME_STEP = Time.FPS_TIME;
     private static final int MIN_FINAL_TIME = 120;
     private static final int MIN_READY_TIME = 15;
