@@ -235,12 +235,11 @@ public class LevelMap implements Disposable {
             String foeType = properties.get("type", String.class);
             Foe foe;
             if (foeType == null || foeType.equals("robot")) {
-                //foe = new Foe(hyperStore, levelScreen);
                 foe = Foe.buildRobot(hyperStore, levelScreen);
-                horde.addLinked(foe);
             } else {
-                foe = null;
+                foe = Foe.buildTank(hyperStore, levelScreen);
             }
+            horde.addLinked(foe);
 
             assignFoeActions(foe, properties);
         }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
@@ -65,6 +66,8 @@ public class Hero extends Agent {
     private boolean dying;
 
     private final LevelMap map;
+
+    private Array<Foe> attackedFoes = new Array();
 
     static {
         VectorPool.initialize();
@@ -209,9 +212,11 @@ public class Hero extends Agent {
         } else {
             super.act(delta);
             boolean moved = setNextPosIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
-            boolean attackReleased = attack();
-            if (!attackReleased && moved) {
-                levelScreen.deactivateBulletTime();
+            if (moved) {
+                Array<Foe> attackedFoes = attack();
+                if (attackedFoes.size == 0) {
+                    levelScreen.deactivateBulletTime();
+                }
             }
 
             if (attackingTime > 0) {
@@ -240,8 +245,8 @@ public class Hero extends Agent {
      * Attack any nearby foe.
      * @return true if the attack was done
      */
-    private boolean attack() {
-        boolean attackReleased = false;
+    private Array<Foe> attack() {
+        attackedFoes.clear();
         Horde globalHorde = levelScreen.getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
@@ -252,18 +257,16 @@ public class Hero extends Agent {
                 foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
                 if (levelScreen.isBulletTime()) {
-                    //comboSound.play(.1f);
                     GlobalAudio.play(comboSound, .1f);
                 } else {
-                    //hitSound.play(.1f);
                     GlobalAudio.play(hitSound, .1f);
                 }
 
                 levelScreen.activateBulletTime(); // Reboot if it was activated before
-                attackReleased = true;
+                attackedFoes.add(foe);
             }
         }
-        return attackReleased;
+        return attackedFoes;
     }
 
     private boolean isFoeOnAttackRadio(Foe foe) {

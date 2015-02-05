@@ -19,7 +19,7 @@ public class Foe extends Agent {
               levelScreen,
               EAnimations.FOE_ROBOT_WALKING,
               EAnimations.FOE_ROBOT_WALKING,
-              EAnimations.FOE_ROBOT_DEAD,
+              EAnimations.FOE_ROBOT_DYING,
               "pum.png",
               1,
               1,
@@ -27,10 +27,24 @@ public class Foe extends Agent {
               100);
     }
 
+    public static Foe buildTank(HyperStore hyperStore, LevelScreen levelScreen) {
+        return new Foe(hyperStore,
+                levelScreen,
+                EAnimations.FOE_TANK_WALKING,
+                EAnimations.FOE_TANK_STUNNING,
+                EAnimations.FOE_TANK_DYING,
+                "pum.png",
+                2,
+                2,
+                75,
+                150);
+    }
+
     private static final int SHAKE_FRAME_DURATION = 4;
     private static final int SHAKE_TOTAL_DURATION = 20;
     private static final int PUM_DURATION = 15;
     private static final int FIRE_WAIT = 30;
+    private static final int STUN_DURATION = 30;
 
     private int life;
     private final int damage;
@@ -52,6 +66,8 @@ public class Foe extends Agent {
     private int shakeIndex;
     private int shakeFrameDuration;
     private int shakeTotalDuration;
+
+    private int stunDuration;
 
     private final Hero hero;
     private final Vector2 heroLastCenterPos = new Vector2();
@@ -99,14 +115,12 @@ public class Foe extends Agent {
         if (standardScore == 50) {
             standardScoreAgent = new TransientAgent(EAnimations.SCORE_50.create(hyperStore));
         } else {
-            // TODO: Other score
-            standardScoreAgent = new TransientAgent(EAnimations.SCORE_50.create(hyperStore));
+            standardScoreAgent = new TransientAgent(EAnimations.SCORE_75.create(hyperStore));
         }
         if (comboScore == 100) {
             comboScoreAgent = new TransientAgent(EAnimations.SCORE_100.create(hyperStore));
         } else {
-            // TODO: Other score
-            comboScoreAgent = new TransientAgent(EAnimations.SCORE_100.create(hyperStore));
+            comboScoreAgent = new TransientAgent(EAnimations.SCORE_150.create(hyperStore));
         }
 
         foeDamageResult = new FoeDamageResult();
@@ -121,10 +135,20 @@ public class Foe extends Agent {
                 setVisible(false);
             }
         } else {
-            if (!levelScreen.isBulletTime()) {
+            if (levelScreen.isBulletTime()) {
+                if (stunDuration > 0) {
+                    stunDuration--;
+                    if (stunDuration == 0) {
+                        setAnimation(basicAnimation);
+                    } else {
+                        addStateTime(delta); // Go ahead with the current stunAnimation
+                    }
+                }
+            } else {
                 super.act(delta);
                 shotHeroIfInSight();
             }
+
             heroLastCenterPos.set(hero.getAuxCenter());
         }
     }
@@ -188,6 +212,7 @@ public class Foe extends Agent {
             if (life > 0) {
                 life -= damagePoints;
             }
+
             if (life <= 0) {
                 if (horde != null) {
                     horde.countKilledFoe(this);
@@ -212,6 +237,9 @@ public class Foe extends Agent {
 
                 levelScreen.processFoeDamageResult(foeDamageResult);
                 horde.processFoeDamageResult(foeDamageResult);
+            } else {
+                setAnimation(stunAnimation);
+                stunDuration = STUN_DURATION;
             }
         }
     }

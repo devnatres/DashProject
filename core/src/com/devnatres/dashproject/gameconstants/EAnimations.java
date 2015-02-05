@@ -42,10 +42,25 @@ public enum EAnimations {
             return createAnimation(hyperStore, "foe_robot_walking.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);
         }
     },
-
-    FOE_ROBOT_DEAD {
+    FOE_ROBOT_DYING {
         public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "foe_robot_cutting.png", 2, 1, 30f, PlayMode.NORMAL);
+        }
+    },
+
+    FOE_TANK_WALKING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "foe_tank_walking.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    FOE_TANK_DYING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "foe_tank_cutting.png", 2, 1, 30f, PlayMode.NORMAL);
+        }
+    },
+    FOE_TANK_STUNNING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "foe_tank_stunning.png", 2, 1, 30f, PlayMode.NORMAL);
         }
     },
 
@@ -54,10 +69,19 @@ public enum EAnimations {
             return createAnimation(hyperStore, "score/score_50.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
         }
     },
-
+    SCORE_75 {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "score/score_75.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
+        }
+    },
     SCORE_100 {
         public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "score/score_100.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
+        }
+    },
+    SCORE_150 {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "score/score_150.png", 1, 1, SCORE_DURATION, PlayMode.NORMAL);
         }
     },
 

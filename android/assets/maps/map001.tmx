@@ -36,11 +36,11 @@
     <property name="step3" value="move,origin"/>
    </properties>
   </object>
-  <object gid="17" x="224" y="1920"/>
+  <object type="tank" gid="17" x="224" y="1920"/>
  </objectgroup>
  <objectgroup name="horde1">
-  <object type="robot" gid="17" x="352" y="416"/>
-  <object type="robot" gid="17" x="288" y="320">
+  <object type="tank" gid="17" x="352" y="416"/>
+  <object type="tank" gid="17" x="288" y="320">
    <properties>
     <property name="step0" value="move,15,9"/>
     <property name="step1" value="move,origin"/>
@@ -54,19 +54,19 @@
   </object>
  </objectgroup>
  <objectgroup name="horde2">
-  <object gid="17" x="832" y="1504">
+  <object type="tank" gid="17" x="832" y="1504">
    <properties>
     <property name="step0" value="delaymove,60,31,46"/>
     <property name="step1" value="delaymove,60,origin"/>
    </properties>
   </object>
-  <object gid="17" x="736" y="1696">
+  <object type="tank" gid="17" x="736" y="1696">
    <properties>
     <property name="step0" value="move,23,50"/>
     <property name="step1" value="move,origin"/>
    </properties>
   </object>
-  <object gid="17" x="736" y="1504">
+  <object type="tank" gid="17" x="736" y="1504">
    <properties>
     <property name="step0" value="move,23,48"/>
     <property name="step1" value="move,origin"/>
