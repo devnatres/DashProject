@@ -270,6 +270,10 @@ public class LevelScreen implements Screen {
             }
             inputForHero();
             decideToChaseHeroWithCamera();
+            if (bulletTime > 0f && !comboCameraChasing) {
+                bulletTime--;
+            }
+
         }
 
         renderStandardComponents();
@@ -476,10 +480,6 @@ public class LevelScreen implements Screen {
         //renderSprites_Cover();
 
         mainBatch.end();
-
-        if (bulletTime > 0f && !comboCameraChasing) {
-            bulletTime--;
-        }
 
         int removedHordes = hordeGroup.removeKilledHordes();
         currentHordeCount -= removedHordes;

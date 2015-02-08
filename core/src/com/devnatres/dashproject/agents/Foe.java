@@ -44,9 +44,9 @@ public class Foe extends Agent {
     private static final int SHAKE_TOTAL_DURATION = 20;
     private static final int PUM_DURATION = 15;
     private static final int FIRE_WAIT = 30;
-    private static final int STUN_DURATION = 30;
 
     private int life;
+    private final int initialLife;
     private final int damage;
 
     private int pumImageDuration;
@@ -66,8 +66,6 @@ public class Foe extends Agent {
     private int shakeIndex;
     private int shakeFrameDuration;
     private int shakeTotalDuration;
-
-    private int stunDuration;
 
     private final Hero hero;
     private final Vector2 heroLastCenterPos = new Vector2();
@@ -101,6 +99,7 @@ public class Foe extends Agent {
         pumImage = new Sprite(hyperStore.getTexture(pumTexture));
 
         this.life = life;
+        this.initialLife = life;
         this.damage = damage;
 
         this.levelScreen = levelScreen;
@@ -135,20 +134,14 @@ public class Foe extends Agent {
                 setVisible(false);
             }
         } else {
-            if (levelScreen.isBulletTime()) {
-                if (stunDuration > 0) {
-                    stunDuration--;
-                    if (stunDuration == 0) {
-                        setAnimation(basicAnimation);
-                    } else {
-                        addStateTime(delta); // Go ahead with the current stunAnimation
-                    }
+            if (!levelScreen.isBulletTime()) {
+                if (getAnimation() == stunAnimation) {
+                    setAnimation(basicAnimation);
+                    life = initialLife;
                 }
-            } else {
                 super.act(delta);
                 shotHeroIfInSight();
             }
-
             heroLastCenterPos.set(hero.getAuxCenter());
         }
     }
@@ -239,7 +232,6 @@ public class Foe extends Agent {
                 horde.processFoeDamageResult(foeDamageResult);
             } else {
                 setAnimation(stunAnimation);
-                stunDuration = STUN_DURATION;
             }
         }
     }
