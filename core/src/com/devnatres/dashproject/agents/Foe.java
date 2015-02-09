@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DnaCamera;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
@@ -137,7 +138,7 @@ public class Foe extends Agent {
             if (!levelScreen.isBulletTime()) {
                 if (getAnimation() == stunAnimation) {
                     setAnimation(basicAnimation);
-                    life = initialLife;
+                    recoverLife();
                 }
                 super.act(delta);
                 shotHeroIfInSight();
@@ -199,41 +200,69 @@ public class Foe extends Agent {
     }
 
     public void receiveDamage(int damagePoints) {
+        if (dying) return;
+
         foeDamageResult.clear();
 
-        if (!dying) {
-            if (life > 0) {
-                life -= damagePoints;
-            }
+        if (life > 0) {
+            life -= damagePoints;
+        }
 
-            if (life <= 0) {
-                if (horde != null) {
-                    horde.countKilledFoe(this);
-                }
-                dying = true;
-                setAnimation(deadAnimation);
-
-                int score;
-                Agent scoreAgent;
-                if (levelScreen.isBulletTime()) {
-                    score = comboScore;
-                    scoreAgent = comboScoreAgent;
-                    foeDamageResult.setDeadInCombo(true);
-                } else {
-                    score = standardScore;
-                    scoreAgent = standardScoreAgent;
-                    foeDamageResult.setDeadInCombo(false);
-                }
-                foeDamageResult.setScore(score);
-                scoreAgent.setCenter(auxCenter.x, auxCenter.y);
-                levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
-
-                levelScreen.processFoeDamageResult(foeDamageResult);
-                horde.processFoeDamageResult(foeDamageResult);
-            } else {
-                setAnimation(stunAnimation);
+        if (Debug.DEBUG) {
+            Debug.addCount();
+            if (Debug.getCount() == 10) {
+                Debug.doNothing();
+            } else if (Debug.getCount() == 3) {
+                Debug.doNothing();
             }
         }
+
+        if (life <= 0) {
+            if (horde != null) {
+                horde.countKilledFoe(this);
+            }
+            dying = true;
+            setAnimation(deadAnimation);
+
+            boolean comboAttack = false;
+
+            if (levelScreen.isBulletTime()
+                    && levelScreen.ifThereAreComboLivingFoesThenContains(this)
+                    && !levelScreen.isFirstComboFoe(this)) {
+
+                comboAttack = true;
+            }
+
+            int score;
+            Agent scoreAgent;
+            if (comboAttack) {
+                score = comboScore;
+                scoreAgent = comboScoreAgent;
+                foeDamageResult.setDeadInCombo(true);
+            } else {
+                score = standardScore;
+                scoreAgent = standardScoreAgent;
+                foeDamageResult.setDeadInCombo(false);
+            }
+
+            foeDamageResult.setScore(score);
+            scoreAgent.setCenter(auxCenter.x, auxCenter.y);
+            levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
+
+            levelScreen.processFoeDamageResult(foeDamageResult);
+            horde.processFoeDamageResult(foeDamageResult);
+
+            levelScreen.removeComboLivingFoe(this);
+        } else {
+            setAnimation(stunAnimation);
+        }
+
+        levelScreen.addComboFoe(this);
+        levelScreen.activateBulletTime();
+    }
+
+    public void recoverLife() {
+        life = initialLife;
     }
 
     @Override

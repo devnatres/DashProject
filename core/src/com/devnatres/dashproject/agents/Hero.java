@@ -262,10 +262,12 @@ public class Hero extends Agent {
                     GlobalAudio.play(hitSound, .1f);
                 }
 
-                levelScreen.activateBulletTime(); // Reboot if it was activated before
                 attackedFoes.add(foe);
             }
         }
+
+        levelScreen.restoreNotAttackedFoesFromComboLivingFoes(attackedFoes);
+
         return attackedFoes;
     }
 

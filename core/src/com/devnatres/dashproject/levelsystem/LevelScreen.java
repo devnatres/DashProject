@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.*;
 import com.devnatres.dashproject.agents.*;
 import com.devnatres.dashproject.debug.Debug;
@@ -101,6 +102,9 @@ public class LevelScreen implements Screen {
 
     private int waitingTime;
 
+    private Array<Foe> comboLivingFoes = new Array();
+    private Foe firstComboFoe;
+
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
@@ -168,6 +172,8 @@ public class LevelScreen implements Screen {
         skipCameraAssistant = !gameState.isCameraAssistantActivated();
 
         gameMenu = new GameMenu(this, hyperStore, gameState);
+
+        if (Debug.DEBUG) Debug.resetCount();
     }
 
     public Hero getHero() {
@@ -272,8 +278,10 @@ public class LevelScreen implements Screen {
             decideToChaseHeroWithCamera();
             if (bulletTime > 0f && !comboCameraChasing) {
                 bulletTime--;
+                if (bulletTime == 0) {
+                    deactivateBulletTime();
+                }
             }
-
         }
 
         renderStandardComponents();
@@ -600,6 +608,44 @@ public class LevelScreen implements Screen {
 
     public void deactivateBulletTime() {
         bulletTime = 0;
+        comboLivingFoes.clear();
+        firstComboFoe = null;
+    }
+
+    public boolean ifThereAreComboLivingFoesThenContains(Foe foe) {
+        return comboLivingFoes.size == 0 || comboLivingFoes.contains(foe, true);
+    }
+
+    public void removeComboLivingFoe(Foe foe) {
+        comboLivingFoes.removeValue(foe, true);
+    }
+
+    public void addComboFoe(Foe foe) {
+        if (!foe.isDying()) {
+            comboLivingFoes.add(foe);
+        }
+
+        if (firstComboFoe == null) {
+            firstComboFoe = foe;
+        }
+    }
+
+    public void restoreNotAttackedFoesFromComboLivingFoes(Array<Foe> attackedFoes) {
+        for (int i = 0; i < comboLivingFoes.size; i++) {
+            Foe comboLivingFoe = comboLivingFoes.get(i);
+            if (!attackedFoes.contains(comboLivingFoe, true)) {
+                comboLivingFoe.recoverLife();
+                if (firstComboFoe == comboLivingFoe) {
+                    firstComboFoe = null;
+                }
+                comboLivingFoes.removeValue(comboLivingFoe, true);
+                i--;
+            }
+        }
+    }
+
+    public boolean isFirstComboFoe(Foe foe) {
+        return firstComboFoe == foe;
     }
 
     public boolean isBulletTime() {

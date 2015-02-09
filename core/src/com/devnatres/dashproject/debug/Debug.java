@@ -35,6 +35,8 @@ public class Debug {
 
     private static Array<DebugCell> testCells;
 
+    private static int count;
+
     public static void begin(Camera gameCamera) {
         if (!DEBUG) return;
 
@@ -138,6 +140,21 @@ public class Debug {
 
         testCells.clear();
     }
+
+    public static void addCount() {
+        if (!DEBUG) return;
+        count++;
+    }
+
+    public static int getCount() {
+        return count;
+    }
+
+    public static void resetCount() {
+        count = 0;
+    }
+
+    public static void doNothing() {}
 
     private Debug() {};
 }
