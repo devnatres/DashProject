@@ -22,6 +22,9 @@ public class GameState {
     private static final String FULLCHAIN_SCORE_SUBKEY = "_fullchain_score";
     private static final String TOTAL_SCORE_SUBKEY = "_total_score";
 
+    private static final String LEVEL_PLAY_COUNT_SUBKEY = "_play_count";
+    private static final String TOTAL_PLAY_COUNT_KEY = "total_play_count";
+
     private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
     private static final String SOUND_KEY = "sound";
     private static final String COMPLETED_LEVELS_KEY = "completed_levels";
@@ -256,12 +259,12 @@ public class GameState {
     public void updateCurrentLevelScore(Score score) {
         LevelId levelId = levelIds.get(levelIndex);
 
-        putScore(levelId, ACTION_SCORE_SUBKEY, lastActionScore, bestActionScore, score.getActionScore());
-        putScore(levelId, TIME_SCORE_SUBKEY, lastTimeScore, bestTimeScore, score.getTimeScore());
-        putScore(levelId, LIFE_SCORE_SUBKEY, lastLifeScore, bestLifeScore, score.getLifeScore());
-        putScore(levelId, CHAIN_SCORE_SUBKEY, lastChainScore, bestChainScore, score.getChainScore());
-        putScore(levelId, FULLCHAIN_SCORE_SUBKEY, lastFullChainScore, bestFullChainScore, score.getFullChainScore());
-        putScore(levelId, TOTAL_SCORE_SUBKEY, lastTotalScore, bestTotalScore, score.getTotalScore());
+        putLevelScore(levelId, ACTION_SCORE_SUBKEY, lastActionScore, bestActionScore, score.getActionScore());
+        putLevelScore(levelId, TIME_SCORE_SUBKEY, lastTimeScore, bestTimeScore, score.getTimeScore());
+        putLevelScore(levelId, LIFE_SCORE_SUBKEY, lastLifeScore, bestLifeScore, score.getLifeScore());
+        putLevelScore(levelId, CHAIN_SCORE_SUBKEY, lastChainScore, bestChainScore, score.getChainScore());
+        putLevelScore(levelId, FULLCHAIN_SCORE_SUBKEY, lastFullChainScore, bestFullChainScore, score.getFullChainScore());
+        putLevelScore(levelId, TOTAL_SCORE_SUBKEY, lastTotalScore, bestTotalScore, score.getTotalScore());
 
         updateGlobalStatistics();
 
@@ -270,6 +273,13 @@ public class GameState {
             preferences.putInteger(COMPLETED_LEVELS_KEY, completedLevels);
         }
 
+        final String levelPlayCountKey = levelId.getLevelKey() + LEVEL_PLAY_COUNT_SUBKEY;
+        final int levelPlayCount = preferences.getInteger(levelPlayCountKey, 0);
+        preferences.putInteger(levelPlayCountKey, levelPlayCount + 1);
+
+        final int totalPlayCount = preferences.getInteger(TOTAL_PLAY_COUNT_KEY, 0);
+        preferences.putInteger(TOTAL_PLAY_COUNT_KEY, totalPlayCount + 1);
+
         if (levelIndex < maxLevelIndex) {
             levelIndex++;
         }
@@ -277,11 +287,11 @@ public class GameState {
         preferences.flush();
     }
 
-    private void putScore(LevelId levelId,
-                          String scoreSubKey,
-                          Array<Integer> lastScoreArray,
-                          Array<Integer> bestScoreArray,
-                          int newScore) {
+    private void putLevelScore(LevelId levelId,
+                               String scoreSubKey,
+                               Array<Integer> lastScoreArray,
+                               Array<Integer> bestScoreArray,
+                               int newScore) {
         if (newScore > bestScoreArray.get(levelIndex)) {
             bestScoreArray.set(levelIndex, newScore);
             preferences.putInteger(keyBest(levelId, scoreSubKey), newScore);
