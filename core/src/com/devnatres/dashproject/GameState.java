@@ -22,6 +22,7 @@ public class GameState {
     private static final String FULLCHAIN_SCORE_SUBKEY = "_fullchain_score";
     private static final String TOTAL_SCORE_SUBKEY = "_total_score";
 
+    private static final String LEVEL_CAMERA_ASSISTANT_SUBKEY = "_camera_assistant";
     private static final String LEVEL_PLAY_COUNT_SUBKEY = "_play_count";
     private static final String TOTAL_PLAY_COUNT_KEY = "total_play_count";
 
@@ -295,6 +296,10 @@ public class GameState {
         if (newScore > bestScoreArray.get(levelIndex)) {
             bestScoreArray.set(levelIndex, newScore);
             preferences.putInteger(keyBest(levelId, scoreSubKey), newScore);
+
+            if (scoreSubKey == TOTAL_SCORE_SUBKEY) {
+                preferences.putBoolean(keyBest(levelId, LEVEL_CAMERA_ASSISTANT_SUBKEY), isCameraAssistantActivated);
+            }
         }
         lastScoreArray.set(levelIndex, newScore);
         preferences.putInteger(keyLast(levelId, scoreSubKey), newScore);

@@ -322,6 +322,10 @@ public class BlockMapSlider {
         int column = (int)(x / tilePixelWidth);
         int row = (int)(y / tilePixelHeight);
 
+        return getBlockCell(column, row);
+    }
+
+    public BlockCell getBlockCell(int column, int row) {
         if (column < 0) {
             column = 0;
         } else if (column >= mapWidth) {
@@ -335,6 +339,5 @@ public class BlockMapSlider {
         }
         return blockMap[column][row];
     }
-
 
 }

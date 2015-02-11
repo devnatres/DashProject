@@ -249,7 +249,7 @@ public class Foe extends Agent {
             scoreAgent.setCenter(auxCenter.x, auxCenter.y);
             levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
 
-            levelScreen.processFoeDamageResult(foeDamageResult);
+            levelScreen.processFoeDamageResult(this, foeDamageResult);
             horde.processFoeDamageResult(foeDamageResult);
 
             levelScreen.removeComboLivingFoe(this);

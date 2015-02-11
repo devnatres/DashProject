@@ -156,6 +156,10 @@ public class LevelMap implements Disposable {
         return blockMapSlider.getBlockAt(x, y);
     }
 
+    public boolean isBlockCell(int column, int row) {
+        return blockMapSlider.getBlockCell(column, row) != null;
+    }
+
     public int getMapPixelWidth() {
         return mapPixelWidth;
     }
@@ -164,12 +168,13 @@ public class LevelMap implements Disposable {
         return mapPixelHeight;
     }
 
-    public int getTilePixelWidth() {
-        return tilePixelWidth;
+    public int getMapWidth() {
+        return mapWidth;
     }
 
-    public int getTilePixelHeight() {
-        return tilePixelHeight;
+
+    public int getMapHeight() {
+        return mapHeight;
     }
 
     /**
@@ -314,6 +319,18 @@ public class LevelMap implements Disposable {
         int row1 = (int)(y1 / tilePixelHeight);
 
         return blockMapSlider.isCellLineCollision(col0, row0, col1, row1);
+    }
+
+    public int getColumn(float x) {
+        return (int)(x / tilePixelWidth);
+    }
+
+    public int getRow(float y) {
+        return (int)(y / tilePixelHeight);
+    }
+
+    public void setCellRectangle(float column, float row, Rectangle rectangle) {
+        rectangle.set(column * tilePixelWidth, row * tilePixelHeight, tilePixelWidth, tilePixelHeight);
     }
 
     @Override

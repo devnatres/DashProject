@@ -105,6 +105,8 @@ public class LevelScreen implements Screen {
     private Array<Foe> comboLivingFoes = new Array();
     private Foe firstComboFoe;
 
+    private Foe lastDeadFoe;
+
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
@@ -271,8 +273,12 @@ public class LevelScreen implements Screen {
             }
             if (lastHordeCount > currentHordeCount && currentHordeCount > 0) {
                 lastHordeCount = currentHordeCount;
+
                 time += TIME_BONUS;
                 timeString = String.valueOf(((int)(time*10))/10f);
+
+                Vector2 powerUpPosition = (lastDeadFoe != null) ? lastDeadFoe.getAuxCenter() : hero.getAuxCenter();
+                PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpPosition);
             }
             inputForHero();
             decideToChaseHeroWithCamera();
@@ -428,8 +434,9 @@ public class LevelScreen implements Screen {
         }
     }
 
-    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
+    public void processFoeDamageResult(Foe foe, FoeDamageResult foeDamageResult) {
         score.sumFoeScore(foeDamageResult.getScore());
+        lastDeadFoe = foe;
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {

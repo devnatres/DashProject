@@ -22,7 +22,7 @@ import com.devnatres.dashproject.tools.VectorPool;
  */
 public class Hero extends Agent {
     private static final int DAMAGE_DURATION = 15;
-    private static final int MAX_LIFE = 10;
+    private static final int MAX_LIFE = 5;
     private static final int STANDARD_ATTACK_DAMAGE = 1;
 
     private int damageImageDuration;
@@ -68,6 +68,8 @@ public class Hero extends Agent {
     private final LevelMap map;
 
     private Array<Foe> attackedFoes = new Array();
+
+    private Rectangle isOnCellRectangle = new Rectangle();
 
     static {
         VectorPool.initialize();
@@ -313,6 +315,23 @@ public class Hero extends Agent {
 
     public int getLife() {
         return life;
+    }
+
+    public boolean hasMaxLife() {
+        return life == MAX_LIFE;
+    }
+
+    public boolean hasExtraDash() {
+        return false;
+    }
+
+    public boolean hasImmunity() {
+        return false;
+    }
+
+    public boolean isOnCell(int column, int row) {
+        map.setCellRectangle(column, row, isOnCellRectangle);
+        return auxArea.contains(isOnCellRectangle);
     }
 
     public boolean isFoeOnScope(Foe foe) {
