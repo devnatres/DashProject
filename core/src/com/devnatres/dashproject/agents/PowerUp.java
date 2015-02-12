@@ -18,12 +18,17 @@ import com.devnatres.dashproject.tools.Tools;
  */
 public class PowerUp extends Agent {
 
-    private static final int FAVORABLE_CASES = 3;
+    private static final int FAVORABLE_CASES = 3; // TODO SET PROBABILITY
     private static final int POSSIBLE_CASES = 3;
 
     private static final int LATERAL_MARGIN = 4;
 
+    private static final int MESSAGE_DURATION = 45;
+
     private static final float EXTRA_TIME = 2.5f;
+    private static final int EXTRA_LIFE = 3;
+    private static final int IMMUNITY_DURATION = 300;
+    private static final int EXTRA_DASH_DURATION = 600;
 
     private enum EPowerUpType {
         TIME {
@@ -38,9 +43,13 @@ public class PowerUp extends Agent {
             }
 
             @Override
-            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
+            void activateEffect(LevelScreen levelScreen) {
                 levelScreen.addTime(EXTRA_TIME);
-                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_TIME);
+            }
+
+            @Override
+            DnaAnimation getMessage(HyperStore hyperStore) {
+                return EAnimations.POWER_UP_MESSAGE_TIME.create(hyperStore);
             }
 
         },
@@ -56,8 +65,13 @@ public class PowerUp extends Agent {
             }
 
             @Override
-            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
-                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_LIFE);
+            void activateEffect(LevelScreen levelScreen) {
+                levelScreen.getHero().addLife(EXTRA_LIFE);
+            }
+
+            @Override
+            DnaAnimation getMessage(HyperStore hyperStore) {
+                return EAnimations.POWER_UP_MESSAGE_LIFE.create(hyperStore);
             }
         },
         DASH {
@@ -72,8 +86,13 @@ public class PowerUp extends Agent {
             }
 
             @Override
-            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
-                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_DASH);
+            void activateEffect(LevelScreen levelScreen) {
+                levelScreen.getHero().activateExtraDash(EXTRA_DASH_DURATION);
+            }
+
+            @Override
+            DnaAnimation getMessage(HyperStore hyperStore) {
+                return EAnimations.POWER_UP_MESSAGE_DASH.create(hyperStore);
             }
         },
         IMMUNITY {
@@ -88,19 +107,20 @@ public class PowerUp extends Agent {
             }
 
             @Override
-            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
-                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_IMMUNITY);
+            void activateEffect(LevelScreen levelScreen) {
+                levelScreen.getHero().addImmunity(IMMUNITY_DURATION);
+            }
+
+            @Override
+            DnaAnimation getMessage(HyperStore hyperStore) {
+                return EAnimations.POWER_UP_MESSAGE_IMMUNITY.create(hyperStore);
             }
         };
         abstract boolean isConvenient(LevelScreen levelScreen);
         abstract DnaAnimation getAnimation(HyperStore hyperStore);
-        abstract void activateEffect(LevelScreen levelScreen, HyperStore hyperStore);
+        abstract void activateEffect(LevelScreen levelScreen);
+        abstract DnaAnimation getMessage(HyperStore hyperStore);
 
-        private static void createMessage(LevelScreen levelScreen, HyperStore hyperStore, EAnimations eAnimations) {
-            TransientAgent agent = new TransientAgent(eAnimations.create(hyperStore));
-            agent.setCenter(levelScreen.getHero().getAuxCenter());
-            levelScreen.register(agent, EAgentLayer.SCORE);
-        }
     }
     private static EPowerUpType[] powerUpTypes = EPowerUpType.values();
 
@@ -190,11 +210,16 @@ public class PowerUp extends Agent {
         return thereIsTargetPosition ? new CoordinateInt(column, row) : null;
     }
 
+    /*************************************************/
+    /* NON STATIC PROPERTIES AND METHODS             */
+    /*************************************************/
+
     final Hero hero;
     final Sound captureSound;
     final EPowerUpType type;
     final LevelScreen levelScreen;
     final HyperStore hyperStore;
+    final Agent messageAgent;
     private PowerUp(HyperStore hyperStore,
                     LevelScreen levelScreen,
                     EPowerUpType type,
@@ -210,13 +235,18 @@ public class PowerUp extends Agent {
 
         hero = levelScreen.getHero();
         captureSound = hyperStore.getSound("sounds/power_up.ogg");
+
+        messageAgent = new Agent(type.getMessage(hyperStore));
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
         if (auxArea.overlaps(hero.auxArea)) {
-            type.activateEffect(levelScreen, hyperStore);
+            type.activateEffect(levelScreen);
+
+            levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
+
             GlobalAudio.play(captureSound, .1f);
             setVisible(false);
         }

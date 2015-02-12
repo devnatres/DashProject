@@ -42,8 +42,11 @@ public class Hero extends Agent {
     private final float attackRadio2;
     private final Sprite attackHalo; // TODO Only for debugging. Remove.
 
-    private final float dashRadio;
-    private final Sprite dashHalo;
+    private float dashRadio;
+    private Sprite dashHalo;
+    private final Sprite dashHalo_normal;
+    private final Sprite dashHalo_extra;
+    private int extraDashDuration;
 
     private final float scopeRadio;
     private final float scopeRadio2;
@@ -71,6 +74,8 @@ public class Hero extends Agent {
 
     private Rectangle isOnCellRectangle = new Rectangle();
 
+    private int immunityDuration;
+
     static {
         VectorPool.initialize();
     }
@@ -97,8 +102,9 @@ public class Hero extends Agent {
         lowCoverDirection = new DirectionSelector();
         nextArea = new Rectangle(auxArea);
 
-        dashHalo = new Sprite(hyperStore.getTexture("dash_radio.png"));
-        dashRadio = dashHalo.getWidth() / 2;
+        dashHalo_normal = new Sprite(hyperStore.getTexture("dash_radio.png"));
+        dashHalo_extra = new Sprite(hyperStore.getTexture("dash_radio_extra.png"));
+        setDashHalo(dashHalo_normal);
 
         attackHalo = new Sprite(hyperStore.getTexture("attack_radio.png"));
         attackRadio = attackHalo.getWidth() / 2;
@@ -227,6 +233,18 @@ public class Hero extends Agent {
             } else {
                 assureNormalAnimation();
             }
+
+            if (immunityDuration > 0) {
+                immunityDuration--;
+            }
+
+            if (extraDashDuration > 0) {
+                extraDashDuration--;
+                if (extraDashDuration == 0) {
+                    setDashHalo(dashHalo_normal);
+                    centerReferences();
+                }
+            }
         }
     }
 
@@ -291,13 +309,14 @@ public class Hero extends Agent {
     }
 
     public void receiveDamage(int damage) {
-        if (!dying) {
+        if (!dying && immunityDuration == 0) {
             damageImageDuration = DAMAGE_DURATION;
             //failDashSound.play();
             GlobalAudio.play(failDashSound);
             if (life > 0) {
                 life -= damage;
-                if (!Debug.IMMORTAL && life <= 0) {
+                if (life < 0) life = 0;
+                if (!Debug.IMMORTAL && life == 0) {
                     die();
                 }
             }
@@ -315,16 +334,36 @@ public class Hero extends Agent {
         return life;
     }
 
+    public void addLife(int extraLife) {
+        life += extraLife;
+        if (life > MAX_LIFE) life = MAX_LIFE;
+    }
+
     public boolean hasMaxLife() {
         return life == MAX_LIFE;
     }
 
+    public void activateExtraDash(int duration) {
+        extraDashDuration = duration;
+        setDashHalo(dashHalo_extra);
+        centerReferences();
+    }
+
+    private void setDashHalo(Sprite newDashHalo) {
+        dashHalo = newDashHalo;
+        dashRadio = dashHalo.getWidth() / 2;
+    }
+
     public boolean hasExtraDash() {
-        return false;
+        return extraDashDuration > 0;
+    }
+
+    public void addImmunity(int duration) {
+        immunityDuration = duration;
     }
 
     public boolean hasImmunity() {
-        return false;
+        return immunityDuration > 0;
     }
 
     public boolean isOnCell(int column, int row) {
@@ -360,7 +399,20 @@ public class Hero extends Agent {
     public void draw(Batch batch) {
         dashHalo.draw(batch);
         attackHalo.draw(batch);
+
+        Color color = batch.getColor();
+        float alpha = color.a;
+        if (immunityDuration > 0) {
+            color.a = .5f;
+            batch.setColor(color);
+        }
+
         super.draw(batch);
+
+        if (immunityDuration > 0) {
+            color.a = alpha;
+            batch.setColor(color);
+        }
 
         if (damageImageDuration > 0) {
             damageImageDuration--;

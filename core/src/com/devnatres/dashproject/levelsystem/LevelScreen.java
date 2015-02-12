@@ -6,10 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -76,6 +73,9 @@ public class LevelScreen implements Screen {
     private final Texture dissipatedMessage;
     private final Texture timeoutMessage;
     private final Texture readyMessage;
+
+    private Agent agentMessage;
+    private int agentMessageDuration;
 
     private boolean comboCameraChasing;
 
@@ -290,6 +290,7 @@ public class LevelScreen implements Screen {
         }
 
         renderStandardComponents();
+        renderAnimatedMessage();
     }
 
     protected void renderPlayMode_HeroDead() {
@@ -458,6 +459,22 @@ public class LevelScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         //Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    }
+
+    public void setAgentMessage(Agent agent, int duration) {
+        agentMessage = agent;
+        agentMessage.setCenter(screenWidth/2, screenHeight/2);
+        agentMessageDuration = duration;
+    }
+
+    private void renderAnimatedMessage() {
+        if (agentMessage != null && agentMessageDuration > 0) {
+            agentMessageDuration--;
+            mainBatch.setProjectionMatrix(fixedCamera.combined);
+            mainBatch.begin();
+            agentMessage.draw(mainBatch);
+            mainBatch.end();
+        }
     }
 
     private void renderBackground() {
