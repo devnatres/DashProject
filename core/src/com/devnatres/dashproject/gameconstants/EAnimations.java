@@ -91,6 +91,32 @@ public enum EAnimations {
         }
     },
 
+    POWER_UP {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "power_up_anim.png", 8, 1, 10, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    POWER_UP_MESSAGE_TIME {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "power_up_message_time.png", 1, 1, 45, PlayMode.NORMAL);
+        }
+    },
+    POWER_UP_MESSAGE_LIFE {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "power_up_message_life.png", 1, 1, 45, PlayMode.NORMAL);
+        }
+    },
+    POWER_UP_MESSAGE_DASH {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "power_up_message_dash.png", 1, 1, 45, PlayMode.NORMAL);
+        }
+    },
+    POWER_UP_MESSAGE_IMMUNITY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "power_up_message_immunity.png", 1, 1, 45, PlayMode.NORMAL);
+        }
+    },
+
     BUTTON_PLAY_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_play_standby.png");

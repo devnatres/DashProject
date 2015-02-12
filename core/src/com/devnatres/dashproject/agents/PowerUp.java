@@ -1,7 +1,11 @@
 package com.devnatres.dashproject.agents;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DnaAnimation;
+import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
+import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.space.CoordinateInt;
@@ -14,10 +18,12 @@ import com.devnatres.dashproject.tools.Tools;
  */
 public class PowerUp extends Agent {
 
-    private static final int FAVORABLE_CASES = 1;
+    private static final int FAVORABLE_CASES = 3;
     private static final int POSSIBLE_CASES = 3;
 
     private static final int LATERAL_MARGIN = 4;
+
+    private static final float EXTRA_TIME = 2.5f;
 
     private enum EPowerUpType {
         TIME {
@@ -25,11 +31,33 @@ public class PowerUp extends Agent {
             boolean isConvenient(LevelScreen levelScreen) {
                 return true;
             }
+
+            @Override
+            DnaAnimation getAnimation(HyperStore hyperStore) {
+                return EAnimations.POWER_UP.create(hyperStore);
+            }
+
+            @Override
+            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
+                levelScreen.addTime(EXTRA_TIME);
+                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_TIME);
+            }
+
         },
         LIFE {
             @Override
             boolean isConvenient(LevelScreen levelScreen) {
                 return !levelScreen.getHero().hasMaxLife();
+            }
+
+            @Override
+            DnaAnimation getAnimation(HyperStore hyperStore) {
+                return EAnimations.POWER_UP.create(hyperStore);
+            }
+
+            @Override
+            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
+                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_LIFE);
             }
         },
         DASH {
@@ -37,20 +65,48 @@ public class PowerUp extends Agent {
             boolean isConvenient(LevelScreen levelScreen) {
                 return !levelScreen.getHero().hasExtraDash();
             }
+
+            @Override
+            DnaAnimation getAnimation(HyperStore hyperStore) {
+                return EAnimations.POWER_UP.create(hyperStore);
+            }
+
+            @Override
+            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
+                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_DASH);
+            }
         },
         IMMUNITY {
             @Override
             boolean isConvenient(LevelScreen levelScreen) {
                 return !levelScreen.getHero().hasImmunity();
             }
+
+            @Override
+            DnaAnimation getAnimation(HyperStore hyperStore) {
+                return EAnimations.POWER_UP.create(hyperStore);
+            }
+
+            @Override
+            void activateEffect(LevelScreen levelScreen, HyperStore hyperStore) {
+                createMessage(levelScreen, hyperStore, EAnimations.POWER_UP_MESSAGE_IMMUNITY);
+            }
         };
         abstract boolean isConvenient(LevelScreen levelScreen);
+        abstract DnaAnimation getAnimation(HyperStore hyperStore);
+        abstract void activateEffect(LevelScreen levelScreen, HyperStore hyperStore);
+
+        private static void createMessage(LevelScreen levelScreen, HyperStore hyperStore, EAnimations eAnimations) {
+            TransientAgent agent = new TransientAgent(eAnimations.create(hyperStore));
+            agent.setCenter(levelScreen.getHero().getAuxCenter());
+            levelScreen.register(agent, EAgentLayer.SCORE);
+        }
     }
     private static EPowerUpType[] powerUpTypes = EPowerUpType.values();
 
     public static void generatePowerUpIfLucky(HyperStore hyperStore,
                                               LevelScreen levelScreen,
-                                              Vector2 referencePosition) {
+                                              Vector2 basePosition) {
 
         boolean thereIsLuck = Tools.randomBoolean(FAVORABLE_CASES, POSSIBLE_CASES);
         if (!thereIsLuck) return;
@@ -58,11 +114,13 @@ public class PowerUp extends Agent {
         EPowerUpType type = selectType(levelScreen);
 
         if (type != null) {
-            CoordinateInt coordinateInt = selectPosition(levelScreen, referencePosition);
-        }
+            CoordinateInt coordinateInt = selectPosition(levelScreen, basePosition);
 
-        // TODO: column row (if thereIsTargetPosition) is the place
-        // TODO: register in levelScreen
+            LevelMap map = levelScreen.getMap();
+            float x = map.getX(coordinateInt.a);
+            float y = map.getY(coordinateInt.b);
+            PowerUp powerUp = new PowerUp(hyperStore, levelScreen, type, x, y);
+        }
     }
 
     private static EPowerUpType selectType(LevelScreen levelScreen) {
@@ -106,24 +164,61 @@ public class PowerUp extends Agent {
         int endRow = centerRow + LATERAL_MARGIN;
         if (endRow >= levelMap.getMapHeight()) endRow = levelMap.getMapHeight()-1;
 
+        boolean isLookingForAPosition = true;
         boolean thereIsTargetPosition = false;
-        int column = iniColumn;
-        int row = iniRow;
-        while (!thereIsTargetPosition && column <= endColumn) {
-            while (!thereIsTargetPosition && row <= endRow) {
-                if (!levelMap.isBlockCell(column, row) && !hero.isOnCell(column, row)) {
-                    thereIsTargetPosition = true;
-                } else {
+        int column = Tools.randomInt(iniColumn, endColumn);
+        int row = Tools.randomInt(iniRow, endRow);
+        while (isLookingForAPosition) {
+            if (!levelMap.isBlockCell(column, row) && !hero.isOnCell(column, row)) {
+                thereIsTargetPosition = true;
+                isLookingForAPosition = false;
+            } else {
+                column++;
+                if (column > endColumn) {
+                    column = iniColumn;
                     row++;
+                    if (row > endRow) {
+                        row = iniRow;
+                    }
+                    if (column == iniColumn && row == iniRow) {
+                        isLookingForAPosition = false;
+                    }
                 }
             }
-            if (!thereIsTargetPosition) column++;
         }
 
         return thereIsTargetPosition ? new CoordinateInt(column, row) : null;
     }
 
-    private PowerUp(Animation animation) {
-        super(animation);
+    final Hero hero;
+    final Sound captureSound;
+    final EPowerUpType type;
+    final LevelScreen levelScreen;
+    final HyperStore hyperStore;
+    private PowerUp(HyperStore hyperStore,
+                    LevelScreen levelScreen,
+                    EPowerUpType type,
+                    float x, float y) {
+        super(type.getAnimation(hyperStore));
+
+        setPosition(x, y);
+        levelScreen.register(this, EAgentLayer.FLOOR);
+
+        this.type = type;
+        this.levelScreen = levelScreen;
+        this.hyperStore = hyperStore;
+
+        hero = levelScreen.getHero();
+        captureSound = hyperStore.getSound("sounds/power_up.ogg");
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        if (auxArea.overlaps(hero.auxArea)) {
+            type.activateEffect(levelScreen, hyperStore);
+            GlobalAudio.play(captureSound, .1f);
+            setVisible(false);
+        }
     }
 }

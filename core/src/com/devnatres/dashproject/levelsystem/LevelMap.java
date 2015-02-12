@@ -329,7 +329,15 @@ public class LevelMap implements Disposable {
         return (int)(y / tilePixelHeight);
     }
 
-    public void setCellRectangle(float column, float row, Rectangle rectangle) {
+    public float getX(int column) {
+        return column * tilePixelWidth;
+    }
+
+    public float getY(int row) {
+        return row * tilePixelHeight;
+    }
+
+    public void setCellRectangle(int column, int row, Rectangle rectangle) {
         rectangle.set(column * tilePixelWidth, row * tilePixelHeight, tilePixelWidth, tilePixelHeight);
     }
 

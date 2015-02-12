@@ -274,11 +274,10 @@ public class LevelScreen implements Screen {
             if (lastHordeCount > currentHordeCount && currentHordeCount > 0) {
                 lastHordeCount = currentHordeCount;
 
-                time += TIME_BONUS;
-                timeString = String.valueOf(((int)(time*10))/10f);
+                addTime(TIME_BONUS);
 
-                Vector2 powerUpPosition = (lastDeadFoe != null) ? lastDeadFoe.getAuxCenter() : hero.getAuxCenter();
-                PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpPosition);
+                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getAuxCenter() : hero.getAuxCenter();
+                PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
             }
             inputForHero();
             decideToChaseHeroWithCamera();
@@ -661,6 +660,11 @@ public class LevelScreen implements Screen {
 
     public void register(Agent agent, EAgentLayer layer) {
         agentRegistry.register(agent, layer);
+    }
+
+    public void addTime(float extraTime) {
+        time += extraTime;
+        timeString = String.valueOf(((int)(time*10))/10f);
     }
 
     private void renderDebugger() {

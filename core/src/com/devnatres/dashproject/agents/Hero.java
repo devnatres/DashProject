@@ -170,14 +170,12 @@ public class Hero extends Agent {
                 levelScreen.register(dashShadow, AgentRegistry.EAgentLayer.TRUNK);
             }
 
-            //dashSound.play(.1f);
             GlobalAudio.play(dashSound, .1f);
 
             nextArea.setPosition(limitPositionX(nextArea.x), limitPositionY(nextArea.y));
             setPosition(nextArea.x, nextArea.y);
             map.updateCoverDirection(auxArea, coverDirection, lowCoverDirection);
         } else {
-            //failDashSound.play();
             GlobalAudio.play(failDashSound);
         }
 
@@ -331,7 +329,7 @@ public class Hero extends Agent {
 
     public boolean isOnCell(int column, int row) {
         map.setCellRectangle(column, row, isOnCellRectangle);
-        return auxArea.contains(isOnCellRectangle);
+        return auxArea.overlaps(isOnCellRectangle);
     }
 
     public boolean isFoeOnScope(Foe foe) {
