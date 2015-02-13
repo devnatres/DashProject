@@ -337,8 +337,8 @@ public class LevelMap implements Disposable {
         return row * tilePixelHeight;
     }
 
-    public void setCellRectangle(int column, int row, Rectangle rectangle) {
-        rectangle.set(column * tilePixelWidth, row * tilePixelHeight, tilePixelWidth, tilePixelHeight);
+    public void setCellCenter(int column, int row, Vector2 center) {
+        center.set(column * tilePixelWidth + tilePixelWidth/2, row * tilePixelHeight + tilePixelHeight/2);
     }
 
     @Override

@@ -366,11 +366,6 @@ public class Hero extends Agent {
         return immunityDuration > 0;
     }
 
-    public boolean isOnCell(int column, int row) {
-        map.setCellRectangle(column, row, isOnCellRectangle);
-        return auxArea.overlaps(isOnCellRectangle);
-    }
-
     public boolean isFoeOnScope(Foe foe) {
         return (auxPosition.dst2(foe.getAuxPosition()) <= scopeRadio2);
     }

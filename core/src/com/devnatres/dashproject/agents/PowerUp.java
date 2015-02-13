@@ -2,6 +2,7 @@ package com.devnatres.dashproject.agents;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.devnatres.dashproject.DnaAnimation;
 import com.devnatres.dashproject.GlobalAudio;
 import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
@@ -17,11 +18,14 @@ import com.devnatres.dashproject.tools.Tools;
  * Created by DevNatres on 10/02/2015.
  */
 public class PowerUp extends Agent {
+    private static final float FLYING_SPEED = 15f;
 
     private static final int FAVORABLE_CASES = 3; // TODO SET PROBABILITY
     private static final int POSSIBLE_CASES = 3;
 
-    private static final int LATERAL_MARGIN = 4;
+    private static final int POWER_UP_RADIO2 = 48 * 48;
+
+    private static final int ZONE_MARGIN = 4;
 
     private static final int MESSAGE_DURATION = 45;
 
@@ -126,7 +130,7 @@ public class PowerUp extends Agent {
 
     public static void generatePowerUpIfLucky(HyperStore hyperStore,
                                               LevelScreen levelScreen,
-                                              Vector2 basePosition) {
+                                              Vector2 baseCenter) {
 
         boolean thereIsLuck = Tools.randomBoolean(FAVORABLE_CASES, POSSIBLE_CASES);
         if (!thereIsLuck) return;
@@ -134,12 +138,11 @@ public class PowerUp extends Agent {
         EPowerUpType type = selectType(levelScreen);
 
         if (type != null) {
-            CoordinateInt coordinateInt = selectPosition(levelScreen, basePosition);
-
-            LevelMap map = levelScreen.getMap();
-            float x = map.getX(coordinateInt.a);
-            float y = map.getY(coordinateInt.b);
-            PowerUp powerUp = new PowerUp(hyperStore, levelScreen, type, x, y);
+            CoordinateInt coordinateInt = selectPosition(levelScreen, baseCenter);
+            Vector2 targetCenter = new Vector2();
+            levelScreen.getMap().setCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
+            PowerUp powerUP = new PowerUp(hyperStore, levelScreen, type, baseCenter, targetCenter);
+            levelScreen.register(powerUP, EAgentLayer.FLOOR);
         }
     }
 
@@ -172,24 +175,27 @@ public class PowerUp extends Agent {
         final int centerColumn = levelMap.getColumn(referencePosition.x);
         final int centerRow = levelMap.getRow(referencePosition.y);
 
-        int iniColumn = centerColumn - LATERAL_MARGIN;
+        int iniColumn = centerColumn - ZONE_MARGIN;
         if (iniColumn < 0) iniColumn = 0;
 
-        int endColumn = centerColumn + LATERAL_MARGIN;
+        int endColumn = centerColumn + ZONE_MARGIN;
         if (endColumn >= levelMap.getMapWidth()) endColumn = levelMap.getMapWidth()-1;
 
-        int iniRow = centerRow - LATERAL_MARGIN;
+        int iniRow = centerRow - ZONE_MARGIN;
         if (iniRow < 0) iniRow = 0;
 
-        int endRow = centerRow + LATERAL_MARGIN;
+        int endRow = centerRow + ZONE_MARGIN;
         if (endRow >= levelMap.getMapHeight()) endRow = levelMap.getMapHeight()-1;
 
+        Vector2 center = new Vector2();
         boolean isLookingForAPosition = true;
         boolean thereIsTargetPosition = false;
         int column = Tools.randomInt(iniColumn, endColumn);
         int row = Tools.randomInt(iniRow, endRow);
         while (isLookingForAPosition) {
-            if (!levelMap.isBlockCell(column, row) && !hero.isOnCell(column, row)) {
+            levelMap.setCellCenter(column, row, center);
+            float distance2 = hero.getAuxCenter().dst2(center);
+            if (!levelMap.isBlockCell(column, row) && distance2 > POWER_UP_RADIO2) {
                 thereIsTargetPosition = true;
                 isLookingForAPosition = false;
             } else {
@@ -220,14 +226,16 @@ public class PowerUp extends Agent {
     final LevelScreen levelScreen;
     final HyperStore hyperStore;
     final Agent messageAgent;
+    boolean flying;
+
     private PowerUp(HyperStore hyperStore,
                     LevelScreen levelScreen,
                     EPowerUpType type,
-                    float x, float y) {
+                    Vector2 baseCenter,
+                    Vector2 targetCenter) {
         super(type.getAnimation(hyperStore));
 
-        setPosition(x, y);
-        levelScreen.register(this, EAgentLayer.FLOOR);
+        setCenter(baseCenter);
 
         this.type = type;
         this.levelScreen = levelScreen;
@@ -237,18 +245,31 @@ public class PowerUp extends Agent {
         captureSound = hyperStore.getSound("sounds/power_up.ogg");
 
         messageAgent = new Agent(type.getMessage(hyperStore));
+        flying = true;
+
+        Vector2 basePosition = new Vector2(baseCenter).add(-getWidth() / 2, -getHeight() / 2);
+        Vector2 targetPosition = new Vector2(targetCenter).add(-getWidth() / 2, -getHeight() / 2);
+        Action moveAction = Tools.getMoveToAction(basePosition, targetPosition, FLYING_SPEED);
+        addAction(moveAction);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (auxArea.overlaps(hero.auxArea)) {
-            type.activateEffect(levelScreen);
+        if (flying) {
+            if (getActions().size == 0) {
+                flying = false;
+            }
+        } else {
+            float distance2 = hero.getAuxCenter().dst2(getAuxCenter());
+            if (distance2 <= POWER_UP_RADIO2) {
+                type.activateEffect(levelScreen);
 
-            levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
+                levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
 
-            GlobalAudio.play(captureSound, .1f);
-            setVisible(false);
+                GlobalAudio.play(captureSound, .1f);
+                setVisible(false);
+            }
         }
     }
 }
