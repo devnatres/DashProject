@@ -134,7 +134,7 @@ public class LevelScreen implements Screen {
 
         agentRegistry = new AgentRegistry();
 
-        hero = new Hero(hyperStore, this);
+        hero = new Hero(this, hyperStore);
         agentRegistry.register(hero, EAgentLayer.TRUNK);
         hordeGroup = new HordeGroup(this);
 
@@ -195,7 +195,7 @@ public class LevelScreen implements Screen {
     }
 
     private int extractScript() {
-        return map.extractLevelScript(hyperStore, this, levelId.getScriptName());
+        return map.extractLevelScript(this, hyperStore, levelId.getScriptName());
     }
 
     public void addHorde(Horde horde) {

@@ -15,9 +15,9 @@ import com.devnatres.dashproject.store.HyperStore;
  * Created by DevNatres on 09/12/2014.
  */
 public class Foe extends Agent {
-    public static Foe buildRobot(HyperStore hyperStore, LevelScreen levelScreen) {
-      return new Foe(hyperStore,
-              levelScreen,
+    public static Foe buildRobot(LevelScreen levelScreen, HyperStore hyperStore) {
+      return new Foe(levelScreen,
+              hyperStore,
               EAnimations.FOE_ROBOT_WALKING,
               EAnimations.FOE_ROBOT_WALKING,
               EAnimations.FOE_ROBOT_DYING,
@@ -28,9 +28,9 @@ public class Foe extends Agent {
               100);
     }
 
-    public static Foe buildTank(HyperStore hyperStore, LevelScreen levelScreen) {
-        return new Foe(hyperStore,
-                levelScreen,
+    public static Foe buildTank(LevelScreen levelScreen, HyperStore hyperStore) {
+        return new Foe(levelScreen,
+                hyperStore,
                 EAnimations.FOE_TANK_WALKING,
                 EAnimations.FOE_TANK_STUNNING,
                 EAnimations.FOE_TANK_DYING,
@@ -82,8 +82,8 @@ public class Foe extends Agent {
 
     private final LevelMap map;
 
-    public Foe(HyperStore hyperStore,
-               LevelScreen levelScreen,
+    public Foe(LevelScreen levelScreen,
+               HyperStore hyperStore,
                EAnimations basicEAnimation,
                EAnimations stunEAnimation,
                EAnimations deadEAnimation,
@@ -113,14 +113,14 @@ public class Foe extends Agent {
         this.standardScore = standardScore;
         this.comboScore = comboScore;
         if (standardScore == 50) {
-            standardScoreAgent = new TransientAgent(EAnimations.SCORE_50.create(hyperStore));
+            standardScoreAgent = new TransientUpAgent(EAnimations.SCORE_50.create(hyperStore));
         } else {
-            standardScoreAgent = new TransientAgent(EAnimations.SCORE_75.create(hyperStore));
+            standardScoreAgent = new TransientUpAgent(EAnimations.SCORE_75.create(hyperStore));
         }
         if (comboScore == 100) {
-            comboScoreAgent = new TransientAgent(EAnimations.SCORE_100.create(hyperStore));
+            comboScoreAgent = new TransientUpAgent(EAnimations.SCORE_100.create(hyperStore));
         } else {
-            comboScoreAgent = new TransientAgent(EAnimations.SCORE_150.create(hyperStore));
+            comboScoreAgent = new TransientUpAgent(EAnimations.SCORE_150.create(hyperStore));
         }
 
         foeDamageResult = new FoeDamageResult();

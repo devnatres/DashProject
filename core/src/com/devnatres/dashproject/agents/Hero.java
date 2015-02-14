@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.gameconstants.EAnimations;
 import com.devnatres.dashproject.levelsystem.LevelMap;
@@ -80,7 +81,7 @@ public class Hero extends Agent {
         VectorPool.initialize();
     }
 
-    public Hero(HyperStore hyperStore, LevelScreen levelScreen) {
+    public Hero(LevelScreen levelScreen, HyperStore hyperStore) {
         super(EAnimations.HERO_WALKING.create(hyperStore));
         //setSize(64, 128);
 
@@ -173,7 +174,7 @@ public class Hero extends Agent {
             if (levelScreen != null) {
                 Agent dashShadow = new TransientAgent(EAnimations.HERO_DASHING.create(hyperStore));
                 dashShadow.setCenter(auxCenter.x, auxCenter.y);
-                levelScreen.register(dashShadow, AgentRegistry.EAgentLayer.TRUNK);
+                levelScreen.register(dashShadow, EAgentLayer.TRUNK);
             }
 
             GlobalAudio.play(dashSound, .1f);

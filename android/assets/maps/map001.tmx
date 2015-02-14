@@ -6,6 +6,9 @@
  <tileset firstgid="17" name="tileset_foes" tilewidth="32" tileheight="64">
   <image source="tileset_foes.png" width="32" height="64"/>
  </tileset>
+ <tileset firstgid="18" name="tileset_mines" tilewidth="128" tileheight="128">
+  <image source="tileset_mines.png" width="128" height="128"/>
+ </tileset>
  <layer name="ground" width="32" height="64">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+2WUQ7AMAhC7ZL2/kfebtDMuQaQj+b9ooDpjIj1vAnEC0THG10DQJ+Zp/3j6WGVrwrzIfHEPjv01Lk0nZdvzN6JE/eFzS82vWY/qv0L1OappO+RHp13blb6p9pv1bnY8mXiEdlftt6y6e2eL8+tq78jM/fHPv+z1x1vdfv4GQAgAAA=
@@ -21,6 +24,11 @@
    H4sIAAAAAAAAC+2Y6wrDIAyFCxt0sMH2/k/bChNKoCYmJ14wH8jmj9qcU03UbQuuvM/2KfSt43F8z/Yr9GvRPo/2oRa0D0FbWs8XCnK+JC37pUl0Zf0IHx6k/xQ8k/UjfNC8P4PQnzS8/v/Tb42eyBtBT2bNg9q4ad7T5kFt3DTvafNg630fpde+LzPqvEXW1RJ34yPraonedWvU788xa9yrg6obWlB1ozecj95+cj6i/Fx9nbdeH5TR18ds91fo+Gr1o/fH1vs7VLxaX1Hfy2t9eOuXjsvlIW/9o+ehVbDeF1iRnhfp+7z3I9w89dYvjc8Kur7U4j3+avtN6TnCyxfpOSLyvo0D8hjtJAAgAAA=
   </data>
  </layer>
+ <objectgroup name="mines">
+  <object gid="18" x="256" y="896"/>
+  <object gid="18" x="608" y="1120"/>
+  <object gid="18" x="576" y="2016"/>
+ </objectgroup>
  <objectgroup name="horde0">
   <object name="foe0" gid="17" x="128" y="1728">
    <properties>

@@ -141,7 +141,7 @@ public class PowerUp extends Agent {
             CoordinateInt coordinateInt = selectPosition(levelScreen, baseCenter);
             Vector2 targetCenter = new Vector2();
             levelScreen.getMap().setCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
-            PowerUp powerUP = new PowerUp(hyperStore, levelScreen, type, baseCenter, targetCenter);
+            PowerUp powerUP = new PowerUp(levelScreen, hyperStore, type, baseCenter, targetCenter);
             levelScreen.register(powerUP, EAgentLayer.FLOOR);
         }
     }
@@ -228,8 +228,8 @@ public class PowerUp extends Agent {
     final Agent messageAgent;
     boolean flying;
 
-    private PowerUp(HyperStore hyperStore,
-                    LevelScreen levelScreen,
+    private PowerUp(LevelScreen levelScreen,
+                    HyperStore hyperStore,
                     EPowerUpType type,
                     Vector2 baseCenter,
                     Vector2 targetCenter) {

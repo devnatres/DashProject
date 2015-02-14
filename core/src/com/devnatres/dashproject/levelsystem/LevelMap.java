@@ -18,9 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Disposable;
-import com.devnatres.dashproject.debug.Debug;
+import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.agents.Foe;
 import com.devnatres.dashproject.agents.Horde;
+import com.devnatres.dashproject.agents.Mine;
+import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
@@ -181,12 +183,14 @@ public class LevelMap implements Disposable {
      *
      * @return number of hordes
      */
-    public int extractLevelScript(HyperStore hyperStore, LevelScreen levelScreen, String scriptName) {
+    public int extractLevelScript(LevelScreen levelScreen, HyperStore hyperStore, String scriptName) {
         int hordeCount = 0;
         MapLayer mapLayer = tiledMap.getLayers().get(scriptName);
         if (mapLayer == null) {
             return hordeCount;
         }
+
+        extractMines(levelScreen, hyperStore);
 
         LevelScript levelScript = levelScreen.getLevelScript();
         HashMap<Integer, Horde> hordeHashMap = new HashMap<Integer, Horde>();
@@ -205,7 +209,7 @@ public class LevelMap implements Disposable {
                 for (int i = 1; i < command.length; i++) {
                     hordeCount++;
                     int hordeNumber = Integer.parseInt(command[i]);
-                    Horde horde = extractHorde(hordeNumber, hyperStore, levelScreen);
+                    Horde horde = extractHorde(levelScreen, hyperStore, hordeNumber);
                     levelScript.addCmd(new CreateHordeCmd(levelScreen, horde));
 
                     hordeHashMap.put(hordeNumber, horde);
@@ -227,7 +231,23 @@ public class LevelMap implements Disposable {
         return hordeCount;
     }
 
-    public Horde extractHorde(int n, HyperStore hyperStore, LevelScreen levelScreen) {
+    public void extractMines(LevelScreen levelScreen, HyperStore hyperStore) {
+        MapLayer mapLayer = tiledMap.getLayers().get("mines");
+        if (mapLayer == null) {
+            return;
+        }
+
+        MapObjects objects = mapLayer.getObjects();
+        for(MapObject object: objects) {
+            MapProperties properties = object.getProperties();
+            Mine mine = new Mine(levelScreen, hyperStore);
+            Vector2 position = new Vector2(properties.get("x", Float.class), properties.get("y", Float.class));
+            mine.setPosition(position.x, position.y);
+            levelScreen.register(mine, EAgentLayer.FLOOR);
+        }
+    }
+
+    public Horde extractHorde(LevelScreen levelScreen, HyperStore hyperStore, int n) {
         Horde horde = new Horde(levelScreen);
         MapLayer mapLayer = tiledMap.getLayers().get("horde"+n);
         if (mapLayer == null) {
@@ -240,9 +260,9 @@ public class LevelMap implements Disposable {
             String foeType = properties.get("type", String.class);
             Foe foe;
             if (foeType == null || foeType.equals("robot")) {
-                foe = Foe.buildRobot(hyperStore, levelScreen);
+                foe = Foe.buildRobot(levelScreen, hyperStore);
             } else {
-                foe = Foe.buildTank(hyperStore, levelScreen);
+                foe = Foe.buildTank(levelScreen, hyperStore);
             }
             horde.addLinked(foe);
 

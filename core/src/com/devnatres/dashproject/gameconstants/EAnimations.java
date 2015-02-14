@@ -117,6 +117,17 @@ public enum EAnimations {
         }
     },
 
+    MINE {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "mine.png", 3, 1, 10, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    MINE_EXPLOSION {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "mine_explosion.png", 3, 1, 10, PlayMode.NORMAL);
+        }
+    },
+
     BUTTON_PLAY_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_play_standby.png");
