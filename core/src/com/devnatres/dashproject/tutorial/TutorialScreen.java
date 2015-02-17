@@ -1,55 +1,53 @@
-package com.devnatres.dashproject.sidescreens;
+package com.devnatres.dashproject.tutorial;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
-import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.levelsystem.LevelCreator;
+import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
- * Created by DevNatres on 20/01/2015.
+ * Created by DevNatres on 17/02/2015.
  */
-public class CreditScreen implements Screen {
+public class TutorialScreen implements Screen {
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final DnaCamera mainCamera;
 
-    private final InputTranslator inputTranslator;
+    private final Tutorial tutorial;
+    private final LevelId levelId;
 
-    private final HyperStore creditHyperStore;
+    private final HyperStore localHyperStore;
 
-    private final Texture background;
-
-    public CreditScreen(DashGame dashGame) {
+    public TutorialScreen(DashGame dashGame, ETutorial eTutorial, LevelId levelId) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
         mainCamera = dashGame.getCenteredMainCamera();
 
-        creditHyperStore = new HyperStore();
-        background = creditHyperStore.getTexture("credits.png");
-
-        inputTranslator = new InputTranslator();
-
+        localHyperStore = new HyperStore();
+        this.tutorial = eTutorial.createTutorial(localHyperStore);
+        this.levelId = levelId;
     }
 
     @Override
     public void render(float delta) {
+        if (tutorial == null || tutorial.isFinished()) {
+            dashGame.setScreen(LevelCreator.createLevel(dashGame, levelId));
+            return;
+        }
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
         mainBatch.begin();
-        mainBatch.draw(background, 0, 0);
+        tutorial.render(mainBatch);
         mainBatch.end();
-
-        if (inputTranslator.isTouchDown()) {
-            dashGame.setScreen(new MainMenuScreen(dashGame));
-        }
     }
 
     @Override
@@ -79,7 +77,6 @@ public class CreditScreen implements Screen {
 
     @Override
     public void dispose() {
-        creditHyperStore.dispose();
+        localHyperStore.dispose();
     }
-
 }

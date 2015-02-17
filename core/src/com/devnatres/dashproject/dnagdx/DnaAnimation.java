@@ -1,4 +1,4 @@
-package com.devnatres.dashproject;
+package com.devnatres.dashproject.dnagdx;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

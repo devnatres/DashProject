@@ -2,8 +2,8 @@ package com.devnatres.dashproject.gameinput;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
-import com.devnatres.dashproject.DnaAnimation;
-import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agents.Agent;
 
 /**

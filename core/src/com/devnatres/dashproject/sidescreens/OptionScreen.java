@@ -7,15 +7,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.DnaCamera;
-import com.devnatres.dashproject.GameState;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.agents.Agent;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 20/01/2015.
@@ -56,7 +56,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
 
         soundButton = new Button(240, 700,
-                EAnimations.BUTTON_OPT_SOUND.create(hyperStore),
+                EAnimation.BUTTON_OPT_SOUND.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
@@ -64,14 +64,14 @@ public class OptionScreen implements Screen, IButtonExecutable {
         soundButton.setAutomaticSoundOff();
 
         cameraButton = new Button(240, 500,
-                EAnimations.BUTTON_OPT_CAMERA.create(hyperStore),
+                EAnimation.BUTTON_OPT_CAMERA.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         backButton = new Button(240, 100,
-                EAnimations.BUTTON_OPT_BACK.create(hyperStore),
+                EAnimation.BUTTON_OPT_BACK.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,

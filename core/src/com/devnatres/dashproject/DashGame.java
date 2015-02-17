@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.debug.Debug;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.VectorPool;
 
 public class DashGame extends Game {

@@ -1,12 +1,12 @@
-package com.devnatres.dashproject.store;
+package com.devnatres.dashproject.resourcestore;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
-import com.devnatres.dashproject.GlobalAudio;
-import com.devnatres.dashproject.store.Store.EGlobalResourceType;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
+import com.devnatres.dashproject.resourcestore.Store.EGlobalResourceType;
 
 /**
  * Created by DevNatres on 06/12/2014.

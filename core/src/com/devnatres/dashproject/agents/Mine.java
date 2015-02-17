@@ -1,11 +1,11 @@
 package com.devnatres.dashproject.agents;
 
 import com.badlogic.gdx.audio.Sound;
-import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 14/02/2015.
@@ -20,11 +20,11 @@ public class Mine extends Agent {
 
     public Mine(LevelScreen levelScreen,
                 HyperStore hyperStore) {
-        super(EAnimations.MINE.create(hyperStore));
+        super(EAnimation.MINE.create(hyperStore));
 
         this.levelScreen = levelScreen;
         hero = levelScreen.getHero();
-        explosion = new TransientAgent(EAnimations.MINE_EXPLOSION.create(hyperStore));
+        explosion = new TransientAgent(EAnimation.MINE_EXPLOSION.create(hyperStore));
         explosionSound = hyperStore.getSound("sounds/hit.ogg");
     }
 

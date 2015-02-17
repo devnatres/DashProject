@@ -8,17 +8,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.DnaCamera;
-import com.devnatres.dashproject.GameState;
-import com.devnatres.dashproject.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
+import com.devnatres.dashproject.tutorial.ETutorial;
+import com.devnatres.dashproject.tutorial.TutorialScreen;
 
 /**
  * Created by DevNatres on 14/01/2015.
@@ -64,42 +66,42 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         inputTranslator = new InputTranslator();
 
         goButton = new Button(380, 64,
-                EAnimations.BUTTON_GO_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_GO_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_GO_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_GO_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         backButton = new Button(100, 64,
-                EAnimations.BUTTON_BACK_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_BACK_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_BACK_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_BACK_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         up2Button = new Button(ARROW_BUTTON_X, 510,
-                EAnimations.BUTTON_ARROW_UP2.create(hyperStore),
+                EAnimation.BUTTON_ARROW_UP2.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         upButton = new Button(ARROW_BUTTON_X, 430,
-                EAnimations.BUTTON_ARROW_UP.create(hyperStore),
+                EAnimation.BUTTON_ARROW_UP.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         downButton = new Button(ARROW_BUTTON_X, 300,
-                EAnimations.BUTTON_ARROW_DOWN.create(hyperStore),
+                EAnimation.BUTTON_ARROW_DOWN.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         down2Button = new Button(ARROW_BUTTON_X, 210,
-                EAnimations.BUTTON_ARROW_DOWN2.create(hyperStore),
+                EAnimation.BUTTON_ARROW_DOWN2.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
@@ -227,7 +229,12 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     @Override
     public void execute(Button button) {
         if (button == goButton) {
-            dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
+            ETutorial eTutorial = currentLevelId.getETutorial();
+            if (eTutorial == ETutorial.NONE) {
+                dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
+            } else {
+                dashGame.setScreen(new TutorialScreen(dashGame, eTutorial, currentLevelId));
+            }
         } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         } else if (button == up2Button) {

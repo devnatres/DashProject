@@ -4,13 +4,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.DnaAnimation;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 15/12/2014.
  */
-public enum EAnimations {
+public enum EAnimation {
     HERO_WALKING {
         public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "mark_standing.png", 3, 1, 10f, PlayMode.LOOP_PINGPONG);

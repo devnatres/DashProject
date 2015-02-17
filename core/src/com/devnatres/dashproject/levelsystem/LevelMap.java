@@ -30,7 +30,7 @@ import com.devnatres.dashproject.space.BlockCell;
 import com.devnatres.dashproject.space.BlockLayerWithHeight;
 import com.devnatres.dashproject.space.BlockMapSlider;
 import com.devnatres.dashproject.space.DirectionSelector;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 import java.util.HashMap;
@@ -357,7 +357,7 @@ public class LevelMap implements Disposable {
         return row * tilePixelHeight;
     }
 
-    public void setCellCenter(int column, int row, Vector2 center) {
+    public void setThisCellCenter(int column, int row, Vector2 center) {
         center.set(column * tilePixelWidth + tilePixelWidth/2, row * tilePixelHeight + tilePixelHeight/2);
     }
 

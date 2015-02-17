@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.debug.Debug;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.VectorPool;
 
 /**
@@ -82,7 +82,7 @@ public class Hero extends Agent {
     }
 
     public Hero(LevelScreen levelScreen, HyperStore hyperStore) {
-        super(EAnimations.HERO_WALKING.create(hyperStore));
+        super(EAnimation.HERO_WALKING.create(hyperStore));
         //setSize(64, 128);
 
         this.hyperStore = hyperStore;
@@ -90,8 +90,8 @@ public class Hero extends Agent {
         this.levelScreen = levelScreen;
 
         walkingAnimation = getAnimation();
-        crouchingAnimation = EAnimations.HERO_CROUCHING.create(hyperStore);
-        attackingAnimation = EAnimations.HERO_ATTACKING.create(hyperStore);
+        crouchingAnimation = EAnimation.HERO_CROUCHING.create(hyperStore);
+        attackingAnimation = EAnimation.HERO_ATTACKING.create(hyperStore);
 
         dashSound = hyperStore.getSound("sounds/dash.ogg");
         failDashSound = hyperStore.getSound("sounds/fail_hit.ogg");
@@ -118,7 +118,7 @@ public class Hero extends Agent {
 
         centerReferences();
 
-        deadAnimation = EAnimations.HERO_DYING.create(hyperStore);
+        deadAnimation = EAnimation.HERO_DYING.create(hyperStore);
 
         map = levelScreen.getMap();
     }
@@ -172,7 +172,7 @@ public class Hero extends Agent {
         LevelMap map = levelScreen.getMap();
         if (map.slide(nextArea)) {
             if (levelScreen != null) {
-                Agent dashShadow = new TransientAgent(EAnimations.HERO_DASHING.create(hyperStore));
+                Agent dashShadow = new TransientAgent(EAnimation.HERO_DASHING.create(hyperStore));
                 dashShadow.setCenter(auxCenter.x, auxCenter.y);
                 levelScreen.register(dashShadow, EAgentLayer.TRUNK);
             }

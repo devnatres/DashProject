@@ -1,0 +1,62 @@
+package com.devnatres.dashproject.tutorial;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
+import com.devnatres.dashproject.gameinput.InputTranslator;
+
+import java.util.ArrayList;
+
+/**
+ * Created by DevNatres on 17/02/2015.
+ */
+public class Tutorial implements Disposable {
+    private final ArrayList<Figure> figures = new ArrayList<Figure>();
+    private Figure currentFigure;
+    private int index;
+    private boolean isFinished = true;
+    private final InputTranslator inputTranslator;
+    private final Texture title;
+
+    public Tutorial(Texture title) {
+        this.title = title;
+
+        inputTranslator = new InputTranslator();
+    }
+
+    public void add(Figure figure) {
+        if (figure != null) {
+            figures.add(figure);
+            if (isFinished) isFinished = false;
+            if (currentFigure == null) currentFigure = figure;
+        }
+    }
+
+    public void render(Batch batch) {
+        currentFigure.act();
+        currentFigure.draw(batch);
+        if (title != null)  batch.draw(title, 0, 700);
+
+        if (inputTranslator.isTouchDown()) {
+            nextFigure();
+        }
+    }
+
+    private void nextFigure() {
+        if (index < figures.size()-1) {
+            index++;
+            currentFigure = figures.get(index);
+        } else {
+            isFinished = true;
+        }
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+}

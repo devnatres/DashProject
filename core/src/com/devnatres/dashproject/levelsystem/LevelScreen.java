@@ -13,8 +13,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.*;
 import com.devnatres.dashproject.agents.*;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.debug.Debug;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Parameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
@@ -22,7 +26,7 @@ import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
@@ -157,7 +161,7 @@ public class LevelScreen implements Screen {
         timeoutMessage = hyperStore.getTexture("message_timeout.png");
         readyMessage = hyperStore.getTexture("message_ready.png");
 
-        radar = EAnimations.RADAR_INDICATOR.create(hyperStore);
+        radar = EAnimation.RADAR_INDICATOR.create(hyperStore);
 
         System.gc();
         inputTranslator.clear();

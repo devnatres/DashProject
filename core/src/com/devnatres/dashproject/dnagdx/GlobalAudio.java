@@ -1,4 +1,4 @@
-package com.devnatres.dashproject;
+package com.devnatres.dashproject.dnagdx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

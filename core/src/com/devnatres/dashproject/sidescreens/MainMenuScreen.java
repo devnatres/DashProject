@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.DnaCamera;
-import com.devnatres.dashproject.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 30/11/2014.
@@ -46,29 +46,29 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         inputTranslator = new InputTranslator();
 
         playButton = new Button(240, 500,
-                EAnimations.BUTTON_PLAY_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_PLAY_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_PLAY_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_PLAY_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         optionsButton = new Button(240, 300,
-                EAnimations.BUTTON_OPTIONS_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_OPTIONS_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_OPTIONS_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_OPTIONS_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         creditsButton = new Button(240, 200,
-                EAnimations.BUTTON_CREDITS_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_CREDITS_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_CREDITS_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_CREDITS_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         exitButton = new Button(240, 100,
-                EAnimations.BUTTON_EXIT_STANDBY.create(hyperStore),
-                EAnimations.BUTTON_EXIT_PUSHED.create(hyperStore),
+                EAnimation.BUTTON_EXIT_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_EXIT_PUSHED.create(hyperStore),
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);

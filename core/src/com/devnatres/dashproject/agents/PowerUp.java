@@ -3,14 +3,14 @@ package com.devnatres.dashproject.agents;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
-import com.devnatres.dashproject.DnaAnimation;
-import com.devnatres.dashproject.GlobalAudio;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.space.CoordinateInt;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 
@@ -20,10 +20,10 @@ import com.devnatres.dashproject.tools.Tools;
 public class PowerUp extends Agent {
     private static final float FLYING_SPEED = 15f;
 
-    private static final int FAVORABLE_CASES = 3; // TODO SET PROBABILITY
+    private static final int FAVORABLE_CASES = 3;
     private static final int POSSIBLE_CASES = 3;
 
-    private static final int POWER_UP_RADIO2 = 48 * 48;
+    private static final int POWER_UP_RADIO2 = 54 * 54;
 
     private static final int ZONE_MARGIN = 4;
 
@@ -43,7 +43,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getAnimation(HyperStore hyperStore) {
-                return EAnimations.POWER_UP.create(hyperStore);
+                return EAnimation.POWER_UP.create(hyperStore);
             }
 
             @Override
@@ -53,7 +53,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getMessage(HyperStore hyperStore) {
-                return EAnimations.POWER_UP_MESSAGE_TIME.create(hyperStore);
+                return EAnimation.POWER_UP_MESSAGE_TIME.create(hyperStore);
             }
 
         },
@@ -65,7 +65,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getAnimation(HyperStore hyperStore) {
-                return EAnimations.POWER_UP.create(hyperStore);
+                return EAnimation.POWER_UP.create(hyperStore);
             }
 
             @Override
@@ -75,7 +75,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getMessage(HyperStore hyperStore) {
-                return EAnimations.POWER_UP_MESSAGE_LIFE.create(hyperStore);
+                return EAnimation.POWER_UP_MESSAGE_LIFE.create(hyperStore);
             }
         },
         DASH {
@@ -86,7 +86,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getAnimation(HyperStore hyperStore) {
-                return EAnimations.POWER_UP.create(hyperStore);
+                return EAnimation.POWER_UP.create(hyperStore);
             }
 
             @Override
@@ -96,7 +96,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getMessage(HyperStore hyperStore) {
-                return EAnimations.POWER_UP_MESSAGE_DASH.create(hyperStore);
+                return EAnimation.POWER_UP_MESSAGE_DASH.create(hyperStore);
             }
         },
         IMMUNITY {
@@ -107,7 +107,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getAnimation(HyperStore hyperStore) {
-                return EAnimations.POWER_UP.create(hyperStore);
+                return EAnimation.POWER_UP.create(hyperStore);
             }
 
             @Override
@@ -117,7 +117,7 @@ public class PowerUp extends Agent {
 
             @Override
             DnaAnimation getMessage(HyperStore hyperStore) {
-                return EAnimations.POWER_UP_MESSAGE_IMMUNITY.create(hyperStore);
+                return EAnimation.POWER_UP_MESSAGE_IMMUNITY.create(hyperStore);
             }
         };
         abstract boolean isConvenient(LevelScreen levelScreen);
@@ -140,7 +140,7 @@ public class PowerUp extends Agent {
         if (type != null) {
             CoordinateInt coordinateInt = selectPosition(levelScreen, baseCenter);
             Vector2 targetCenter = new Vector2();
-            levelScreen.getMap().setCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
+            levelScreen.getMap().setThisCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
             PowerUp powerUP = new PowerUp(levelScreen, hyperStore, type, baseCenter, targetCenter);
             levelScreen.register(powerUP, EAgentLayer.FLOOR);
         }
@@ -193,7 +193,7 @@ public class PowerUp extends Agent {
         int column = Tools.randomInt(iniColumn, endColumn);
         int row = Tools.randomInt(iniRow, endRow);
         while (isLookingForAPosition) {
-            levelMap.setCellCenter(column, row, center);
+            levelMap.setThisCellCenter(column, row, center);
             float distance2 = hero.getAuxCenter().dst2(center);
             if (!levelMap.isBlockCell(column, row) && distance2 > POWER_UP_RADIO2) {
                 thereIsTargetPosition = true;

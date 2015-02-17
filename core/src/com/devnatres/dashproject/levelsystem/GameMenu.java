@@ -3,15 +3,15 @@ package com.devnatres.dashproject.levelsystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.devnatres.dashproject.DnaCamera;
-import com.devnatres.dashproject.GameState;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.agents.Agent;
-import com.devnatres.dashproject.gameconstants.EAnimations;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
-import com.devnatres.dashproject.store.HyperStore;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 31/01/2015.
@@ -38,49 +38,49 @@ public class GameMenu implements IButtonExecutable {
         this.gameState = gameState;
 
         yesButton = new Button(120, 100,
-                EAnimations.BUTTON_MENU_YES.create(hyperStore),
+                EAnimation.BUTTON_MENU_YES.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         noButton = new Button(360, 100,
-                EAnimations.BUTTON_MENU_NO.create(hyperStore),
+                EAnimation.BUTTON_MENU_NO.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         resumeButton = new Button(240, 700,
-                EAnimations.BUTTON_MENU_RESUME.create(hyperStore),
+                EAnimation.BUTTON_MENU_RESUME.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         resetButton = new Button(240, 600,
-                EAnimations.BUTTON_MENU_RESET.create(hyperStore),
+                EAnimation.BUTTON_MENU_RESET.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         menuButton = new Button(240, 500,
-                EAnimations.BUTTON_MENU_MENU.create(hyperStore),
+                EAnimation.BUTTON_MENU_MENU.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         exitButton = new Button(240, 400,
-                EAnimations.BUTTON_MENU_EXIT.create(hyperStore),
+                EAnimation.BUTTON_MENU_EXIT.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         soundButton = new Button(240, 300,
-                EAnimations.BUTTON_MENU_SOUND.create(hyperStore),
+                EAnimation.BUTTON_MENU_SOUND.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,

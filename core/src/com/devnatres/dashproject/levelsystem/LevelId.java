@@ -1,5 +1,7 @@
 package com.devnatres.dashproject.levelsystem;
 
+import com.devnatres.dashproject.tutorial.ETutorial;
+
 /**
  * Created by DevNatres on 15/01/2015.
  */
@@ -11,6 +13,7 @@ public class LevelId {
     private static final int TROPHY_B_INDEX = 4;
     private static final int TROPHY_C_INDEX = 5;
     private static final int NAME_INDEX = 6;
+    private static final int TUTORIAL_INDEX = 7;
 
     private final String mapName;
     private final String scriptName;
@@ -20,6 +23,7 @@ public class LevelId {
     private final int trophyB;
     private final int trophyC;
     private final String name;
+    private final String tutorialName;
     private final String key;
 
     public LevelId(String levelString) {
@@ -36,6 +40,7 @@ public class LevelId {
         trophyB = Integer.parseInt(fragments[TROPHY_B_INDEX]);
         trophyC = Integer.parseInt(fragments[TROPHY_C_INDEX]);
         name = fragments[NAME_INDEX];
+        tutorialName = fragments[TUTORIAL_INDEX];
     }
 
     public String getMapName() {
@@ -69,5 +74,14 @@ public class LevelId {
 
     public float getInitialTime() {
         return initialTime;
+    }
+
+    public ETutorial getETutorial() {
+        ETutorial eTutorial = ETutorial.NONE;
+        try {
+            eTutorial = ETutorial.valueOf(tutorialName);
+        } catch (Exception e) {
+        }
+        return eTutorial;
     }
 }

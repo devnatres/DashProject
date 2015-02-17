@@ -7,7 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.devnatres.dashproject.DnaCamera;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
 
 /**
  * Created by DevNatres on 06/12/2014.
