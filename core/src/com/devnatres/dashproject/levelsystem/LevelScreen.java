@@ -99,6 +99,7 @@ public class LevelScreen implements Screen {
     private int maxHordeCount;
     private int lastHordeCount;
     private int currentHordeCount;
+    private String currentHordeCountString;
 
     private final LevelId levelId;
 
@@ -147,6 +148,7 @@ public class LevelScreen implements Screen {
         maxHordeCount = extractScript();
         lastHordeCount = maxHordeCount;
         currentHordeCount = maxHordeCount;
+        currentHordeCountString = String.valueOf(currentHordeCount);
 
         badassMusic = hyperStore.getMusic("music/badass.ogg");
         badassMusic.setLooping(true);
@@ -499,9 +501,11 @@ public class LevelScreen implements Screen {
         int life = hero.getLife();
         float lifeWidth = lifePointImage.getWidth() + 1;
         for (int i = 1; i <= life; i++) {
-            lifePointImage.setPosition(380 + (i*lifeWidth), screenHeight - 20);
+            lifePointImage.setPosition(350 + (i*lifeWidth), screenHeight - 20);
             lifePointImage.draw(mainBatch);
         }
+
+        mainFont.draw(mainBatch, currentHordeCountString, 450, screenHeight - 10);
 
         mainBatch.end();
 
@@ -517,7 +521,10 @@ public class LevelScreen implements Screen {
         mainBatch.end();
 
         int removedHordes = hordeGroup.removeKilledHordes();
-        currentHordeCount -= removedHordes;
+        if (removedHordes > 0) {
+            currentHordeCount -= removedHordes;
+            currentHordeCountString = String.valueOf(currentHordeCount);
+        }
 
         score.updateScore();
     }

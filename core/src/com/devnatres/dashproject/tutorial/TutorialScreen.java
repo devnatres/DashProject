@@ -9,6 +9,7 @@ import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.resourcestore.HyperStore;
+import com.devnatres.dashproject.sidescreens.LobbyScreen;
 
 /**
  * Created by DevNatres on 17/02/2015.
@@ -36,7 +37,11 @@ public class TutorialScreen implements Screen {
     @Override
     public void render(float delta) {
         if (tutorial == null || tutorial.isFinished()) {
-            dashGame.setScreen(LevelCreator.createLevel(dashGame, levelId));
+            if (levelId == null) {
+                dashGame.setScreen(new LobbyScreen(dashGame));
+            } else {
+                dashGame.setScreen(LevelCreator.createLevel(dashGame, levelId));
+            }
             return;
         }
 
@@ -77,6 +82,7 @@ public class TutorialScreen implements Screen {
 
     @Override
     public void dispose() {
+        tutorial.dispose();
         localHyperStore.dispose();
     }
 }

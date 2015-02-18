@@ -16,6 +16,8 @@ import java.io.IOException;
  * Created by DevNatres on 15/01/2015.
  */
 public class GameState {
+    private static final String PREFERENCES_NAME = "com.devnatres.dashproject";
+
     private static final String ACTION_SCORE_SUBKEY = "_action_score";
     private static final String TIME_SCORE_SUBKEY = "_time_score";
     private static final String LIFE_SCORE_SUBKEY = "_life_score";
@@ -30,6 +32,8 @@ public class GameState {
     private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
     private static final String SOUND_KEY = "sound";
     private static final String COMPLETED_LEVELS_KEY = "completed_levels";
+
+    private static final String TUTORIAL_VISITED_SUBKEY = "_tutorial_visited";
 
     private static String keyLast(LevelId levelId, String scoreString) {
         return levelId.getLevelKey() + "_last" + scoreString;
@@ -71,7 +75,7 @@ public class GameState {
     private int trophyCCount;
 
     public GameState() {
-        preferences = Gdx.app.getPreferences("com.devnatres.dashproject");
+        preferences = Gdx.app.getPreferences(PREFERENCES_NAME);
 
         isSoundActivated = preferences.getBoolean(SOUND_KEY, true);
         updateGlobalSound();
@@ -343,4 +347,24 @@ public class GameState {
     public boolean isCameraAssistantActivated() {
         return isCameraAssistantActivated;
     }
+
+    public void setTutorialVisited(LevelId levelId) {
+        final String tutorialVisitedKey = levelId.getLevelKey() + TUTORIAL_VISITED_SUBKEY;
+        preferences.putBoolean(tutorialVisitedKey, true);
+        preferences.flush();
+    }
+
+    public boolean isTutorialVisited(LevelId levelId) {
+        final String tutorialVisitedKey = levelId.getLevelKey() + TUTORIAL_VISITED_SUBKEY;
+        return preferences.getBoolean(tutorialVisitedKey, false);
+    }
+
+    public void setAllTutorialsUnvisited() {
+        for (int i = 0; i <= maxLevelIndex; i++) {
+            final String tutorialVisitedKey = levelIds.get(i).getLevelKey() + TUTORIAL_VISITED_SUBKEY;
+            preferences.putBoolean(tutorialVisitedKey, false);
+        }
+        preferences.flush();
+    }
+
 }

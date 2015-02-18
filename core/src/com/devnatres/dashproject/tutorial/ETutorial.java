@@ -16,12 +16,12 @@ public enum ETutorial {
             return null;
         }
     },
-    MOVEMENT {
+    BASICS1 {
         @Override
         public Tutorial createTutorial(HyperStore hyperStore) {
-            Tutorial tutorial = new Tutorial(null);
+            Tutorial tutorial = new Tutorial(hyperStore.getTexture("message_movement.png"));
 
-            Figure figure1 = new Figure(null);
+            Figure figure1 = new Figure(hyperStore.getTexture("message_basics1a.png"));
 
             Agent hero = new Agent(EAnimation.HERO_WALKING.create(hyperStore));
             hero.setPosition(10, 300);
@@ -35,7 +35,7 @@ public enum ETutorial {
 
             tutorial.add(figure1);
 
-            Figure figure2 = new Figure(null);
+            Figure figure2 = new Figure(hyperStore.getTexture("message_basics1b.png"));
 
             Agent hero2 = new Agent(EAnimation.HERO_WALKING.create(hyperStore));
             hero2.setPosition(100, 300);
@@ -50,6 +50,36 @@ public enum ETutorial {
             tutorial.add(figure2);
 
             return tutorial;
+        }
+    },
+    BASICS2 {
+        @Override
+        public Tutorial createTutorial(HyperStore hyperStore) {
+            return null;
+        }
+    },
+    COMBOS {
+        @Override
+        public Tutorial createTutorial(HyperStore hyperStore) {
+            return null;
+        }
+    },
+    TANKS {
+        @Override
+        public Tutorial createTutorial(HyperStore hyperStore) {
+            return null;
+        }
+    },
+    LOW_OBSTACLES {
+        @Override
+        public Tutorial createTutorial(HyperStore hyperStore) {
+            return null;
+        }
+    },
+    MINES {
+        @Override
+        public Tutorial createTutorial(HyperStore hyperStore) {
+            return null;
         }
     };
     abstract public Tutorial createTutorial(HyperStore hyperStore);

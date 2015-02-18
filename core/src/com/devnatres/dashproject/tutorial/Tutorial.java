@@ -3,7 +3,9 @@ package com.devnatres.dashproject.tutorial;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
+import com.devnatres.dashproject.gameconstants.Parameters;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 
 import java.util.ArrayList;
 
@@ -17,9 +19,16 @@ public class Tutorial implements Disposable {
     private boolean isFinished = true;
     private final InputTranslator inputTranslator;
     private final Texture title;
+    private final Texture tapToNext;
+    private final Texture tapToFinish;
+    private final HyperStore localHyperStore;
 
     public Tutorial(Texture title) {
         this.title = title;
+
+        localHyperStore = new HyperStore();
+        tapToNext = localHyperStore.getTexture("message_taptonext.png");
+        tapToFinish = localHyperStore.getTexture("message_taptofinish.png");
 
         inputTranslator = new InputTranslator();
     }
@@ -35,7 +44,18 @@ public class Tutorial implements Disposable {
     public void render(Batch batch) {
         currentFigure.act();
         currentFigure.draw(batch);
+
         if (title != null)  batch.draw(title, 0, 700);
+
+        if (index == figures.size()-1) {
+            batch.draw(tapToFinish,
+                    (Parameters.INITIAL_SCREEN_WIDTH-tapToFinish.getWidth())/2,
+                    0);
+        } else {
+            batch.draw(tapToNext,
+                    (Parameters.INITIAL_SCREEN_WIDTH-tapToNext.getWidth())/2,
+                    0);
+        }
 
         if (inputTranslator.isTouchDown()) {
             nextFigure();
@@ -57,6 +77,6 @@ public class Tutorial implements Disposable {
 
     @Override
     public void dispose() {
-
+        localHyperStore.dispose();
     }
 }

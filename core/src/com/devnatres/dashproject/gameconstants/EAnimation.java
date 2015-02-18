@@ -194,6 +194,12 @@ public enum EAnimation {
         }
     },
 
+    BUTTON_TUTORIAL_STANDBY {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_tutorial_standby.png");
+        }
+    },
+
     BUTTON_OPT_SOUND {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_opt_sound.png");
@@ -202,6 +208,11 @@ public enum EAnimation {
     BUTTON_OPT_CAMERA {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_opt_camera.png");
+        }
+    },
+    BUTTON_OPT_TUTORIAL {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createButtonAnimation(hyperStore, "buttons/button_opt_tutorial.png");
         }
     },
     BUTTON_OPT_BACK {

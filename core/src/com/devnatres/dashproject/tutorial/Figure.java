@@ -34,6 +34,6 @@ public class Figure {
             Agent agent = agents.get(i);
             agent.draw(batch);
         }
-        if (description != null) batch.draw(description, 0, 0);
+        if (description != null) batch.draw(description, 0, 100);
     }
 }

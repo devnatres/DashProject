@@ -3,24 +3,27 @@ package com.devnatres.dashproject.sidescreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.dnagdx.DnaCamera;
-import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
  * Created by DevNatres on 20/01/2015.
  */
 public class OptionScreen implements Screen, IButtonExecutable {
+    private static final int DONE_DURATION = 60;
+
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final BitmapFont mainFont;
@@ -32,11 +35,15 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
     private final Button soundButton;
     private final Button cameraButton;
+    private final Button tutorialsButton;
     private final Button backButton;
 
     private final Agent soundSymbol;
     private final Agent cameraSymbol;
     private final Agent offSymbol;
+
+    private final Texture tutorialsResettingDone;
+    private int doneDuration;
 
     public OptionScreen(DashGame dashGame) {
         this.dashGame = dashGame;
@@ -70,12 +77,21 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
+        tutorialsButton = new Button(240, 300,
+                EAnimation.BUTTON_OPT_TUTORIAL.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this);
+
         backButton = new Button(240, 100,
                 EAnimation.BUTTON_OPT_BACK.create(hyperStore),
                 null,
                 hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
+
+        tutorialsResettingDone = hyperStore.getTexture("message_done.png");
     }
 
     @Override
@@ -88,6 +104,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
         soundButton.act(Time.FRAME, touchDownPointOnCamera);
         cameraButton.act(Time.FRAME, touchDownPointOnCamera);
+        tutorialsButton.act(Time.FRAME, touchDownPointOnCamera);
         backButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
@@ -103,6 +120,13 @@ public class OptionScreen implements Screen, IButtonExecutable {
         if (!gameState.isCameraAssistantActivated()) {
             offSymbol.setCenter(cameraSymbol.getAuxCenter());
             offSymbol.draw(mainBatch);
+        }
+        tutorialsButton.draw(mainBatch);
+        if (doneDuration > 0) {
+            doneDuration--;
+            mainBatch.draw(tutorialsResettingDone,
+                    (dashGame.getScreenWidth()-tutorialsResettingDone.getWidth())/2,
+                    180);
         }
         backButton.draw(mainBatch);
         mainBatch.end();
@@ -146,6 +170,9 @@ public class OptionScreen implements Screen, IButtonExecutable {
             soundButton.playSound();
         } else if (button == cameraButton) {
             gameState.activateCameraAssistant(!gameState.isCameraAssistantActivated());
+        } else if (button == tutorialsButton) {
+            gameState.setAllTutorialsUnvisited();
+            doneDuration = DONE_DURATION;
         }
     }
 }
