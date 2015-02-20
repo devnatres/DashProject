@@ -135,7 +135,7 @@ public class LevelScreen implements Screen {
         fixedCamera = new DnaCamera();
         fixedCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
 
-        map = new LevelMap(levelId.getMapName());
+        map = new LevelMap(levelId.getMapName(), mainBatch);
 
         agentRegistry = new AgentRegistry();
 
@@ -223,15 +223,16 @@ public class LevelScreen implements Screen {
     }
 
     private void renderStandardComponents() {
-        // TODO Optimize by sharing the same begin-end batch sequence (see design.odt)
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
+        mainBatch.begin();
         renderBackground();
         renderMap();
         renderSprites();
         renderFoeRadar();
         renderHub();
+        mainBatch.end();
     }
 
     protected void renderPlayMode_Ready() {
@@ -492,7 +493,6 @@ public class LevelScreen implements Screen {
 
     private void renderHub() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
 
         score.renderActionScore(mainBatch, mainFont);
 
@@ -506,19 +506,13 @@ public class LevelScreen implements Screen {
         }
 
         mainFont.draw(mainBatch, currentHordeCountString, 450, screenHeight - 10);
-
-        mainBatch.end();
-
     }
 
     private void renderSprites() {
-        mainBatch.begin();
 
         agentRegistry.render(Time.FRAME, mainBatch);
 
         //renderSprites_Cover();
-
-        mainBatch.end();
 
         int removedHordes = hordeGroup.removeKilledHordes();
         if (removedHordes > 0) {
@@ -564,7 +558,6 @@ public class LevelScreen implements Screen {
         }
 
         if (!thereIsFoeOnCamera) {
-            mainBatch.begin();
             for (int i = 0; i < hordeGroup.size(); i++){
                 Horde horde = hordeGroup.getHorde(i);
                 if (!horde.isKilled()) {
@@ -572,7 +565,6 @@ public class LevelScreen implements Screen {
                     renderFoeRadar_indicator(horde.getReferencePosition());
                 }
             }
-            mainBatch.end();
         }
     }
 

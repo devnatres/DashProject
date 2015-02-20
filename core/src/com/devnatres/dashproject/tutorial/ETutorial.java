@@ -13,7 +13,7 @@ public enum ETutorial {
     NONE {
         @Override
         public Tutorial createTutorial(HyperStore hyperStore) {
-            return null;
+            return new Tutorial(null);
         }
     },
     BASICS1 {

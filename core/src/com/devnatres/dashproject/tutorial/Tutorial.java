@@ -42,6 +42,8 @@ public class Tutorial implements Disposable {
     }
 
     public void render(Batch batch) {
+        if (currentFigure == null) return;
+
         currentFigure.act();
         currentFigure.draw(batch);
 

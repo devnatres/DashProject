@@ -10,7 +10,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -23,14 +22,15 @@ import com.devnatres.dashproject.agents.Foe;
 import com.devnatres.dashproject.agents.Horde;
 import com.devnatres.dashproject.agents.Mine;
 import com.devnatres.dashproject.debug.Debug;
+import com.devnatres.dashproject.dnagdx.DnaOrthogonalTiledMapRenderer;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.BlockCell;
 import com.devnatres.dashproject.space.BlockLayerWithHeight;
 import com.devnatres.dashproject.space.BlockMapSlider;
 import com.devnatres.dashproject.space.DirectionSelector;
-import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ import static com.devnatres.dashproject.space.BlockCell.EBlockHeight;
  */
 public class LevelMap implements Disposable {
     private final TiledMap tiledMap;
-    private final OrthogonalTiledMapRenderer tiledMapRenderer;
+    private final DnaOrthogonalTiledMapRenderer tiledMapRenderer;
     private final BlockMapSlider blockMapSlider;
     private final MapProperties tiledMapProperties;
     private final int mapWidth;
@@ -52,11 +52,15 @@ public class LevelMap implements Disposable {
     private final int mapPixelWidth;
     private final int mapPixelHeight;
 
-    public LevelMap(String levelName) {
+    public LevelMap(String levelName, Batch batch) {
         String levelFileName = "maps/" + levelName + ".tmx";
 
         tiledMap = new TmxMapLoader().load(levelFileName);
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        if (batch == null) {
+            tiledMapRenderer = new DnaOrthogonalTiledMapRenderer(tiledMap);
+        } else {
+            tiledMapRenderer = new DnaOrthogonalTiledMapRenderer(tiledMap, batch);
+        }
 
         tiledMapProperties = tiledMap.getProperties();
         mapWidth = tiledMapProperties.get("width", Integer.class);
