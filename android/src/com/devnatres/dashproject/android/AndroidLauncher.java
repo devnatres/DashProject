@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.gameconstants.Parameters;
+import com.devnatres.dashproject.gameconstants.LaunchParameters;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -13,8 +13,8 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-        config.useAccelerometer = Parameters.USE_ACCELEROMETER;
-        config.useCompass = Parameters.USE_COMPASS;
+        config.useAccelerometer = LaunchParameters.USE_ACCELEROMETER;
+        config.useCompass = LaunchParameters.USE_COMPASS;
 
 		initialize(new DashGame(), config);
 	}

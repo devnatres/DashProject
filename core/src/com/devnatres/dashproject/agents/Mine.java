@@ -31,10 +31,10 @@ public class Mine extends Agent {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (auxArea.overlaps(hero.auxArea)) {
+        if (areaRef.overlaps(hero.areaRef)) {
             hero.receiveDamage(DAMAGE);
 
-            explosion.setCenter(getAuxCenter());
+            explosion.setCenter(getCenterRef());
             levelScreen.register(explosion, EAgentLayer.FLOOR);
 
             GlobalAudio.play(explosionSound, .1f);

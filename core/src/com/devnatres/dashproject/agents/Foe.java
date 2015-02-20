@@ -12,6 +12,7 @@ import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * High level class to represent foes.
  * Created by DevNatres on 09/12/2014.
  */
 public class Foe extends Agent {
@@ -92,6 +93,7 @@ public class Foe extends Agent {
                int damage,
                int standardScore,
                int comboScore) {
+
         super(basicEAnimation.create(hyperStore));
 
         basicAnimation = getAnimation();
@@ -108,7 +110,7 @@ public class Foe extends Agent {
         camera = levelScreen.getCamera();
 
         hero = levelScreen.getHero();
-        heroLastCenterPos.set(hero.getAuxCenter());
+        heroLastCenterPos.set(hero.getCenterRef());
 
         this.standardScore = standardScore;
         this.comboScore = comboScore;
@@ -143,7 +145,7 @@ public class Foe extends Agent {
                 super.act(delta);
                 shotHeroIfInSight();
             }
-            heroLastCenterPos.set(hero.getAuxCenter());
+            heroLastCenterPos.set(hero.getCenterRef());
         }
     }
 
@@ -161,10 +163,10 @@ public class Foe extends Agent {
                 fireWait--;
             }
             if (isHeroUncovered()) {
-                boolean isHeroVisible = map.isLineCollision(auxCenter.x, auxCenter.y,
-                        hero.getAuxCenter().x, hero.getAuxCenter().y);
+                boolean isHeroVisible = map.isLineCollision(centerRef.x, centerRef.y,
+                        hero.getCenterRef().x, hero.getCenterRef().y);
                 if (isHeroVisible) {
-                    boolean isHeroMoved = !heroLastCenterPos.equals(hero.getAuxCenter());
+                    boolean isHeroMoved = !heroLastCenterPos.equals(hero.getCenterRef());
                     if (isHeroMoved || fireWait == 0) {
                         shotHero();
                         fireWait = FIRE_WAIT;
@@ -183,13 +185,13 @@ public class Foe extends Agent {
     }
 
     private boolean isHeroUncovered() {
-        Vector2 heroCenterPos = hero.getAuxCenter();
+        Vector2 heroCenterPos = hero.getCenterRef();
         boolean isHeroCovered = false;
 
-        if ((auxCenter.x < heroCenterPos.x && hero.isCoverLeft())
-                || (auxCenter.x > heroCenterPos.x && hero.isCoverRight())
-                || (auxCenter.y < heroCenterPos.y && hero.isCoverDown())
-                || (auxCenter.y > heroCenterPos.y && hero.isCoverUp())) {
+        if ((centerRef.x < heroCenterPos.x && hero.isCoverLeft())
+                || (centerRef.x > heroCenterPos.x && hero.isCoverRight())
+                || (centerRef.y < heroCenterPos.y && hero.isCoverDown())
+                || (centerRef.y > heroCenterPos.y && hero.isCoverUp())) {
             isHeroCovered = true;
         }
         return !isHeroCovered;
@@ -246,7 +248,7 @@ public class Foe extends Agent {
             }
 
             foeDamageResult.setScore(score);
-            scoreAgent.setCenter(auxCenter.x, auxCenter.y);
+            scoreAgent.setCenter(centerRef.x, centerRef.y);
             levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
 
             levelScreen.processFoeDamageResult(this, foeDamageResult);
@@ -285,7 +287,7 @@ public class Foe extends Agent {
             super.draw(batch, parentAlpha);
             if (pumImageDuration > 0) {
                 pumImageDuration--;
-                pumImage.setCenter(auxCenter.x, auxCenter.y);
+                pumImage.setCenter(centerRef.x, centerRef.y);
                 pumImage.draw(batch);
             }
         }

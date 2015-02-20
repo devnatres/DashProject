@@ -116,7 +116,7 @@ public class GameMenu implements IButtonExecutable {
         if (confirmingButton == null) {
             soundSymbol.draw(batch);
             if (!gameState.isSoundActivated()) {
-                offSymbol.setCenter(soundSymbol.getAuxCenter());
+                offSymbol.setCenter(soundSymbol.getCenterRef());
                 offSymbol.draw(batch);
             }
         }

@@ -112,13 +112,13 @@ public class OptionScreen implements Screen, IButtonExecutable {
         soundButton.draw(mainBatch);
         soundSymbol.draw(mainBatch);
         if (!gameState.isSoundActivated()) {
-            offSymbol.setCenter(soundSymbol.getAuxCenter());
+            offSymbol.setCenter(soundSymbol.getCenterRef());
             offSymbol.draw(mainBatch);
         }
         cameraButton.draw(mainBatch);
         cameraSymbol.draw(mainBatch);
         if (!gameState.isCameraAssistantActivated()) {
-            offSymbol.setCenter(cameraSymbol.getAuxCenter());
+            offSymbol.setCenter(cameraSymbol.getCenterRef());
             offSymbol.draw(mainBatch);
         }
         tutorialsButton.draw(mainBatch);

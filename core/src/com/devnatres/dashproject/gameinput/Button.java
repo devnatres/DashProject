@@ -56,7 +56,7 @@ public class Button extends Agent {
         if (isPushed) {
             executeCountDown(delta);
         } else {
-            if (touchPoint != null && auxArea.contains(touchPoint)) {
+            if (touchPoint != null && areaRef.contains(touchPoint)) {
                 isPushed = true;
                 if (isAutomaticSoundOn) {
                     GlobalAudio.play(sound);

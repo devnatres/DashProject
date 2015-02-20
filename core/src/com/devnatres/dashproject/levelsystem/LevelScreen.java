@@ -19,7 +19,7 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
-import com.devnatres.dashproject.gameconstants.Parameters;
+import com.devnatres.dashproject.gameconstants.LaunchParameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
@@ -133,7 +133,7 @@ public class LevelScreen implements Screen {
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
 
         fixedCamera = new DnaCamera();
-        fixedCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
+        fixedCamera.setToOrtho(false, LaunchParameters.INITIAL_SCREEN_WIDTH, LaunchParameters.INITIAL_SCREEN_HEIGHT);
 
         map = new LevelMap(levelId.getMapName(), mainBatch);
 
@@ -283,7 +283,7 @@ public class LevelScreen implements Screen {
 
                 addTime(TIME_BONUS);
 
-                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getAuxCenter() : hero.getAuxCenter();
+                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getCenterRef() : hero.getCenterRef();
                 PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
             }
             inputForHero();
@@ -397,7 +397,7 @@ public class LevelScreen implements Screen {
     }
 
     private void chaseHeroWithCamera() {
-        moveCameraTo(hero.getAuxCenter().x, hero.getAuxCenter().y, Time.FAST_CAMERA_SPEED);
+        moveCameraTo(hero.getCenterRef().x, hero.getCenterRef().y, Time.FAST_CAMERA_SPEED);
     }
 
     @Override
@@ -694,7 +694,7 @@ public class LevelScreen implements Screen {
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
 
-            Vector2 foePosition = foe.getAuxCenter();
+            Vector2 foePosition = foe.getCenterRef();
             boolean hidden = false;
             if (foePosition.x < hero.getX() && hero.isCoverLeft()) {
                 hidden = true;

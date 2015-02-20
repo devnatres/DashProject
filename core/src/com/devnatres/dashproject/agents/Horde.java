@@ -96,15 +96,15 @@ public class Horde {
             Foe foe = foes.get(i);
             if (!foe.isDying()) {
                 if (initialized) {
-                    currentDistance2 = hero.getAuxCenter().dst2(foe.getAuxCenter());
+                    currentDistance2 = hero.getCenterRef().dst2(foe.getCenterRef());
                     if (currentDistance2 < minDistance2) {
-                        referencePosition.set(foe.getAuxCenter());
+                        referencePosition.set(foe.getCenterRef());
                         minDistance2 = currentDistance2;
                     }
                 } else {
                     initialized = true;
-                    referencePosition.set(foe.getAuxCenter());
-                    minDistance2 = hero.getAuxCenter().dst2(foe.getAuxCenter());
+                    referencePosition.set(foe.getCenterRef());
+                    minDistance2 = hero.getCenterRef().dst2(foe.getCenterRef());
                 }
             }
         }

@@ -73,7 +73,7 @@ public class DnaCamera extends OrthographicCamera {
     }
 
     public boolean isOnCamera(Agent agent) {
-        Vector2 point = agent.getAuxCenter();
+        Vector2 point = agent.getCenterRef();
         return isOnCamera(point.x, point.y);
     }
 }

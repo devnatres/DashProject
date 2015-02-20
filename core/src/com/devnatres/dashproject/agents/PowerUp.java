@@ -194,7 +194,7 @@ public class PowerUp extends Agent {
         int row = Tools.randomInt(iniRow, endRow);
         while (isLookingForAPosition) {
             levelMap.setThisCellCenter(column, row, center);
-            float distance2 = hero.getAuxCenter().dst2(center);
+            float distance2 = hero.getCenterRef().dst2(center);
             if (!levelMap.isBlockCell(column, row) && distance2 > POWER_UP_RADIO2) {
                 thereIsTargetPosition = true;
                 isLookingForAPosition = false;
@@ -261,7 +261,7 @@ public class PowerUp extends Agent {
                 flying = false;
             }
         } else {
-            float distance2 = hero.getAuxCenter().dst2(getAuxCenter());
+            float distance2 = hero.getCenterRef().dst2(getCenterRef());
             if (distance2 <= POWER_UP_RADIO2) {
                 type.activateEffect(levelScreen);
 

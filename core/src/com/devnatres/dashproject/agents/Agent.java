@@ -10,42 +10,45 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.devnatres.dashproject.gameconstants.Time;
 
 /**
+ * An agent is a basic independent entity in the game.
+ *
  * Created by DevNatres on 04/12/2014.
  */
 public class Agent extends Actor {
-    private static final float DEFAULT_STATE_TIME = 1f;
+    private static final float DEFAULT_FRAME_DURATION = 1f;
     private static final float DEFAULT_PARENT_ALPHA = 1f;
     private static final float DEFAULT_SPEED = 1f;
 
-    protected final Vector2 auxPosition;
-    protected final Rectangle auxArea;
-    protected Vector2 auxCenter;
+    protected final Vector2 positionRef;
+    protected final Rectangle areaRef;
+    protected Vector2 centerRef;
 
     private Animation animation;
-
     private float speed;
-
     protected float animationStateTime;
 
-    public Agent(Animation animation) {
-        this.animation = animation;
+    private float frameWidth;
+    private float frameHeight;
+    private float frameXDisplacement;
+    private float frameYDisplacement;
 
+    public Agent(Animation animation) {
         TextureRegion textureRegion = animation.getKeyFrame(0);
-        auxArea = new Rectangle(textureRegion.getRegionX(),
+        areaRef = new Rectangle(textureRegion.getRegionX(),
                 textureRegion.getRegionY(),
                 textureRegion.getRegionWidth(),
                 textureRegion.getRegionHeight());
-        auxPosition = new Vector2();
-        auxCenter = new Vector2();
+        positionRef = new Vector2();
+        centerRef = new Vector2();
 
+        setAnimation(animation);
         setPosition(0f, 0f);
-        setSize(auxArea.getWidth(), auxArea.getHeight());
-
+        setSize(areaRef.getWidth(), areaRef.getHeight());
         speed = DEFAULT_SPEED;
     }
 
     public Agent(Texture texture) {
-        this(new Animation(DEFAULT_STATE_TIME, new TextureRegion(texture)));
+        this(new Animation(DEFAULT_FRAME_DURATION, new TextureRegion(texture)));
     }
 
     public void setCenter(float x, float y) {
@@ -58,19 +61,25 @@ public class Agent extends Actor {
 
     @Override
     public void positionChanged() {
-        auxPosition.set(getX(), getY());
-        auxArea.setPosition(auxPosition);
-        auxArea.getCenter(auxCenter);
+        positionRef.set(getX(), getY());
+        areaRef.setPosition(positionRef);
+        areaRef.getCenter(centerRef);
     }
 
     @Override
     public void sizeChanged() {
-        auxArea.setSize(getWidth(), getHeight());
-        auxArea.getCenter(auxCenter);
+        areaRef.setSize(getWidth(), getHeight());
+        areaRef.getCenter(centerRef);
     }
 
     public void setAnimation(Animation animation) {
         this.animation = animation;
+
+        frameWidth = animation.getKeyFrame(0).getRegionWidth();
+        frameHeight = animation.getKeyFrame(0).getRegionHeight();
+        frameXDisplacement = (frameWidth - areaRef.width)/2;
+        frameYDisplacement = (frameHeight - areaRef.height)/2;
+
         animationStateTime = 0;
     }
 
@@ -97,11 +106,8 @@ public class Agent extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isVisible()) {
-            // TODO: not the best place for every frame
-            float frameWidth = animation.getKeyFrame(0).getRegionWidth();
-            float frameHeight = animation.getKeyFrame(0).getRegionHeight();
-            float frameX = getX() - (frameWidth - auxArea.width)/2;
-            float frameY = getY() - (frameHeight - auxArea.height)/2;
+            float frameX = getX() - frameXDisplacement;
+            float frameY = getY() - frameYDisplacement;
 
             batch.draw(animation.getKeyFrame(animationStateTime),
                     frameX, frameY,
@@ -117,12 +123,12 @@ public class Agent extends Actor {
         return speed;
     }
 
-    public Vector2 getAuxCenter() {
-        return auxCenter;
+    public Vector2 getCenterRef() {
+        return centerRef;
     }
 
-    public Vector2 getAuxPosition() {
-        return auxPosition;
+    public Vector2 getPositionRef() {
+        return positionRef;
     }
 
 }

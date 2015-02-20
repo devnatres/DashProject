@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.gameconstants.Parameters;
+import com.devnatres.dashproject.gameconstants.LaunchParameters;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public class Debug {
         shape = new ShapeRenderer();
 
         debugCamera = new OrthographicCamera();
-        debugCamera.setToOrtho(false, Parameters.INITIAL_SCREEN_WIDTH, Parameters.INITIAL_SCREEN_HEIGHT);
+        debugCamera.setToOrtho(false, LaunchParameters.INITIAL_SCREEN_WIDTH, LaunchParameters.INITIAL_SCREEN_HEIGHT);
 
         font = new BitmapFont();
         font.setColor(Color.RED);

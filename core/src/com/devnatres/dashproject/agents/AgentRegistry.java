@@ -4,19 +4,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
 /**
+ * An AgentRegistry object contains agents order by layers.
+ * It automatically removes agents that became invisible.
+ *
  * Created by DevNatres on 22/12/2014.
  */
 public class AgentRegistry {
 
     public enum EAgentLayer {
-        //ROOT,
         FLOOR,
         TRUNK,
-        //LEAF,
-        //ARCH,
-        //CLOUD,
         SCORE,
-        //SYSTEM
     }
 
     private static final int LAYER_SIZE = EAgentLayer.values().length;
@@ -48,7 +46,6 @@ public class AgentRegistry {
         if (!layers.get(layer.ordinal()).contains(agent, true)) {
             layers.get(layer.ordinal()).add(agent);
         }
-
         return agent;
     }
 

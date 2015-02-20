@@ -26,7 +26,7 @@ public enum ETutorial {
             Agent hero = new Agent(EAnimation.HERO_WALKING.create(hyperStore));
             hero.setPosition(10, 300);
             Vector2 targetPosition = new Vector2(100, 300);
-            hero.addAction(Tools.getMoveToAction(hero.getAuxPosition(), targetPosition, 3));
+            hero.addAction(Tools.getMoveToAction(hero.getPositionRef(), targetPosition, 3));
             figure1.add(hero);
 
             Agent robot = new Agent(EAnimation.FOE_ROBOT_WALKING.create(hyperStore));

@@ -101,7 +101,7 @@ public class Hero extends Agent {
 
         coverDirection = new DirectionSelector();
         lowCoverDirection = new DirectionSelector();
-        nextArea = new Rectangle(auxArea);
+        nextArea = new Rectangle(areaRef);
 
         dashHalo_normal = new Sprite(hyperStore.getTexture("dash_radio.png"));
         dashHalo_extra = new Sprite(hyperStore.getTexture("dash_radio_extra.png"));
@@ -130,9 +130,9 @@ public class Hero extends Agent {
     }
 
     private void centerReferences() {
-        dashHalo.setCenter(auxCenter.x, auxCenter.y);
-        attackHalo.setCenter(auxCenter.x, auxCenter.y);
-        damageImage.setCenter(auxCenter.x, auxCenter.y);
+        dashHalo.setCenter(centerRef.x, centerRef.y);
+        attackHalo.setCenter(centerRef.x, centerRef.y);
+        damageImage.setCenter(centerRef.x, centerRef.y);
     }
 
     public void programNextPos(float nextX, float nextY) {
@@ -155,11 +155,11 @@ public class Hero extends Agent {
 
         Vector2 vTarget = VectorPool.get();
         vTarget.set(targetCenterX, targetCenterY);
-        vTarget.sub(auxCenter);
+        vTarget.sub(centerRef);
         vTarget.limit(dashRadio);
 
-        targetCenterX = auxCenter.x + vTarget.x;
-        targetCenterY = auxCenter.y + vTarget.y;
+        targetCenterX = centerRef.x + vTarget.x;
+        targetCenterY = centerRef.y + vTarget.y;
 
         if (Debug.DEBUG) Debug.addPoint(targetCenterX, targetCenterY, Color.RED);
 
@@ -173,7 +173,7 @@ public class Hero extends Agent {
         if (map.slide(nextArea)) {
             if (levelScreen != null) {
                 Agent dashShadow = new TransientAgent(EAnimation.HERO_DASHING.create(hyperStore));
-                dashShadow.setCenter(auxCenter.x, auxCenter.y);
+                dashShadow.setCenter(centerRef.x, centerRef.y);
                 levelScreen.register(dashShadow, EAgentLayer.TRUNK);
             }
 
@@ -181,7 +181,7 @@ public class Hero extends Agent {
 
             nextArea.setPosition(limitPositionX(nextArea.x), limitPositionY(nextArea.y));
             setPosition(nextArea.x, nextArea.y);
-            map.updateCoverDirection(auxArea, coverDirection, lowCoverDirection);
+            map.updateCoverDirection(areaRef, coverDirection, lowCoverDirection);
         } else {
             GlobalAudio.play(failDashSound);
         }
@@ -291,17 +291,17 @@ public class Hero extends Agent {
     }
 
     private boolean isFoeOnAttackRadio(Foe foe) {
-        return auxPosition.dst2(foe.getAuxPosition()) <= attackRadio2;
+        return positionRef.dst2(foe.getPositionRef()) <= attackRadio2;
     }
 
     private boolean isFoeInSight(Foe foe) {
-        final float heroLowX = auxArea.x;
-        final float heroHighX = auxArea.x + auxArea.width - 1;
-        final float heroLowY = auxArea.y;
-        final float heroHighY = auxArea.y + auxArea.height - 1;
+        final float heroLowX = areaRef.x;
+        final float heroHighX = areaRef.x + areaRef.width - 1;
+        final float heroLowY = areaRef.y;
+        final float heroHighY = areaRef.y + areaRef.height - 1;
 
         final float foeLowX = foe.getX();
-        final float foeHighX = foe.getAuxPosition().x + foe.getWidth() - 1;
+        final float foeHighX = foe.getPositionRef().x + foe.getWidth() - 1;
         final float foeLowY = foe.getY();
         final float foeHighY = foe.getY() + foe.getHeight() - 1;
 
@@ -368,7 +368,7 @@ public class Hero extends Agent {
     }
 
     public boolean isFoeOnScope(Foe foe) {
-        return (auxPosition.dst2(foe.getAuxPosition()) <= scopeRadio2);
+        return (positionRef.dst2(foe.getPositionRef()) <= scopeRadio2);
     }
 
     public boolean isDying() {
