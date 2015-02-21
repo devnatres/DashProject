@@ -11,7 +11,7 @@ import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
- * High level class to represent foes.<br>
+ * High level entity that represent a foe.<br>
  * <br>
  * Created by DevNatres on 09/12/2014.
  */
@@ -42,8 +42,8 @@ public class Foe extends Agent {
                 150);
     }
 
-    private static final int SHAKE_FRAME_DURATION = 4;
-    private static final int SHAKE_TOTAL_DURATION = 20;
+    private static final int ONE_SHAKE_DURATION = 4;
+    private static final int TOTAL_SHAKE_DURATION = 40;
     private static final int PUM_DURATION = 15;
     private static final int FIRE_WAIT = 30;
 
@@ -58,7 +58,7 @@ public class Foe extends Agent {
     private final Animation deadAnimation;
     private final Sprite pumImage;
     private int pumImageDuration;
-    private final Shake shake = new Shake(SHAKE_TOTAL_DURATION, SHAKE_FRAME_DURATION);
+    private final Shake shake = new Shake(TOTAL_SHAKE_DURATION, ONE_SHAKE_DURATION);
 
     private final LevelScreen levelScreen;
     private final LevelMap map;
@@ -199,7 +199,7 @@ public class Foe extends Agent {
         if (life > 0) life -= damagePoints;
 
         if (life <= 0) {
-            if (horde != null) horde.countKilledFoe(this);
+            if (horde != null) horde.countKilledFoe();
 
             dying = true;
             setAnimation(deadAnimation);
@@ -231,7 +231,7 @@ public class Foe extends Agent {
         }
         foeDamageResult.setScore(score);
         levelScreen.processFoeDamageResult(this, foeDamageResult);
-        horde.processFoeDamageResult(foeDamageResult);
+        horde.addFoeDamageResult(foeDamageResult);
 
         scoreAgent.setCenter(getCenter());
         levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);

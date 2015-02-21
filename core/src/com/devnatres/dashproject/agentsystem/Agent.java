@@ -17,16 +17,13 @@ import com.devnatres.dashproject.space.Volume;
  * Areas involved: <br>
  * <br>
  * - Graphic area <br>
- *   Dimensions: actor's getWidth() and getHeight().
- *      Their values are established from the first frame of the animation.<br>
- *   Position: actor's getX() and getY().<br>
+ *   Actor's getWidth(), getHeight(), getX(), getY().
+  * <br>
+ * - Volume area <br>
+ *   Agent's getCenter(), getVolumeRectangle(), etc.
  * <br>
- * - Physic area <br>
- *   Dimensions and position: "volumeRect" rectangle <br>
- *   Auxiliary properties to avoid frequently calculations: volumePosition and volumeCenter.<br>
- * <br>
- * This implementation create both areas as the same from the first animation (first frame).
- * Graphic area can be modified but physic area remains equal and centered.
+ * This implementation create both areas as the same from the first frame of the original animation.
+ * Graphic area can be modified but physic area remains the same and centered on the graphic area.
  * <br>
  * Created by DevNatres on 04/12/2014.
  */
@@ -111,8 +108,6 @@ public class Agent extends Actor {
         if (isVisible()) {
             batch.draw(animation.getKeyFrame(animationStateTime), getX(), getY());
         }
-
-        //if (Debug.DEBUG) Debug.addRectangleRef(volume.getRectangle(), Color.YELLOW);
     }
 
     public void draw(Batch batch) {

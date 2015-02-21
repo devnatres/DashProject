@@ -1,6 +1,8 @@
 package com.devnatres.dashproject.agentsystem;
 
 /**
+ * Represents the result of an attack to a horde. <br>
+ * <br>
  * Created by DevNatres on 05/01/2015.
  */
 public class HordeDamageResult {

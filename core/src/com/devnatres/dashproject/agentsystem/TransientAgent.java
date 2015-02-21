@@ -3,8 +3,8 @@ package com.devnatres.dashproject.agentsystem;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
 /**
- * A transient agent sets itself invisible when its animation ends.
- *
+ * High level entity that sets itself invisible when its animation ends.<br>
+ * <br>
  * Created by DevNatres on 22/12/2014.
  *
  */

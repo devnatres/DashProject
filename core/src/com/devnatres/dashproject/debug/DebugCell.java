@@ -1,8 +1,8 @@
 package com.devnatres.dashproject.debug;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 /**
+ * Represents a cell for debugging purposes.<br>
+ *     <br>
  * Created by DevNatres on 08/01/2015.
  */
 public class DebugCell {
@@ -13,15 +13,10 @@ public class DebugCell {
     private final int row;
     private final int type;
 
-    private final ShapeRenderer shape;
-
-
     public DebugCell(int column, int row, int type) {
         this.column = column;
         this.row = row;
         this.type = type;
-
-        shape = new ShapeRenderer();
     }
 
     public int getType() {

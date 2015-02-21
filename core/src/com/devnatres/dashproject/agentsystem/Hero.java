@@ -19,7 +19,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.VectorPool;
 
 /**
- * High level class to represent the hero.<br>
+ * High level entity that represents the hero.<br>
  * <br>
  * Created by DevNatres on 06/12/2014.
  */

@@ -6,27 +6,29 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.*;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.*;
-import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
-import com.devnatres.dashproject.gameconstants.LaunchParameters;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
+import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
-import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 import static com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
@@ -133,7 +135,7 @@ public class LevelScreen implements Screen {
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
 
         fixedCamera = new DnaCamera();
-        fixedCamera.setToOrtho(false, LaunchParameters.INITIAL_SCREEN_WIDTH, LaunchParameters.INITIAL_SCREEN_HEIGHT);
+        fixedCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
 
         map = new LevelMap(levelId.getMapName(), mainBatch);
 
@@ -284,7 +286,7 @@ public class LevelScreen implements Screen {
                 addTime(TIME_BONUS);
 
                 Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getCenter() : hero.getCenter();
-                PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
+                PowerUpGenerator.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
             }
             inputForHero();
             decideToChaseHeroWithCamera();

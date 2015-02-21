@@ -3,23 +3,28 @@ package com.devnatres.dashproject;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.Time;
-import com.devnatres.dashproject.sidescreens.MainMenuScreen;
+import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.resourcestore.HyperStore;
+import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.tools.VectorPool;
 
 public class DashGame extends Game {
-    private int screenWidth;
-    private int screenHeight;
+    private static int globalScreenWidth = -1;
+    private static int globalScreenHeight = -1;
+
+    public static int getGlobalScreenWidth() {
+        return globalScreenWidth;
+    }
+
+    public static int getGlobalScreenHeight() {
+        return globalScreenHeight;
+    }
 
     private Application.ApplicationType appType;
     private SpriteBatch mainBatch;
@@ -27,11 +32,10 @@ public class DashGame extends Game {
     private ShapeRenderer mainShape;
     private DnaCamera mainCamera;
 
-    private HyperStore hyperStore;
+    private int screenWidth;
+    private int screenHeight;
 
-    private Texture texture;
-    private TextureRegion textureRegion;
-    private Sprite sprite;
+    private HyperStore hyperStore;
 
     private long initialFrameTime = System.nanoTime();
     private long currentFrameTime;
@@ -86,6 +90,9 @@ public class DashGame extends Game {
 
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
+
+        if (globalScreenWidth == -1) globalScreenWidth = screenWidth;
+        if (globalScreenHeight == -1) globalScreenHeight = screenHeight;
 
         appType = Gdx.app.getType();
 

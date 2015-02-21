@@ -10,8 +10,10 @@ import com.devnatres.dashproject.levelsystem.LevelScreen;
  * Created by DevNatres on 28/12/2014.
  */
 public class Horde {
+    private static final float COMBO_SCORE_FACTOR = 1.5f;
+
     private final Array<Foe> foes = new Array();
-    private int foesCount; // It keeps the foes count although they were remove from the collection
+    private int maxFoesCount;
     private int killedFoesCount;
     private HordeGroup hordeGroup;
     private final HordeDamageResult hordeDamageResult;
@@ -27,11 +29,13 @@ public class Horde {
         hero = levelScreen.getHero();
     }
     /**
-     * Add the foe to the horde but it is not notify to the foe.
+     * Add the foe to the horde but it is not notify to the foe.<br>
+     * It is useful if you want to maintain a same foe in multiple hordes for management purposes
+     * additionally to the true horde in the game.
      */
     public void addUnlinked(Foe foe) {
         foes.add(foe);
-        foesCount++;
+        maxFoesCount++;
     }
 
     /**
@@ -55,7 +59,7 @@ public class Horde {
     }
 
     public boolean isKilled() {
-        return killedFoesCount == foesCount;
+        return killedFoesCount == maxFoesCount;
     }
 
     public void removeKilledFoes() {
@@ -68,26 +72,23 @@ public class Horde {
         }
     }
 
-    public void countKilledFoe(Foe foe) {
+    public void countKilledFoe() {
         killedFoesCount++;
     }
 
-    public void processFoeDamageResult(FoeDamageResult foeDamageResult) {
+    public void addFoeDamageResult(FoeDamageResult foeDamageResult) {
         hordeDamageResult.sumFoeScore(foeDamageResult.getScore());
 
         if (killedFoesCount == 1 || foeDamageResult.isDeadInCombo()) {
             hordeDamageResult.sumDeadInCombo();
-            if (hordeDamageResult.getDeadInComboCount() == foesCount) {
+            if (hordeDamageResult.getDeadInComboCount() == maxFoesCount) {
                 hordeDamageResult.markHordeCombo();
-                hordeDamageResult.setComboScore((int)(hordeDamageResult.getFoeScore() * 1.5));
+                hordeDamageResult.setComboScore((int)(hordeDamageResult.getFoeScore() * COMBO_SCORE_FACTOR));
                 levelScreen.processHordeDamageResult(hordeDamageResult);
-
             }
         }
 
-        if (isKilled()) {
-            hordeGroup.processHordeDamageResult(hordeDamageResult);
-        }
+        if (isKilled()) hordeGroup.addHordeDamageResult(hordeDamageResult);
     }
 
     public Vector2 getReferencePosition() {

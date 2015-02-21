@@ -3,7 +3,7 @@ package com.devnatres.dashproject.tutorial;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
-import com.devnatres.dashproject.gameconstants.LaunchParameters;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -51,11 +51,11 @@ public class Tutorial implements Disposable {
 
         if (index == figures.size()-1) {
             batch.draw(tapToFinish,
-                    (LaunchParameters.INITIAL_SCREEN_WIDTH-tapToFinish.getWidth())/2,
+                    (DashGame.getGlobalScreenWidth()-tapToFinish.getWidth())/2,
                     0);
         } else {
             batch.draw(tapToNext,
-                    (LaunchParameters.INITIAL_SCREEN_WIDTH-tapToNext.getWidth())/2,
+                    (DashGame.getGlobalScreenWidth()-tapToNext.getWidth())/2,
                     0);
         }
 

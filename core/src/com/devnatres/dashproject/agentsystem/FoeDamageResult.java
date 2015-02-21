@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.agentsystem;
 
 /**
- * Represents the result of an attack. <br>
+ * Represents the result of an attack to a foe. <br>
  * <br>
  * Created by DevNatres on 04/01/2015.
  */

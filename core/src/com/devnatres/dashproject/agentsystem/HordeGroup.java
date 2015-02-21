@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
+ * The group of alive hordes.
  * Created by DevNatres on 05/01/2015.
  */
 public class HordeGroup {
@@ -12,10 +13,8 @@ public class HordeGroup {
     private boolean isFullChainAvailable = true;
     private int maxConsecutiveChainCount;
     private int currentConsecutiveChainCount;
-    private final LevelScreen levelScreen;
 
     public HordeGroup(LevelScreen levelSCreen) {
-        this.levelScreen = levelSCreen;
         globalHorde = new Horde(levelSCreen);
     }
 
@@ -56,7 +55,7 @@ public class HordeGroup {
         return removedHordes;
     }
 
-    public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
+    public void addHordeDamageResult(HordeDamageResult hordeDamageResult) {
         if (hordeDamageResult.isDeadInChain()) {
             currentConsecutiveChainCount++;
             if (currentConsecutiveChainCount > maxConsecutiveChainCount) {

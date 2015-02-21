@@ -8,6 +8,8 @@ import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * High level class to represent mines.<br>
+ * <br>
  * Created by DevNatres on 14/02/2015.
  */
 public class Mine extends Agent {
@@ -18,8 +20,7 @@ public class Mine extends Agent {
     private final Hero hero;
     private final Sound explosionSound;
 
-    public Mine(LevelScreen levelScreen,
-                HyperStore hyperStore) {
+    public Mine(LevelScreen levelScreen, HyperStore hyperStore) {
         super(EAnimation.MINE.create(hyperStore));
 
         this.levelScreen = levelScreen;

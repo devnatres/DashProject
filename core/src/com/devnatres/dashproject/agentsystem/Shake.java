@@ -1,31 +1,33 @@
 package com.devnatres.dashproject.agentsystem;
 
 /**
+ * Auxiliary class to manage a shake by providing some displacements to apply to a position.<br>
+ * <br>
  * Created by DevNatres on 21/02/2015.
  */
 public class Shake {
     private final int displacements[] = new int[]{-1, 1};
     private int index;
 
-    private int maxFrameDuration;
-    private int curFrameDuration;
+    private int oneShakeDuration;
+    private int curShakeDuration;
+    private int totalDuration;
 
-    private int maxTotalDuration;
-    private int curTotalDuration;
-
-    public Shake(int totalDuration, int frameDuration) {
-        this.maxTotalDuration = totalDuration;
-        this.maxFrameDuration = frameDuration;
+    public Shake(int totalDuration, int oneShakeDuration) {
+        this.totalDuration = totalDuration;
+        this.oneShakeDuration = oneShakeDuration;
     }
 
     public void shake() {
-        if (curFrameDuration < maxFrameDuration) {
-            curFrameDuration++;
-        } else {
-            curFrameDuration = 0;
-            index = (index < displacements.length - 1) ? index + 1 : 0;
+        if (totalDuration > 0) {
+            if (curShakeDuration < oneShakeDuration) {
+                curShakeDuration++;
+            } else {
+                curShakeDuration = 0;
+                index = (index < displacements.length - 1) ? index + 1 : 0;
+            }
+            totalDuration--;
         }
-        curTotalDuration++;
     }
 
     public int getDisplacement() {
@@ -33,6 +35,6 @@ public class Shake {
     }
 
     public boolean canStillShake() {
-        return curTotalDuration < maxTotalDuration;
+        return totalDuration > 0;
     }
 }

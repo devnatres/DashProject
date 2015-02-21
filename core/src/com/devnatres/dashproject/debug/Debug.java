@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.gameconstants.LaunchParameters;
+import com.devnatres.dashproject.DashGame;
 
 import java.util.ArrayList;
 
@@ -57,7 +57,7 @@ public class Debug {
         shape = new ShapeRenderer();
 
         debugCamera = new OrthographicCamera();
-        debugCamera.setToOrtho(false, LaunchParameters.INITIAL_SCREEN_WIDTH, LaunchParameters.INITIAL_SCREEN_HEIGHT);
+        debugCamera.setToOrtho(false, DashGame.getGlobalScreenWidth(), DashGame.getGlobalScreenHeight());
 
         font = new BitmapFont();
         font.setColor(Color.RED);
