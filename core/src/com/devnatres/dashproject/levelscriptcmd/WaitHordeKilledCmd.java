@@ -1,6 +1,6 @@
 package com.devnatres.dashproject.levelscriptcmd;
 
-import com.devnatres.dashproject.agents.Horde;
+import com.devnatres.dashproject.agentsystem.Horde;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**

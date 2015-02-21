@@ -2,7 +2,7 @@ package com.devnatres.dashproject.dnagdx;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.space.DirectionSelector;
 
 /**
@@ -73,7 +73,7 @@ public class DnaCamera extends OrthographicCamera {
     }
 
     public boolean isOnCamera(Agent agent) {
-        Vector2 point = agent.getCenterRef();
+        Vector2 point = agent.getCenter();
         return isOnCamera(point.x, point.y);
     }
 }

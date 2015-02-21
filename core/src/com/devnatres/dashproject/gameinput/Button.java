@@ -4,7 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.agentsystem.Agent;
 
 /**
  * Created by DevNatres on 17/01/2015.
@@ -56,7 +56,7 @@ public class Button extends Agent {
         if (isPushed) {
             executeCountDown(delta);
         } else {
-            if (touchPoint != null && areaRef.contains(touchPoint)) {
+            if (touchPoint != null && getVolumeRectangle().contains(touchPoint)) {
                 isPushed = true;
                 if (isAutomaticSoundOn) {
                     GlobalAudio.play(sound);

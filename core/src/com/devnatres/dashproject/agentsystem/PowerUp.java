@@ -1,11 +1,11 @@
-package com.devnatres.dashproject.agents;
+package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
+import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
@@ -194,7 +194,7 @@ public class PowerUp extends Agent {
         int row = Tools.randomInt(iniRow, endRow);
         while (isLookingForAPosition) {
             levelMap.setThisCellCenter(column, row, center);
-            float distance2 = hero.getCenterRef().dst2(center);
+            float distance2 = hero.getCenter().dst2(center);
             if (!levelMap.isBlockCell(column, row) && distance2 > POWER_UP_RADIO2) {
                 thereIsTargetPosition = true;
                 isLookingForAPosition = false;
@@ -261,7 +261,7 @@ public class PowerUp extends Agent {
                 flying = false;
             }
         } else {
-            float distance2 = hero.getCenterRef().dst2(getCenterRef());
+            float distance2 = hero.getCenter().dst2(getCenter());
             if (distance2 <= POWER_UP_RADIO2) {
                 type.activateEffect(levelScreen);
 

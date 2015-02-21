@@ -1,12 +1,12 @@
-package com.devnatres.dashproject.agents;
+package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * An AgentRegistry object contains agents order by layers.
- * It automatically removes agents that became invisible.
- *
+ * An AgentRegistry object contains agents order by layers.<br>
+ * It automatically removes agents that became invisible.<br>
+ * <br>
  * Created by DevNatres on 22/12/2014.
  */
 public class AgentRegistry {

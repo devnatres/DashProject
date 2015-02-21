@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.agents;
+package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 

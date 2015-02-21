@@ -2,7 +2,7 @@ package com.devnatres.dashproject.tutorial;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.gameconstants.Time;
 
 import java.util.ArrayList;

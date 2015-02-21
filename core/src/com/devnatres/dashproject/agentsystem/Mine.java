@@ -1,8 +1,8 @@
-package com.devnatres.dashproject.agents;
+package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.audio.Sound;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
+import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
@@ -31,10 +31,10 @@ public class Mine extends Agent {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (areaRef.overlaps(hero.areaRef)) {
+        if (getVolumeRectangle().overlaps(hero.getVolumeRectangle())) {
             hero.receiveDamage(DAMAGE);
 
-            explosion.setCenter(getCenterRef());
+            explosion.setCenter(getCenter());
             levelScreen.register(explosion, EAgentLayer.FLOOR);
 
             GlobalAudio.play(explosionSound, .1f);

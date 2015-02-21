@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.*;
-import com.devnatres.dashproject.agents.*;
+import com.devnatres.dashproject.agentsystem.*;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
@@ -29,7 +29,7 @@ import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
-import static com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
+import static com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 
 /**
  * Created by DevNatres on 04/12/2014.
@@ -283,7 +283,7 @@ public class LevelScreen implements Screen {
 
                 addTime(TIME_BONUS);
 
-                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getCenterRef() : hero.getCenterRef();
+                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getCenter() : hero.getCenter();
                 PowerUp.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
             }
             inputForHero();
@@ -397,7 +397,7 @@ public class LevelScreen implements Screen {
     }
 
     private void chaseHeroWithCamera() {
-        moveCameraTo(hero.getCenterRef().x, hero.getCenterRef().y, Time.FAST_CAMERA_SPEED);
+        moveCameraTo(hero.getCenter().x, hero.getCenter().y, Time.FAST_CAMERA_SPEED);
     }
 
     @Override
@@ -470,7 +470,7 @@ public class LevelScreen implements Screen {
 
     public void setAgentMessage(Agent agent, int duration) {
         agentMessage = agent;
-        agentMessage.setCenter(screenWidth/2, screenHeight/2);
+        agentMessage.setCenter(screenWidth / 2, screenHeight / 2);
         agentMessageDuration = duration;
     }
 
@@ -638,7 +638,7 @@ public class LevelScreen implements Screen {
         firstComboFoe = null;
     }
 
-    public boolean ifThereAreComboLivingFoesThenContains(Foe foe) {
+    public boolean thereAreComboLivingFoesThatContains(Foe foe) {
         return comboLivingFoes.size == 0 || comboLivingFoes.contains(foe, true);
     }
 
@@ -656,7 +656,7 @@ public class LevelScreen implements Screen {
         }
     }
 
-    public void restoreNotAttackedFoesFromComboLivingFoes(Array<Foe> attackedFoes) {
+    public void restoreNotAttackedFoesAccordingToComboLivingFoes(Array<Foe> attackedFoes) {
         for (int i = 0; i < comboLivingFoes.size; i++) {
             Foe comboLivingFoe = comboLivingFoes.get(i);
             if (!attackedFoes.contains(comboLivingFoe, true)) {
@@ -694,7 +694,7 @@ public class LevelScreen implements Screen {
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
 
-            Vector2 foePosition = foe.getCenterRef();
+            Vector2 foePosition = foe.getCenter();
             boolean hidden = false;
             if (foePosition.x < hero.getX() && hero.isCoverLeft()) {
                 hidden = true;

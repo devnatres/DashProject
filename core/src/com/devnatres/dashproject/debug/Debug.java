@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.gameconstants.LaunchParameters;
@@ -19,12 +20,16 @@ import java.util.ArrayList;
 public class Debug {
     public static final boolean DEBUG = false;
     private static final boolean DEBUG_POINTS = DEBUG && false;
+    private static final boolean DEBUG_RECTANGLES = DEBUG && true;
     private static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
-    public static final boolean IMMORTAL = false;
+    public static final boolean IMMORTAL = true;
 
     private static ArrayList<Vector2> points;
     private static ArrayList<Color> pointColors;
+
+    private static ArrayList<Rectangle> rectangles;
+    private static ArrayList<Color> rectangleColors;
 
     private static ShapeRenderer shape;
     private static Batch batch;
@@ -42,6 +47,8 @@ public class Debug {
 
         points = new ArrayList<Vector2>();
         pointColors = new ArrayList<Color>();
+        rectangles = new ArrayList<Rectangle>();
+        rectangleColors = new ArrayList<Color>();
         testCells = new Array<DebugCell>();
 
         Debug.gameCamera = gameCamera;
@@ -71,6 +78,22 @@ public class Debug {
 
         points.add(new Vector2(x, y));
         pointColors.add(color);
+    }
+
+    public static void addRectangleRef(Rectangle rectangle, Color color) {
+        if (!DEBUG_RECTANGLES) return;
+
+        if (!rectangles.contains(rectangle)) {
+            rectangles.add(rectangle);
+            rectangleColors.add(color);
+        }
+    }
+
+    public static void removeRectangleRef() {
+        if (!DEBUG_RECTANGLES) return;
+
+        rectangles.clear();
+        rectangleColors.clear();
     }
 
     public static void addTestCell(int column, int row, boolean segmentChange, int stepColumn, int stepRow) {
@@ -103,7 +126,7 @@ public class Debug {
         if (!(initialized && DEBUG)) return;
 
         if (DEBUG_POINTS) drawPoints(gameCamera);
-
+        if (DEBUG_RECTANGLES) drawRectangles(gameCamera);
         if (DEBUG_COLLISIONS) drawCollisions(gameCamera);
     }
 
@@ -121,6 +144,20 @@ public class Debug {
         }
     }
 
+    private static void drawRectangles(Camera gameCamera) {
+        shape.setProjectionMatrix(gameCamera.combined);
+
+        for (int i = 0, n = rectangles.size(); i < n; i++) {
+            Rectangle rectangle = rectangles.get(i);
+            Color color = rectangleColors.get(i);
+
+            shape.setColor(color);
+            shape.begin(ShapeRenderer.ShapeType.Line);
+            shape.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+            shape.end();
+        }
+    }
+
     private static void drawCollisions(Camera gameCamera) {
         shape.setProjectionMatrix(gameCamera.combined);
 
@@ -132,9 +169,9 @@ public class Debug {
                 shape.setColor(128, 0, 128, .7f);
             }
             shape.begin(ShapeRenderer.ShapeType.Filled);
-            shape.circle((debugCell.getColumn() * DebugCell.CELL_PIXEL_WIDTH) + DebugCell.CELL_PIXEL_WIDTH / 2,
-                    (debugCell.getRow() * DebugCell.CELL_PIXEL_HEIGHT) + DebugCell.CELL_PIXEL_HEIGHT / 2,
-                    DebugCell.CELL_PIXEL_WIDTH / 2);
+           shape.circle((debugCell.getColumn() * DebugCell.CELL_PIXEL_WIDTH) + DebugCell.CELL_PIXEL_WIDTH / 2,
+                   (debugCell.getRow() * DebugCell.CELL_PIXEL_HEIGHT) + DebugCell.CELL_PIXEL_HEIGHT / 2,
+                   DebugCell.CELL_PIXEL_WIDTH / 2);
             shape.end();
         }
 

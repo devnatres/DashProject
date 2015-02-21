@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gamestate.GameState;
-import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
@@ -116,7 +116,7 @@ public class GameMenu implements IButtonExecutable {
         if (confirmingButton == null) {
             soundSymbol.draw(batch);
             if (!gameState.isSoundActivated()) {
-                offSymbol.setCenter(soundSymbol.getCenterRef());
+                offSymbol.setCenter(soundSymbol.getCenter());
                 offSymbol.draw(batch);
             }
         }

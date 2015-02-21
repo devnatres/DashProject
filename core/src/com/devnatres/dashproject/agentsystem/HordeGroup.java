@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.agents;
+package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.levelsystem.LevelScreen;

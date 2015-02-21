@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.devnatres.dashproject.agents.Hero;
-import com.devnatres.dashproject.agents.HordeGroup;
+import com.devnatres.dashproject.agentsystem.Hero;
+import com.devnatres.dashproject.agentsystem.HordeGroup;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**

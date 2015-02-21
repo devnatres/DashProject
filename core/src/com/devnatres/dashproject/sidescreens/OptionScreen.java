@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.agents.Agent;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
@@ -55,13 +55,6 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
         inputTranslator = new InputTranslator();
 
-        soundSymbol = new Agent(hyperStore.getTexture("symbols/symbol_sound.png"));
-        soundSymbol.setCenter(240, 630);
-        cameraSymbol = new Agent(hyperStore.getTexture("symbols/symbol_camera.png"));
-        cameraSymbol.setCenter(240, 430);
-        offSymbol = new Agent(hyperStore.getTexture("symbols/symbol_off.png"));
-
-
         soundButton = new Button(240, 700,
                 EAnimation.BUTTON_OPT_SOUND.create(hyperStore),
                 null,
@@ -91,6 +84,12 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
+        soundSymbol = new Agent(hyperStore.getTexture("symbols/symbol_sound.png"));
+        soundSymbol.setCenter(soundButton.getCenter().x, soundButton.getY()-soundSymbol.getHeight()/2);
+        cameraSymbol = new Agent(hyperStore.getTexture("symbols/symbol_camera.png"));
+        cameraSymbol.setCenter(cameraButton.getCenter().x, cameraButton.getY()-cameraSymbol.getHeight()/2);
+        offSymbol = new Agent(hyperStore.getTexture("symbols/symbol_off.png"));
+
         tutorialsResettingDone = hyperStore.getTexture("message_done.png");
     }
 
@@ -112,13 +111,13 @@ public class OptionScreen implements Screen, IButtonExecutable {
         soundButton.draw(mainBatch);
         soundSymbol.draw(mainBatch);
         if (!gameState.isSoundActivated()) {
-            offSymbol.setCenter(soundSymbol.getCenterRef());
+            offSymbol.setCenter(soundSymbol.getCenter());
             offSymbol.draw(mainBatch);
         }
         cameraButton.draw(mainBatch);
         cameraSymbol.draw(mainBatch);
         if (!gameState.isCameraAssistantActivated()) {
-            offSymbol.setCenter(cameraSymbol.getCenterRef());
+            offSymbol.setCenter(cameraSymbol.getCenter());
             offSymbol.draw(mainBatch);
         }
         tutorialsButton.draw(mainBatch);

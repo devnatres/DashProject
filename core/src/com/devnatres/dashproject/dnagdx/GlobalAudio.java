@@ -16,9 +16,9 @@ import com.badlogic.gdx.utils.Array;
  * enough to minimize the theoretical issue of be heard if audio is disabled when a sound is playing.
  * (If you need long sounds, consider to create them as music resources.)
  *
- * Music's volume can be set when audio is disabled because
+ * Music's volumeRect can be set when audio is disabled because
  * the new value is saved to be retrieved later when audio is enabled.
- * (This allows you, for example, to fade in/out music volume
+ * (This allows you, for example, to fade in/out music volumeRect
  * regardless of whether the audio is been enabled o disabled.)
  *
  */
@@ -97,7 +97,7 @@ public class GlobalAudio {
         for (int i = 0; i < musics.size; i++) {
             Music music = musics.get(i);
             if (isAudioEnabled) {
-                // It isn't necessary if volume was set with this class. It's just a safety step.
+                // It isn't necessary if volumeRect was set with this class. It's just a safety step.
                 musicVolumesWhenEnabled.set(i, music.getVolume());
             }
             music.setVolume(0f);

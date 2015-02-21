@@ -17,10 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.Disposable;
-import com.devnatres.dashproject.agents.AgentRegistry.EAgentLayer;
-import com.devnatres.dashproject.agents.Foe;
-import com.devnatres.dashproject.agents.Horde;
-import com.devnatres.dashproject.agents.Mine;
+import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
+import com.devnatres.dashproject.agentsystem.Foe;
+import com.devnatres.dashproject.agentsystem.Horde;
+import com.devnatres.dashproject.agentsystem.Mine;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaOrthogonalTiledMapRenderer;
 import com.devnatres.dashproject.levelscriptcmd.CreateHordeCmd;
@@ -94,13 +94,13 @@ public class LevelMap implements Disposable {
     }
 
     /**
-     * @param rectangle The dimensions and position of the volume
+     * @param rectangle The dimensions and position of the volumeRect
      * @param coverDirection CoverDirection to be updated
      * @param lowCoverDirection CoverDirection of low blocks to be updated
      */
-    public void updateCoverDirection(Rectangle rectangle,
-                                     DirectionSelector coverDirection,
-                                     DirectionSelector lowCoverDirection) {
+    public void updateTheseCoverDirections(Rectangle rectangle,
+                                           DirectionSelector coverDirection,
+                                           DirectionSelector lowCoverDirection) {
         final float centerRectangleX = rectangle.getX() + rectangle.getWidth()/2;
         final float centerRectangleY = rectangle.getY() + rectangle.getHeight()/2;
         final float marginX = tilePixelWidth / 2;
