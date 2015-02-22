@@ -1,9 +1,9 @@
 package com.devnatres.dashproject.agentsystem;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
@@ -53,9 +53,9 @@ public class Foe extends Agent {
     private final int damage;
     private int fireWait = FIRE_WAIT;
 
-    private final Animation basicAnimation;
-    private final Animation stunAnimation;
-    private final Animation deadAnimation;
+    private final DnaAnimation basicAnimation;
+    private final DnaAnimation stunAnimation;
+    private final DnaAnimation deadAnimation;
     private final Sprite pumImage;
     private int pumImageDuration;
     private final Shake shake = new Shake(TOTAL_SHAKE_DURATION, ONE_SHAKE_DURATION);
@@ -124,8 +124,8 @@ public class Foe extends Agent {
     @Override
     public void act(float delta) {
         if (dying) {
-            addStateTime(delta);
-            if (getAnimation().isAnimationFinished(animationStateTime)) {
+            getAnimation().updateStateTime();
+            if (getAnimation().isAnimationFinished()) {
                 setVisible(false);
             }
         } else {

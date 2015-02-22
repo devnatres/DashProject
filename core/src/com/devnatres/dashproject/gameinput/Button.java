@@ -7,11 +7,11 @@ import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agentsystem.Agent;
 
 /**
+ * High level entity that represent button.<br>
+ *     <br>
  * Created by DevNatres on 17/01/2015.
  */
 public class Button extends Agent {
-    private float centerX;
-    private float centerY;
     private DnaAnimation standbyAnimation;
     private DnaAnimation pushAnimation;
     private final IButtonExecutable executable;
@@ -21,14 +21,14 @@ public class Button extends Agent {
     private float elapsedTime;
 
     /**
-     *
+     * Button constructor's.
      * @param centerX center x coordinate
      * @param centerY center y coordinate
      * @param standbyAnimation mandatory standby animation
      * @param pushAnimation optional push animation, can be null
      * @param sound sound to be played when pushed
      * @param elapsedTime time to wait after pushed (push animation will be displayed if any)
-     * @param executable executable object to call its execute(actionId) method when pushed and after elapsed time
+     * @param executable callback. The execute(actionId) method will be called when pushed and after elapsed time
      */
     public Button(float centerX, float centerY,
                   DnaAnimation standbyAnimation,
@@ -39,11 +39,7 @@ public class Button extends Agent {
 
         super(standbyAnimation);
         this.standbyAnimation = standbyAnimation;
-
-        this.centerX = centerX;
-        this.centerY = centerY;
         setCenter(centerX, centerY);
-
         this.pushAnimation = pushAnimation;
         this.sound = sound;
         this.elapsedTime = elapsedTime;
@@ -77,10 +73,6 @@ public class Button extends Agent {
         } else {
             elapsedTime -= delta;
         }
-    }
-
-    public void setAutomaticSoundOn() {
-        isAutomaticSoundOn = true;
     }
 
     public void setAutomaticSoundOff() {

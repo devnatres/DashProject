@@ -31,7 +31,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
     private final HyperStore hyperStore;
     private final GameState gameState;
 
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
 
     private final Button soundButton;
     private final Button cameraButton;
@@ -53,7 +53,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         hyperStore = dashGame.getHyperStore();
         gameState = dashGame.getGameState();
 
-        inputTranslator = new InputTranslator();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         soundButton = new Button(240, 700,
                 EAnimation.BUTTON_OPT_SOUND.create(hyperStore),
@@ -100,7 +100,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
-        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         soundButton.act(Time.FRAME, touchDownPointOnCamera);
         cameraButton.act(Time.FRAME, touchDownPointOnCamera);
         tutorialsButton.act(Time.FRAME, touchDownPointOnCamera);

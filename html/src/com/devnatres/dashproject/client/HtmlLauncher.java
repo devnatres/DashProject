@@ -4,13 +4,12 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.gameconstants.LaunchParameters;
 
 public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(LaunchParameters.INITIAL_SCREEN_WIDTH, LaunchParameters.INITIAL_SCREEN_HEIGHT);
+                return new GwtApplicationConfiguration(DashGame.INITIAL_SCREEN_WIDTH, DashGame.INITIAL_SCREEN_HEIGHT);
         }
 
         @Override

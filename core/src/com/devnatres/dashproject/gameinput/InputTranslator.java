@@ -10,6 +10,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 
 /**
+ * An InputTranslator object listens and manages inputs to answer questions about user gestures. <br>
+ *     <br>
+ * Try to create only an InputTranslator and to share it between the screens.
+ * The reason is that it's registered as a listener in LibGdx and there isn't a way to remove it.<br>
+ *     <br>
  * Created by DevNatres on 06/12/2014.
  */
 public class InputTranslator implements InputProcessor {

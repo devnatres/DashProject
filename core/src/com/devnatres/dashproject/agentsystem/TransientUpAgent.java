@@ -1,22 +1,23 @@
 package com.devnatres.dashproject.agentsystem;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
 
 /**
+ * Transient objects that set up their position while they are alive.<br>
+ *     <br>
  * Created by DevNatres on 14/02/2015.
  */
 public class TransientUpAgent extends TransientAgent {
     private static final float SPEED = .5f;
 
-    public TransientUpAgent(Animation animation) {
+    public TransientUpAgent(DnaAnimation animation) {
         super(animation);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (isVisible() && getY() < DashGame.getGlobalScreenHeight()) {
+        if (isVisible()) {
             setY(getY()+SPEED);
         }
     }

@@ -18,7 +18,7 @@ public class CreditScreen implements Screen {
     private final SpriteBatch mainBatch;
     private final DnaCamera mainCamera;
 
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
 
     private final HyperStore creditHyperStore;
 
@@ -32,7 +32,7 @@ public class CreditScreen implements Screen {
         creditHyperStore = new HyperStore();
         background = creditHyperStore.getTexture("credits.png");
 
-        inputTranslator = new InputTranslator();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
     }
 
@@ -47,7 +47,7 @@ public class CreditScreen implements Screen {
         mainBatch.draw(background, 0, 0);
         mainBatch.end();
 
-        if (inputTranslator.isTouchDown()) {
+        if (mainInputTranslator.isTouchDown()) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         }
     }

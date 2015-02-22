@@ -6,8 +6,9 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.gameconstants.Time;
 
 /**
- * Created by DevNatres on 07/01/2015.
- */
+ * Extends the Animation Gdx class to manage its own state time.<br>
+ *     <br>
+ * Created by DevNatres on 07/01/2015. */
 public class DnaAnimation extends Animation {
     private float currentStateTime;
 
@@ -23,7 +24,7 @@ public class DnaAnimation extends Animation {
         super(frameDuration, keyFrames);
     }
 
-    public float updateCurrentStateTime() {
+    public float updateStateTime() {
         if (currentStateTime >= Time.MAX_TIME_FLOAT) {
             currentStateTime = 0;
         } else {
@@ -31,6 +32,14 @@ public class DnaAnimation extends Animation {
         }
 
         return currentStateTime;
+    }
+
+    public boolean isAnimationFinished () {
+        return isAnimationFinished(currentStateTime);
+    }
+
+    public void resetAnimation() {
+        currentStateTime = 0;
     }
 
     public TextureRegion getCurrentKeyFrame() {

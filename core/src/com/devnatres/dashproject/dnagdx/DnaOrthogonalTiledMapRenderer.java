@@ -6,7 +6,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 
 /**
- * This class doesn't open neither end the batch when it is passed to the constructor.
+ * Extends OrthogonalTiledMapRenderer to avoid opening/ending the batch when it's passed to the constructor.
+ * That is, use the batch as a true external batch that must be opened and ended from outside.
+ * This way the same opened batch can be shared with other rendering processes before it is ended. <br>
+ *     <br>
  * Created by DevNatres on 20/02/2015.
  */
 public class DnaOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer {

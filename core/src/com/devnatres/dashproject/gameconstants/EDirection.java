@@ -3,8 +3,11 @@ package com.devnatres.dashproject.gameconstants;
 import com.devnatres.dashproject.space.DirectionSelector;
 
 /**
-* Created by DevNatres on 07/12/2014.
-*/
+ * This enum represents the four basic directions and
+ * each element has methods to manage its own operations. <br>
+ *     <br>
+ * Created by DevNatres on 07/12/2014.
+ */
 public enum EDirection {
     UP {
         @Override

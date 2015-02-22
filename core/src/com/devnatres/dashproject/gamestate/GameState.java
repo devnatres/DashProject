@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 /**
+ * A GameState object read, manage and write the information of the game that must be saved. <br>
+ *     <br>
  * Created by DevNatres on 15/01/2015.
  */
 public class GameState {
@@ -24,15 +26,12 @@ public class GameState {
     private static final String CHAIN_SCORE_SUBKEY = "_chain_score";
     private static final String FULLCHAIN_SCORE_SUBKEY = "_fullchain_score";
     private static final String TOTAL_SCORE_SUBKEY = "_total_score";
-
     private static final String LEVEL_CAMERA_ASSISTANT_SUBKEY = "_camera_assistant";
     private static final String LEVEL_PLAY_COUNT_SUBKEY = "_play_count";
     private static final String TOTAL_PLAY_COUNT_KEY = "total_play_count";
-
     private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
     private static final String SOUND_KEY = "sound";
     private static final String COMPLETED_LEVELS_KEY = "completed_levels";
-
     private static final String TUTORIAL_VISITED_SUBKEY = "_tutorial_visited";
 
     private static String keyLast(LevelId levelId, String scoreString) {
@@ -106,7 +105,6 @@ public class GameState {
 
         completedLevels = preferences.getInteger(COMPLETED_LEVELS_KEY, 0);
         levelIndex = Tools.limitInteger(completedLevels, 0, maxLevelIndex);
-
         updateGlobalStatistics();
     }
 
@@ -133,9 +131,9 @@ public class GameState {
         trophyACount = 0;
         trophyBCount = 0;
         trophyCCount = 0;
+
         for (int i = 0; i <= maxLevelIndex; i++) {
             totalBestScore += bestTotalScore.get(i);
-
             int points = bestTotalScore.get(i);
             String trophy = obtainTrophy(i, points);
             if (trophy == "A") {
@@ -272,8 +270,6 @@ public class GameState {
         putLevelScore(levelId, FULLCHAIN_SCORE_SUBKEY, lastFullChainScore, bestFullChainScore, score.getFullChainScore());
         putLevelScore(levelId, TOTAL_SCORE_SUBKEY, lastTotalScore, bestTotalScore, score.getTotalScore());
 
-        updateGlobalStatistics();
-
         if (levelIndex == completedLevels) {
             completedLevels++;
             preferences.putInteger(COMPLETED_LEVELS_KEY, completedLevels);
@@ -285,6 +281,8 @@ public class GameState {
 
         final int totalPlayCount = preferences.getInteger(TOTAL_PLAY_COUNT_KEY, 0);
         preferences.putInteger(TOTAL_PLAY_COUNT_KEY, totalPlayCount + 1);
+
+        updateGlobalStatistics();
 
         if (levelIndex < maxLevelIndex) {
             levelIndex++;
@@ -366,5 +364,4 @@ public class GameState {
         }
         preferences.flush();
     }
-
 }

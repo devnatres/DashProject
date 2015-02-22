@@ -8,6 +8,9 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * This enum represents the prefabricated animations.
+ * The create() method of each element returns the animation object.<br>
+ *     <br>
  * Created by DevNatres on 15/12/2014.
  */
 public enum EAnimation {

@@ -1,6 +1,7 @@
 package com.devnatres.dashproject.tutorial;
 
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.resourcestore.HyperStore;
@@ -12,14 +13,14 @@ import com.devnatres.dashproject.tools.Tools;
 public enum ETutorial {
     NONE {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
-            return new Tutorial(null);
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+            return new Tutorial(dashgame, null);
         }
     },
     BASICS1 {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
-            Tutorial tutorial = new Tutorial(hyperStore.getTexture("message_movement.png"));
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+            Tutorial tutorial = new Tutorial(dashgame, hyperStore.getTexture("message_movement.png"));
 
             Figure figure1 = new Figure(hyperStore.getTexture("message_basics1a.png"));
 
@@ -54,33 +55,33 @@ public enum ETutorial {
     },
     BASICS2 {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     COMBOS {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     TANKS {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     LOW_OBSTACLES {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     MINES {
         @Override
-        public Tutorial createTutorial(HyperStore hyperStore) {
+        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     };
-    abstract public Tutorial createTutorial(HyperStore hyperStore);
+    abstract public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore);
 }

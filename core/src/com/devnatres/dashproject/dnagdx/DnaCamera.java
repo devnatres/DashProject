@@ -6,6 +6,8 @@ import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.space.DirectionSelector;
 
 /**
+ * Extends the OrthographicCamera Gdx class to increase functionality.<br>
+ *     <br>
  * Created by DevNatres on 07/01/2015.
  */
 public class DnaCamera extends OrthographicCamera {

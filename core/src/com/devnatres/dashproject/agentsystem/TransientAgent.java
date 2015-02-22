@@ -1,6 +1,6 @@
 package com.devnatres.dashproject.agentsystem;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
 
 /**
  * High level entity that sets itself invisible when its animation ends.<br>
@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
  *
  */
 public class TransientAgent extends Agent {
-    public TransientAgent(Animation animation) {
+    public TransientAgent(DnaAnimation animation) {
         super(animation);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
-        if (getAnimation().isAnimationFinished(animationStateTime)) {
+        if (getAnimation().isAnimationFinished()) {
             setVisible(false);
         }
     }

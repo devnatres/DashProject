@@ -2,20 +2,20 @@ package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.debug.Debug;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
-import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.resourcestore.HyperStore;
+import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.tools.VectorPool;
 
 /**
@@ -55,10 +55,10 @@ public class Hero extends Agent {
     private final float scopeRadio2;
     private final Sprite damageImage;
     private int damageImageDuration;
-    private final Animation walkingAnimation;
-    private final Animation crouchingAnimation;
-    private final Animation deadAnimation;
-    private final Animation attackingAnimation;
+    private final DnaAnimation walkingAnimation;
+    private final DnaAnimation crouchingAnimation;
+    private final DnaAnimation deadAnimation;
+    private final DnaAnimation attackingAnimation;
     private float attackingTime;
 
     private final LevelScreen levelScreen;
@@ -179,8 +179,8 @@ public class Hero extends Agent {
     @Override
     public void act(float delta) {
         if (dying) {
-            addStateTime(delta);
-            if (getAnimation().isAnimationFinished(animationStateTime)) setVisible(false);
+            getAnimation().updateStateTime();
+            if (getAnimation().isAnimationFinished()) setVisible(false);
         } else {
             super.act(delta);
             boolean moved = setNextPosIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);

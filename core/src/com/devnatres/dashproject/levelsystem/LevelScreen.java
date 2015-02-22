@@ -63,7 +63,7 @@ public class LevelScreen implements Screen {
     private final Music badassMusic;
     private final Music endOkMusic;
 
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
 
     private final Texture grayScreenTexture;
 
@@ -127,6 +127,7 @@ public class LevelScreen implements Screen {
         mainFont = game.getMainFont();
         mainCamera = game.getMainCamera();
         gameState = game.getGameState();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         this.levelId = levelId;
 
@@ -156,8 +157,6 @@ public class LevelScreen implements Screen {
         badassMusic.setLooping(true);
         endOkMusic = hyperStore.getMusic("music/end_ok.ogg");
 
-        inputTranslator = new InputTranslator();
-
         mainShape.setColor(Color.WHITE);
 
         grayScreenTexture = hyperStore.getTexture("gray_screen.png");
@@ -168,7 +167,7 @@ public class LevelScreen implements Screen {
         radar = EAnimation.RADAR_INDICATOR.create(hyperStore);
 
         System.gc();
-        inputTranslator.clear();
+        mainInputTranslator.clear();
 
         playMode = EPlayMode.READY;
         waitingTime = MIN_READY_TIME;
@@ -213,7 +212,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (inputTranslator.isResetRequested() || resetCountDown == 0) {
+        if (mainInputTranslator.isResetRequested() || resetCountDown == 0) {
             menuReset();
             return;
         }
@@ -247,10 +246,10 @@ public class LevelScreen implements Screen {
                 (screenHeight - readyMessage.getHeight())/2);
         mainBatch.end();
 
-        if (waitingTime == 0 && inputTranslator.isTouchDown()) {
+        if (waitingTime == 0 && mainInputTranslator.isTouchDown()) {
             playMode = EPlayMode.GAME_PLAY;
         } else {
-            inputTranslator.clear();
+            mainInputTranslator.clear();
             if (waitingTime > 0) {
                 waitingTime--;
             }
@@ -270,7 +269,7 @@ public class LevelScreen implements Screen {
         } else if (!Debug.IMMORTAL && time == 0) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
-        } else if (inputTranslator.isMenuRequested()) {
+        } else if (mainInputTranslator.isMenuRequested()) {
             playMode = EPlayMode.MENU;
         } else {
             if (!isBulletTime() && time > 0) {
@@ -340,10 +339,10 @@ public class LevelScreen implements Screen {
         score.renderFinalCount(mainBatch, mainFont);
         mainBatch.end();
 
-        if (waitingTime == 0 && inputTranslator.isTouchDown()) {
+        if (waitingTime == 0 && mainInputTranslator.isTouchDown()) {
             menuReset();
         } else {
-            inputTranslator.clear();
+            mainInputTranslator.clear();
             if (waitingTime > 0) {
                 waitingTime--;
             }
@@ -352,7 +351,7 @@ public class LevelScreen implements Screen {
 
     protected void renderPlayMode_Menu() {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
-        gameMenu.check(inputTranslator, fixedCamera);
+        gameMenu.check(mainInputTranslator, fixedCamera);
         mainBatch.begin();
         gameMenu.paint(mainBatch);
         mainBatch.end();
@@ -563,7 +562,7 @@ public class LevelScreen implements Screen {
             for (int i = 0; i < hordeGroup.size(); i++){
                 Horde horde = hordeGroup.getHorde(i);
                 if (!horde.isKilled()) {
-                    radar.updateCurrentStateTime();
+                    radar.updateStateTime();
                     renderFoeRadar_indicator(horde.getReferencePosition());
                 }
             }
@@ -624,7 +623,7 @@ public class LevelScreen implements Screen {
     }
 
     private void inputForHero() {
-        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         if (touchDownPointOnCamera != null) {
             hero.programNextPos(touchDownPointOnCamera.x, touchDownPointOnCamera.y);
         }

@@ -17,20 +17,20 @@ public class Tutorial implements Disposable {
     private Figure currentFigure;
     private int index;
     private boolean isFinished = true;
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
     private final Texture title;
     private final Texture tapToNext;
     private final Texture tapToFinish;
     private final HyperStore localHyperStore;
 
-    public Tutorial(Texture title) {
+    public Tutorial(DashGame dashGame, Texture title) {
         this.title = title;
 
         localHyperStore = new HyperStore();
         tapToNext = localHyperStore.getTexture("message_taptonext.png");
         tapToFinish = localHyperStore.getTexture("message_taptofinish.png");
 
-        inputTranslator = new InputTranslator();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
     }
 
     public void add(Figure figure) {
@@ -59,7 +59,7 @@ public class Tutorial implements Disposable {
                     0);
         }
 
-        if (inputTranslator.isTouchDown()) {
+        if (mainInputTranslator.isTouchDown()) {
             nextFigure();
         }
     }

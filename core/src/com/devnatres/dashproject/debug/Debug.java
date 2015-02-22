@@ -15,6 +15,8 @@ import com.devnatres.dashproject.DashGame;
 import java.util.ArrayList;
 
 /**
+ * Debug supporting class. <br>
+ *     <br>
  * Created by DevNatres on 08/12/2014.
  */
 public class Debug {

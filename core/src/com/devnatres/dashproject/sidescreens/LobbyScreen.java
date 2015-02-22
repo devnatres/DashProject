@@ -37,7 +37,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final Texture background;
     private final HyperStore lobbyHyperStore;
 
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
     private final GameState gameState;
 
     private final HyperStore hyperStore;
@@ -65,7 +65,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
         gameState = dashGame.getGameState();
 
-        inputTranslator = new InputTranslator();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         goButton = new Button(380, 64,
                 EAnimation.BUTTON_GO_STANDBY.create(hyperStore),
@@ -130,7 +130,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         currentLevelId = gameState.getCurrentLevelId();
         eTutorial = currentLevelId.getETutorial();
 
-        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         goButton.act(Time.FRAME, touchDownPointOnCamera);
         backButton.act(Time.FRAME, touchDownPointOnCamera);
         if (eTutorial != ETutorial.NONE) tutorialButton.act(Time.FRAME, touchDownPointOnCamera);

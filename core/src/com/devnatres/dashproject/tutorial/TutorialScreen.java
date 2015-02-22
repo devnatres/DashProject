@@ -30,7 +30,7 @@ public class TutorialScreen implements Screen {
         mainCamera = dashGame.getCenteredMainCamera();
 
         localHyperStore = new HyperStore();
-        this.tutorial = eTutorial.createTutorial(localHyperStore);
+        this.tutorial = eTutorial.createTutorial(dashGame, localHyperStore);
         this.levelId = levelId;
     }
 

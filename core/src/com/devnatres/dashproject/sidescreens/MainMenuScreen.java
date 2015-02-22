@@ -27,7 +27,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     private final DnaCamera mainCamera;
     private final HyperStore hyperStore;
 
-    private final InputTranslator inputTranslator;
+    private final InputTranslator mainInputTranslator;
 
     private final Button playButton;
     private final Button optionsButton;
@@ -42,8 +42,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         mainFont = dashGame.getMainFont();
         mainCamera = dashGame.getCenteredMainCamera();
         hyperStore = dashGame.getHyperStore();
-
-        inputTranslator = new InputTranslator();
+        mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         playButton = new Button(240, 500,
                 EAnimation.BUTTON_PLAY_STANDBY.create(hyperStore),
@@ -83,7 +82,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
-        Vector2 touchDownPointOnCamera = inputTranslator.getTouchDownPointOnCamera(mainCamera);
+        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         playButton.act(Time.FRAME, touchDownPointOnCamera);
         optionsButton.act(Time.FRAME, touchDownPointOnCamera);
         creditsButton.act(Time.FRAME, touchDownPointOnCamera);

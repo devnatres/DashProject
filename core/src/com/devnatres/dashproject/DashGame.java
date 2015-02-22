@@ -9,12 +9,19 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.Time;
+import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.tools.VectorPool;
 
 public class DashGame extends Game {
+    public static final String TITLE = "Dash Project";
+    public static final int INITIAL_SCREEN_WIDTH = 480;
+    public static final int INITIAL_SCREEN_HEIGHT = 800;
+    public static final boolean USE_ACCELEROMETER = false;
+    public static final boolean USE_COMPASS = false;
+
     private static int globalScreenWidth = -1;
     private static int globalScreenHeight = -1;
 
@@ -31,6 +38,7 @@ public class DashGame extends Game {
     private BitmapFont mainFont;
     private ShapeRenderer mainShape;
     private DnaCamera mainCamera;
+    private InputTranslator mainInputTranslator;
 
     private int screenWidth;
     private int screenHeight;
@@ -65,6 +73,11 @@ public class DashGame extends Game {
 
     public ShapeRenderer getMainShape() {
         return mainShape;
+    }
+
+    public InputTranslator getClearedMainInputTranslator() {
+        mainInputTranslator.clear();
+        return mainInputTranslator;
     }
 
     public DnaCamera getMainCamera() {
@@ -102,6 +115,8 @@ public class DashGame extends Game {
 
         mainCamera = new DnaCamera();
         mainCamera.setToOrtho(false, screenWidth, screenHeight);
+
+        mainInputTranslator = new InputTranslator();
 
         hyperStore = new HyperStore();
         gameState = new GameState(); // It must be created before any Screen

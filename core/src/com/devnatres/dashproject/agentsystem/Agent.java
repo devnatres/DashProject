@@ -1,13 +1,12 @@
 package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.devnatres.dashproject.gameconstants.Time;
+import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.space.Volume;
 
 /**
@@ -34,12 +33,10 @@ public class Agent extends Actor {
     private static final float DEFAULT_SPEED = 1f;
 
     private final Volume volume;
-    private Animation animation;
+    private DnaAnimation animation;
     private float speed;
 
-    protected float animationStateTime;
-
-    public Agent(Animation animation) {
+    public Agent(DnaAnimation animation) {
         TextureRegion textureRegion = animation.getKeyFrame(0);
 
         volume = new Volume(0f, 0f, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
@@ -52,11 +49,11 @@ public class Agent extends Actor {
     }
 
     public Agent(Texture texture) {
-        this(new Animation(DEFAULT_FRAME_DURATION, new TextureRegion(texture)));
+        this(new DnaAnimation(DEFAULT_FRAME_DURATION, new TextureRegion(texture)));
     }
 
     public void setCenter(float x, float y) {
-        setPosition(x - getWidth()/2, y - getHeight()/2);
+        setPosition(x - getWidth() / 2, y - getHeight() / 2);
     }
 
     public void setCenter(Vector2 center) {
@@ -72,33 +69,26 @@ public class Agent extends Actor {
         return volume.getPosition();
     }
 
-    public void setAnimation(Animation animation) {
+    public void setAnimation(DnaAnimation animation) {
         if (animation != null) {
             this.animation = animation;
 
             TextureRegion textureRegion = animation.getKeyFrame(0);
             setSize(textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
             setCenter(getCenter());
-        }
-        animationStateTime = 0;
-    }
 
-    protected void addStateTime(float delta) {
-        if (animationStateTime > Time.MAX_TIME_FLOAT) {
-            animationStateTime = 0;
-        } else {
-            animationStateTime += delta;
+            animation.resetAnimation();
         }
     }
 
-    public Animation getAnimation() {
+    public DnaAnimation getAnimation() {
         return animation;
     }
 
     @Override
     public void act(float delta) {
         if (isVisible()) {
-            addStateTime(delta);
+            animation.updateStateTime();
             super.act(delta);
         }
     }
@@ -106,7 +96,7 @@ public class Agent extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (isVisible()) {
-            batch.draw(animation.getKeyFrame(animationStateTime), getX(), getY());
+            batch.draw(animation.getCurrentKeyFrame(), getX(), getY());
         }
     }
 
