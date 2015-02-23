@@ -89,7 +89,7 @@ public class LevelScreen implements Screen {
 
     private boolean skipCameraAssistant;
 
-    private EPlayMode playMode;
+    private EPlayMode playModeOld;
 
     private final Score score;
 
@@ -148,7 +148,7 @@ public class LevelScreen implements Screen {
 
         levelScript = new LevelScript();
 
-        maxHordeCount = extractScript();
+        maxHordeCount = map.extractLevelScript(this, hyperStore, levelId.getScriptName());
         lastHordeCount = maxHordeCount;
         currentHordeCount = maxHordeCount;
         currentHordeCountString = String.valueOf(currentHordeCount);
@@ -169,7 +169,7 @@ public class LevelScreen implements Screen {
         System.gc();
         mainInputTranslator.clear();
 
-        playMode = EPlayMode.READY;
+        playModeOld = EPlayMode.READY;
         waitingTime = MIN_READY_TIME;
         score = new Score(hyperStore, this);
 
@@ -201,10 +201,6 @@ public class LevelScreen implements Screen {
         return levelScript;
     }
 
-    private int extractScript() {
-        return map.extractLevelScript(this, hyperStore, levelId.getScriptName());
-    }
-
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
         hordeGroup.addLinked(horde);
@@ -218,7 +214,7 @@ public class LevelScreen implements Screen {
         }
 
         clearScreen();
-        playMode.render(this);
+        playModeOld.render(this);
 
         if (Debug.DEBUG) renderDebugger();
     }
@@ -242,12 +238,12 @@ public class LevelScreen implements Screen {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(readyMessage,
-                (screenWidth - readyMessage.getWidth())/2,
-                (screenHeight - readyMessage.getHeight())/2);
+                (screenWidth - readyMessage.getWidth()) / 2,
+                (screenHeight - readyMessage.getHeight()) / 2);
         mainBatch.end();
 
         if (waitingTime == 0 && mainInputTranslator.isTouchDown()) {
-            playMode = EPlayMode.GAME_PLAY;
+            playModeOld = EPlayMode.GAME_PLAY;
         } else {
             mainInputTranslator.clear();
             if (waitingTime > 0) {
@@ -259,18 +255,18 @@ public class LevelScreen implements Screen {
     protected void renderPlayMode_GamePlay() {
         boolean thereIsNewScriptCmdExecuted = levelScript.execute();
         if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
-            playMode = EPlayMode.SCORE_COUNT;
+            playModeOld = EPlayMode.SCORE_COUNT;
             score.calculateFinalCount();
             gameState.updateCurrentLevelScore(score);
             GlobalAudio.playOnly(endOkMusic);
             waitingTime = MIN_FINAL_TIME;
         } else if (!hero.isVisible()) {
-            playMode = EPlayMode.HERO_DEAD;
+            playModeOld = EPlayMode.HERO_DEAD;
         } else if (!Debug.IMMORTAL && time == 0) {
             hero.die();
-            playMode = EPlayMode.TIME_OUT;
+            playModeOld = EPlayMode.TIME_OUT;
         } else if (mainInputTranslator.isMenuRequested()) {
-            playMode = EPlayMode.MENU;
+            playModeOld = EPlayMode.MENU;
         } else {
             if (!isBulletTime() && time > 0) {
                 time -= TIME_STEP;
@@ -311,8 +307,8 @@ public class LevelScreen implements Screen {
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(dissipatedMessage,
-                (screenWidth - dissipatedMessage.getWidth())/2,
-                (screenHeight - dissipatedMessage.getHeight())/2);
+                (screenWidth - dissipatedMessage.getWidth()) / 2,
+                (screenHeight - dissipatedMessage.getHeight()) / 2);
         mainBatch.end();
     }
 
@@ -371,7 +367,7 @@ public class LevelScreen implements Screen {
     }
 
     public void menuResume() {
-        playMode = EPlayMode.GAME_PLAY;
+        playModeOld = EPlayMode.GAME_PLAY;
     }
 
     public void menuMainMenu() {
@@ -403,8 +399,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        /*mainCamera.setToOrtho(false, width, height);
-        mainCamera.update();*/
     }
 
     public LevelMap getMap() {

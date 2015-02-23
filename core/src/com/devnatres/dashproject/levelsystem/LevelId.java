@@ -3,6 +3,8 @@ package com.devnatres.dashproject.levelsystem;
 import com.devnatres.dashproject.tutorial.ETutorial;
 
 /**
+ * Identify a level and contains its information. <br>
+ *     <br>
  * Created by DevNatres on 15/01/2015.
  */
 public class LevelId {

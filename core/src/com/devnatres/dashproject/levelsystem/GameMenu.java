@@ -14,6 +14,8 @@ import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * Represents a in-game menu. <br>
+ *     <br>
  * Created by DevNatres on 31/01/2015.
  */
 public class GameMenu implements IButtonExecutable {

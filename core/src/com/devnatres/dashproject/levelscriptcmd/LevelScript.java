@@ -5,6 +5,10 @@ import com.badlogic.gdx.utils.Array;
 import static com.devnatres.dashproject.levelscriptcmd.Cmd.*;
 
 /**
+ * Represents a list of commands to process sequentially. <br>
+ * If a command is terminated in a execute() call, the next command will be executed the next time.
+ * If it isn't terminated, it will continue in next calls. <br>
+ *     <br>
  * Created by DevNatres on 29/12/2014.
  */
 public class LevelScript {

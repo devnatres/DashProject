@@ -1,6 +1,8 @@
 package com.devnatres.dashproject.levelsystem;
 
 /**
+ * This auxiliary enum helps LevelScreen to switch the proper method according to the play mode.<br>
+ *     <br>
  * Created by DevNatres on 10/01/2015.
  */
 public enum EPlayMode {

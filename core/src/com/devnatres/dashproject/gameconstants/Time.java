@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.gameconstants;
 
 /**
- * Class for time constants. <br>
+ * Class for global time constants. <br>
  *     <br>
  * Created by DevNatres on 16/12/2014.
  */

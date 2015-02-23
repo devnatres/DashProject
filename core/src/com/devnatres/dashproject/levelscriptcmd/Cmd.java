@@ -3,6 +3,8 @@ package com.devnatres.dashproject.levelscriptcmd;
 import com.devnatres.dashproject.levelsystem.LevelScreen;
 
 /**
+ * Root class for level-script commands <br>
+ *     <br>
  * Created by DevNatres on 29/12/2014.
  */
 abstract public class Cmd {

@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Created by DevNatres on 03/12/2014.
  */
-abstract public class Tools {
+final public class Tools {
     private static final Random random = new Random();
 
     public static int randomInt(int min, int max) {
