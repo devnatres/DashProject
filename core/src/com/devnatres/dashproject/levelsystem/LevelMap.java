@@ -197,27 +197,45 @@ public class LevelMap implements Disposable {
 
             String[] command = stepLine.split(",");
             if (command[0].equals("createhorde")) {
-                for (int i = 1; i < command.length; i++) {
-                    hordeCount++;
-                    int hordeNumber = Integer.parseInt(command[i]);
-                    Horde horde = extractHorde(levelScreen, hyperStore, hordeNumber);
-                    levelScript.addCmd(new RegisterHordeCmd(levelScreen, horde));
-
-                    hordeHashMap.put(hordeNumber, horde);
-                }
+                int n = extractLevelScript_createHorde(levelScreen, hyperStore, command, levelScript, hordeHashMap);
+                hordeCount += n;
             } else if (command[0].equals("waithordekilled")) {
-                for (int i = 1; i < command.length; i++) {
-                    int hordeNumber = Integer.parseInt(command[i]);
-                    Horde horde = hordeHashMap.get(hordeNumber);
-                    levelScript.addCmd(new WaitHordeKilledCmd(levelScreen, horde));
-                }
+                extractLevelScript_waitHordeKilled(levelScreen, command, levelScript, hordeHashMap);
             } else if (command[0].equals("heroposition")) {
-                levelScreen.getHero().setPosition(Integer.parseInt(command[1])*tilePixelWidth,
-                        (mapHeight - 1 - Integer.parseInt(command[2]))*tilePixelHeight);
+                int heroX = Integer.parseInt(command[1])*tilePixelWidth;
+                int heroY = (mapHeight-1-Integer.parseInt(command[2])) * tilePixelHeight;
+                levelScreen.getHero().setPosition(heroX, heroY);
             }
             stepNumber++;
         }
         return hordeCount;
+    }
+
+    private int extractLevelScript_createHorde(LevelScreen levelScreen,
+                                               HyperStore hyperStore,
+                                               String[] command,
+                                               LevelScript levelScript,
+                                               HashMap<Integer, Horde> hordeHashMap) {
+
+        for (int i = 1; i < command.length; i++) {
+            int hordeNumber = Integer.parseInt(command[i]);
+            Horde horde = extractHorde(levelScreen, hyperStore, hordeNumber);
+            levelScript.addCmd(new RegisterHordeCmd(levelScreen, horde));
+
+            hordeHashMap.put(hordeNumber, horde);
+        }
+        return command.length - 1;
+    }
+
+    private void extractLevelScript_waitHordeKilled(LevelScreen levelScreen,
+                                                    String[] command,
+                                                    LevelScript levelScript,
+                                                    HashMap<Integer, Horde> hordeHashMap) {
+        for (int i = 1; i < command.length; i++) {
+            int hordeNumber = Integer.parseInt(command[i]);
+            Horde horde = hordeHashMap.get(hordeNumber);
+            levelScript.addCmd(new WaitHordeKilledCmd(levelScreen, horde));
+        }
     }
 
     public void extractMines(LevelScreen levelScreen, HyperStore hyperStore) {
@@ -281,7 +299,6 @@ public class LevelMap implements Disposable {
             } else if (command[0].equals("delaymove")) {
                 Action action = new DelayAction(Integer.parseInt(command[1]));
                 sequenceAction.addAction(action);
-
                 action = extractMoveAction(command, 2, sourcePos, originalPos, foe.getSpeed());
                 sequenceAction.addAction(action);
             }
@@ -330,7 +347,7 @@ public class LevelMap implements Disposable {
     }
 
     public void setThisCellCenter(int column, int row, Vector2 center) {
-        center.set(column*tilePixelWidth + tilePixelWidth/2, row*tilePixelHeight + tilePixelHeight/2);
+        center.set((column*tilePixelWidth) + tilePixelWidth/2, (row*tilePixelHeight) + tilePixelHeight/2);
     }
 
     @Override

@@ -2,13 +2,8 @@ package com.devnatres.dashproject.levelsystem;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -22,10 +17,8 @@ import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
-import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
-import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -34,6 +27,8 @@ import com.devnatres.dashproject.tools.Tools;
 import static com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 
 /**
+ * Represents a level screen of the game, the main game-play class. <br>
+ *     <br>
  * Created by DevNatres on 04/12/2014.
  */
 public class LevelScreen implements Screen {
@@ -43,146 +38,75 @@ public class LevelScreen implements Screen {
     private static final int MIN_READY_TIME = 15;
     private static final float TIME_BONUS = 3f;
 
-    private int resetCountDown = RESET_COUNT;
-
-    private final DashGame dashGame;
-    private final SpriteBatch mainBatch;
-    private final ShapeRenderer mainShape;
-    private final BitmapFont mainFont;
-    private final DnaCamera mainCamera;
-    private final GameState gameState;
-
-    private final DnaCamera fixedCamera;
-
-    private final HyperStore hyperStore;
-
-    private final LevelMap map;
-
-    private final Hero hero;
-
-    private final Music badassMusic;
-    private final Music endOkMusic;
-
-    private final InputTranslator mainInputTranslator;
-
-    private final Texture grayScreenTexture;
-
-    private final float screenWidth;
-    private final float screenHeight;
-
-    private float bulletTime;
-
-    private final AgentRegistry agentRegistry;
-    private final HordeGroup hordeGroup;
-
-    private final LevelScript levelScript;
-    private final Texture dissipatedMessage;
-    private final Texture timeoutMessage;
-    private final Texture readyMessage;
-
-    private Agent agentMessage;
-    private int agentMessageDuration;
-
-    private boolean comboCameraChasing;
-
-    private final DnaAnimation radar;
-
     private boolean skipCameraAssistant;
 
-    private EPlayMode playModeOld;
+    private int resetCountDown = RESET_COUNT;
 
-    private final Score score;
+    private Sprite lifePointImage;
+    private DnaAnimation radar;
 
-    private final Sprite lifePointImage;
-
-    private float time;
-    private String timeString;
-
-    private int maxHordeCount;
-    private int lastHordeCount;
-    private int currentHordeCount;
-    private String currentHordeCountString;
-
-    private final LevelId levelId;
-
-    private final GameMenu gameMenu;
-
-    private int waitingTime;
-
-    private Array<Foe> comboLivingFoes = new Array();
-    private Foe firstComboFoe;
-
-    private Foe lastDeadFoe;
+    private LevelScreenSet set;
+    private LevelScreenBasics basics;
+    private LevelScreenEnemy enemy;
+    private LevelScreenAudio audio;
+    private LevelScreenMessages messages;
+    private LevelScreenVariables variables;
+    Hero hero;
+    AgentRegistry agentRegistry;
+    GameState gameState;
+    private GameMenu gameMenu;
+    private Score score;
+    private EPlayMode playMode;
 
     /**
      * It can be only instantiated by other classes in the same package or derived classes.
      */
     protected LevelScreen(DashGame game, LevelId levelId) {
-        this.dashGame = game;
+        set = new LevelScreenSet(this, game);
+        basics = new LevelScreenBasics(this, levelId);
 
-        screenWidth = game.getScreenWidth();
-        screenHeight = game.getScreenHeight();
-        mainBatch = game.getMainBatch();
-        mainShape = game.getMainShape();
-        mainFont = game.getMainFont();
-        mainCamera = game.getMainCamera();
-        gameState = game.getGameState();
-        mainInputTranslator = dashGame.getClearedMainInputTranslator();
-
-        this.levelId = levelId;
-
-        hyperStore = game.getHyperStore();
-
-        mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
-
-        fixedCamera = new DnaCamera();
-        fixedCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
-
-        map = new LevelMap(levelId.getMapName(), mainBatch);
+        hero = new Hero(this, set.hyperStore);
 
         agentRegistry = new AgentRegistry();
+        agentRegistry.register(hero, AgentRegistry.EAgentLayer.TRUNK);
 
-        hero = new Hero(this, hyperStore);
-        agentRegistry.register(hero, EAgentLayer.TRUNK);
-        hordeGroup = new HordeGroup(this);
+        gameState = game.getGameState();
+        enemy = new LevelScreenEnemy(this);
+        audio = new LevelScreenAudio(this);
+        messages = new LevelScreenMessages(this);
+        variables = new LevelScreenVariables();
 
-        levelScript = new LevelScript();
+        radar = EAnimation.RADAR_INDICATOR.create(set.hyperStore);
+        lifePointImage = new Sprite(set.hyperStore.getTexture("heal_point.png"));
 
-        maxHordeCount = map.extractLevelScript(this, hyperStore, levelId.getScriptName());
-        lastHordeCount = maxHordeCount;
-        currentHordeCount = maxHordeCount;
-        currentHordeCountString = String.valueOf(currentHordeCount);
+        gameMenu = new GameMenu(this, set.hyperStore, gameState);
+        score = new Score(set.hyperStore, this);
 
-        badassMusic = hyperStore.getMusic("music/badass.ogg");
-        badassMusic.setLooping(true);
-        endOkMusic = hyperStore.getMusic("music/end_ok.ogg");
-
-        mainShape.setColor(Color.WHITE);
-
-        grayScreenTexture = hyperStore.getTexture("gray_screen.png");
-        dissipatedMessage = hyperStore.getTexture("message_dissipated.png");
-        timeoutMessage = hyperStore.getTexture("message_timeout.png");
-        readyMessage = hyperStore.getTexture("message_ready.png");
-
-        radar = EAnimation.RADAR_INDICATOR.create(hyperStore);
+        prepareGame();
 
         System.gc();
-        mainInputTranslator.clear();
-
-        playModeOld = EPlayMode.READY;
-        waitingTime = MIN_READY_TIME;
-        score = new Score(hyperStore, this);
-
-        lifePointImage = new Sprite(hyperStore.getTexture("heal_point.png"));
-
-        time = levelId.getInitialTime();
-        timeString = String.valueOf(((int)(time*10))/10f);
-
-        skipCameraAssistant = !gameState.isCameraAssistantActivated();
-
-        gameMenu = new GameMenu(this, hyperStore, gameState);
 
         if (Debug.DEBUG) Debug.resetCount();
+    }
+
+    private void prepareGame() {
+        skipCameraAssistant = !gameState.isCameraAssistantActivated();
+        variables.time = basics.levelId.getInitialTime();
+        variables.timeString = String.valueOf(((int)(variables.time*10))/10f);
+        variables.waitingTime = MIN_READY_TIME;
+        playMode = EPlayMode.READY;
+    }
+
+    LevelScreenSet getSet() {
+        return set;
+    }
+
+    LevelScreenBasics getBasics() {
+        return basics;
+    }
+
+    LevelId getLevelId() {
+        return basics.levelId;
     }
 
     public Hero getHero() {
@@ -190,167 +114,162 @@ public class LevelScreen implements Screen {
     }
 
     public float getTime() {
-        return time;
+        return variables.time;
     }
 
     public DnaCamera getCamera() {
-        return mainCamera;
+        return set.mainCamera;
     }
 
     public LevelScript getLevelScript() {
-        return levelScript;
+        return basics.levelScript;
     }
 
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
-        hordeGroup.addLinked(horde);
+        enemy.hordeGroup.addLinked(horde);
     }
 
     @Override
     public void render(float delta) {
-        if (mainInputTranslator.isResetRequested() || resetCountDown == 0) {
+        if (set.mainInputTranslator.isResetRequested() || resetCountDown == 0) {
             menuReset();
             return;
         }
 
         clearScreen();
-        playModeOld.render(this);
+        playMode.render(this);
 
         if (Debug.DEBUG) renderDebugger();
     }
 
     private void renderStandardComponents() {
-        mainCamera.update();
-        mainBatch.setProjectionMatrix(mainCamera.combined);
+        set.mainCamera.update();
+        set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
 
-        mainBatch.begin();
+        set.mainBatch.begin();
         renderBackground();
         renderMap();
         renderSprites();
         renderFoeRadar();
         renderHub();
-        mainBatch.end();
+        set.mainBatch.end();
     }
 
     protected void renderPlayMode_Ready() {
         renderStandardComponents();
 
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
-        mainBatch.draw(readyMessage,
-                (screenWidth - readyMessage.getWidth()) / 2,
-                (screenHeight - readyMessage.getHeight()) / 2);
-        mainBatch.end();
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+        set.mainBatch.begin();
+        set.mainBatch.draw(messages.readyMessage,
+                (set.screenWidth - messages.readyMessage.getWidth()) / 2,
+                (set.screenHeight - messages.readyMessage.getHeight()) / 2);
+        set.mainBatch.end();
 
-        if (waitingTime == 0 && mainInputTranslator.isTouchDown()) {
-            playModeOld = EPlayMode.GAME_PLAY;
+        if (variables.waitingTime == 0 && set.mainInputTranslator.isTouchDown()) {
+            playMode = EPlayMode.GAME_PLAY;
         } else {
-            mainInputTranslator.clear();
-            if (waitingTime > 0) {
-                waitingTime--;
+            set.mainInputTranslator.clear();
+            if (variables.waitingTime > 0) {
+                variables.waitingTime--;
             }
         }
     }
 
     protected void renderPlayMode_GamePlay() {
-        boolean thereIsNewScriptCmdExecuted = levelScript.execute();
-        if (!thereIsNewScriptCmdExecuted && hordeGroup.size() == 0) {
-            playModeOld = EPlayMode.SCORE_COUNT;
-            score.calculateFinalCount();
-            gameState.updateCurrentLevelScore(score);
-            GlobalAudio.playOnly(endOkMusic);
-            waitingTime = MIN_FINAL_TIME;
+        boolean thereIsNewScriptCmdExecuted = basics.levelScript.execute();
+        if (!thereIsNewScriptCmdExecuted && enemy.hordeGroup.size() == 0) {
+            renderPlayMode_GamePlay_scoreCountTransition();
         } else if (!hero.isVisible()) {
-            playModeOld = EPlayMode.HERO_DEAD;
-        } else if (!Debug.IMMORTAL && time == 0) {
+            playMode = EPlayMode.HERO_DEAD;
+        } else if (!Debug.IMMORTAL && variables.time == 0) {
             hero.die();
-            playModeOld = EPlayMode.TIME_OUT;
-        } else if (mainInputTranslator.isMenuRequested()) {
-            playModeOld = EPlayMode.MENU;
+            playMode = EPlayMode.TIME_OUT;
+        } else if (set.mainInputTranslator.isMenuRequested()) {
+            playMode = EPlayMode.MENU;
         } else {
-            if (!isBulletTime() && time > 0) {
-                time -= TIME_STEP;
-                if (time < 0) {
-                    time = 0;
-                }
-                timeString = String.valueOf(((int)(time*10))/10f);
-            }
-            if (lastHordeCount > currentHordeCount && currentHordeCount > 0) {
-                lastHordeCount = currentHordeCount;
-
-                addTime(TIME_BONUS);
-
-                Vector2 powerUpBasePosition = (lastDeadFoe != null) ? lastDeadFoe.getCenter() : hero.getCenter();
-                PowerUpGenerator.generatePowerUpIfLucky(hyperStore, this, powerUpBasePosition);
-            }
-            inputForHero();
-            decideToChaseHeroWithCamera();
-            if (bulletTime > 0f && !comboCameraChasing) {
-                bulletTime--;
-                if (bulletTime == 0) {
-                    deactivateBulletTime();
-                }
-            }
+            renderPlayMode_GamePlay_main();
         }
-
         renderStandardComponents();
         renderAnimatedMessage();
     }
 
-    protected void renderPlayMode_HeroDead() {
-        if (resetCountDown > 0) {
-            resetCountDown--;
+    private void renderPlayMode_GamePlay_main() {
+        if (!isBulletTime() && variables.time > 0) {
+            variables.time -= TIME_STEP;
+            if (variables.time < 0) variables.time = 0;
+            variables.timeString = String.valueOf(((int)(variables.time*10))/10f);
         }
+        if (enemy.lastHordeCount > enemy.currentHordeCount && enemy.currentHordeCount > 0) {
+            enemy.lastHordeCount = enemy.currentHordeCount;
+            addTime(TIME_BONUS);
+            Vector2 powerUpBasePosition = (enemy.lastDeadFoe != null) ? enemy.lastDeadFoe.getCenter() : hero.getCenter();
+            PowerUpGenerator.generatePowerUpIfLucky(set.hyperStore, this, powerUpBasePosition);
+        }
+        inputForHero();
+        decideToChaseHeroWithCamera();
+        if (variables.bulletTime > 0f && !variables.comboCameraChasing) {
+            variables.bulletTime--;
+            if (variables.bulletTime == 0) deactivateBulletTime();
+        }
+    }
+
+    private void renderPlayMode_GamePlay_scoreCountTransition() {
+        playMode = EPlayMode.SCORE_COUNT;
+        score.calculateFinalCount();
+        gameState.updateCurrentLevelScore(score);
+        GlobalAudio.playOnly(audio.endOkMusic);
+        variables.waitingTime = MIN_FINAL_TIME;
+    }
+
+    protected void renderPlayMode_HeroDead() {
+        if (resetCountDown > 0) resetCountDown--;
 
         renderStandardComponents();
 
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
-        mainBatch.draw(dissipatedMessage,
-                (screenWidth - dissipatedMessage.getWidth()) / 2,
-                (screenHeight - dissipatedMessage.getHeight()) / 2);
-        mainBatch.end();
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+        set.mainBatch.begin();
+        set.mainBatch.draw(messages.dissipatedMessage,
+                (set.screenWidth - messages.dissipatedMessage.getWidth()) / 2,
+                (set.screenHeight - messages.dissipatedMessage.getHeight()) / 2);
+        set.mainBatch.end();
     }
 
     protected void renderPlayMode_TimeOut() {
-        if (resetCountDown > 0) {
-            resetCountDown--;
-        }
+        if (resetCountDown > 0) resetCountDown--;
 
         renderStandardComponents();
 
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
-        mainBatch.draw(timeoutMessage,
-                (screenWidth - timeoutMessage.getWidth())/2,
-                (screenHeight - timeoutMessage.getHeight())/2);
-        mainBatch.end();
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+        set.mainBatch.begin();
+        set.mainBatch.draw(messages.timeoutMessage,
+                (set.screenWidth - messages.timeoutMessage.getWidth())/2,
+                (set.screenHeight - messages.timeoutMessage.getHeight())/2);
+        set.mainBatch.end();
     }
 
     protected void renderPlayMode_ScoreCount() {
         renderStandardComponents();
 
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        mainBatch.begin();
-        score.renderFinalCount(mainBatch, mainFont);
-        mainBatch.end();
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+        set.mainBatch.begin();
+        score.renderFinalCount(set.mainBatch, set.mainFont);
+        set.mainBatch.end();
 
-        if (waitingTime == 0 && mainInputTranslator.isTouchDown()) {
+        if (variables.waitingTime == 0 && set.mainInputTranslator.isTouchDown()) {
             menuReset();
         } else {
-            mainInputTranslator.clear();
-            if (waitingTime > 0) {
-                waitingTime--;
-            }
+            set.mainInputTranslator.clear();
+            if (variables.waitingTime > 0) variables.waitingTime--;
         }
     }
 
     protected void renderPlayMode_Menu() {
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
-        gameMenu.check(mainInputTranslator, fixedCamera);
-        mainBatch.begin();
-        gameMenu.paint(mainBatch);
-        mainBatch.end();
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+        gameMenu.check(set.mainInputTranslator, set.fixedCamera);
+        set.mainBatch.begin();
+        gameMenu.paint(set.mainBatch);
+        set.mainBatch.end();
     }
 
     private boolean isAllFoesOutOfVisibleScope() {
@@ -358,7 +277,7 @@ public class LevelScreen implements Screen {
         Horde globalHorde = getGlobalHorde();
         for (int i = 0; i < globalHorde.size(); i++){
             Foe foe = globalHorde.getFoe(i);
-            if (mainCamera.isOnCamera(foe) && !foe.isDying() && hero.isFoeOnScope(foe)) {
+            if (set.mainCamera.isOnCamera(foe) && !foe.isDying() && hero.isFoeOnScope(foe)) {
                 allFoesOutOfVisibleScope = false;
                 break;
             }
@@ -367,26 +286,26 @@ public class LevelScreen implements Screen {
     }
 
     public void menuResume() {
-        playModeOld = EPlayMode.GAME_PLAY;
+        playMode = EPlayMode.GAME_PLAY;
     }
 
     public void menuMainMenu() {
-        dashGame.setScreen(new MainMenuScreen(dashGame));
+        set.dashGame.setScreen(new MainMenuScreen(set.dashGame));
     }
 
     public void menuReset() {
         GlobalAudio.stopMusic();
-        dashGame.setScreen(new LobbyScreen(dashGame));
+        set.dashGame.setScreen(new LobbyScreen(set.dashGame));
     }
 
     private void decideToChaseHeroWithCamera() {
-        if (skipCameraAssistant || bulletTime == 0 || comboCameraChasing) {
+        if (skipCameraAssistant || variables.bulletTime == 0 || variables.comboCameraChasing) {
             chaseHeroWithCamera();
         } else { // We can't still decide not to chase, we must check if there aren't foes on hero's visible scope
             if (isAllFoesOutOfVisibleScope()) {
-                comboCameraChasing = true;
+                variables.comboCameraChasing = true;
                 chaseHeroWithCamera();
-                if (comboCameraChasing) { // Can be modified in the method above
+                if (variables.comboCameraChasing) { // Can be modified in the method above
                     activateBulletTime();
                 }
             }
@@ -402,43 +321,43 @@ public class LevelScreen implements Screen {
     }
 
     public LevelMap getMap() {
-        return map;
+        return basics.map;
     }
 
     public HordeGroup getHordeGroup() {
-        return hordeGroup;
+        return enemy.hordeGroup;
     }
 
     public Horde getGlobalHorde() {
-        return hordeGroup.getGlobalHorde();
+        return enemy.hordeGroup.getGlobalHorde();
     }
 
     private void moveCameraTo(float posX, float posY, float speed) {
         posX = limitCameraTargetX(posX);
         posY = limitCameraTargetY(posY);
 
-        if (posX != mainCamera.position.x || posY != mainCamera.position.y) {
+        if (posX != set.mainCamera.position.x || posY != set.mainCamera.position.y) {
             Vector3 vTarget = new Vector3(posX, posY, 0);
-            if (speed == 0 || Math.abs(vTarget.dst(mainCamera.position)) <= speed) {
-                mainCamera.position.set(vTarget);
-                comboCameraChasing = false;
+            if (speed == 0 || Math.abs(vTarget.dst(set.mainCamera.position)) <= speed) {
+                set.mainCamera.position.set(vTarget);
+                variables.comboCameraChasing = false;
             } else {
-                Vector3 vJump = vTarget.sub(mainCamera.position).nor().scl(speed);
+                Vector3 vJump = vTarget.sub(set.mainCamera.position).nor().scl(speed);
                 // Slow movement needs to be rounded to avoid seeing tile map flickering
                 if (speed < Time.MEDIUM_CAMERA_SPEED) {
-                    mainCamera.translate(Math.round(vJump.x), Math.round(vJump.y));
+                    set.mainCamera.translate(Math.round(vJump.x), Math.round(vJump.y));
                 } else {
-                    mainCamera.translate(vJump.x, vJump.y);
+                    set.mainCamera.translate(vJump.x, vJump.y);
                 }
             }
         } else {
-            comboCameraChasing = false;
+            variables.comboCameraChasing = false;
         }
     }
 
     public void processFoeDamageResult(Foe foe, FoeDamageResult foeDamageResult) {
         score.sumFoeScore(foeDamageResult.getScore());
-        lastDeadFoe = foe;
+        enemy.lastDeadFoe = foe;
     }
 
     public void processHordeDamageResult(HordeDamageResult hordeDamageResult) {
@@ -446,36 +365,35 @@ public class LevelScreen implements Screen {
     }
 
     private float limitCameraTargetX(float x) {
-        final float minX = screenWidth/2;
-        final float maxX = map.getMapPixelWidth() - screenWidth/2;
+        final float minX = set.screenWidth/2;
+        final float maxX = basics.map.getMapPixelWidth() - set.screenWidth/2;
         return Math.round(Tools.limitFloat(x, minX, maxX));
     }
 
     private float limitCameraTargetY(float y) {
-        final float minY = screenHeight/2;
-        final float maxY = map.getMapPixelHeight() - screenHeight/2;
+        final float minY = set.screenHeight/2;
+        final float maxY = basics.map.getMapPixelHeight() - set.screenHeight/2;
         return Math.round(Tools.limitFloat(y, minY, maxY));
     }
 
     private void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        //Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     public void setAgentMessage(Agent agent, int duration) {
-        agentMessage = agent;
-        agentMessage.setCenter(screenWidth / 2, screenHeight / 2);
-        agentMessageDuration = duration;
+        messages.agentMessage = agent;
+        messages.agentMessage.setCenter(set.screenWidth / 2, set.screenHeight / 2);
+        messages.agentMessageDuration = duration;
     }
 
     private void renderAnimatedMessage() {
-        if (agentMessage != null && agentMessageDuration > 0) {
-            agentMessageDuration--;
-            mainBatch.setProjectionMatrix(fixedCamera.combined);
-            mainBatch.begin();
-            agentMessage.draw(mainBatch);
-            mainBatch.end();
+        if (messages.agentMessage != null && messages.agentMessageDuration > 0) {
+            messages.agentMessageDuration--;
+            set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
+            set.mainBatch.begin();
+            messages.agentMessage.draw(set.mainBatch);
+            set.mainBatch.end();
         }
     }
 
@@ -483,78 +401,52 @@ public class LevelScreen implements Screen {
     }
 
     private void renderMap() {
-        map.paint(mainCamera);
+        basics.map.paint(set.mainCamera);
     }
 
     private void renderHub() {
-        mainBatch.setProjectionMatrix(fixedCamera.combined);
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
 
-        score.renderActionScore(mainBatch, mainFont);
+        score.renderActionScore(set.mainBatch, set.mainFont);
 
-        mainFont.draw(mainBatch, timeString, screenWidth/2, screenHeight - 10);
+        set.mainFont.draw(set.mainBatch, variables.timeString, set.screenWidth/2, set.screenHeight - 10);
 
         int life = hero.getLife();
         float lifeWidth = lifePointImage.getWidth() + 1;
         for (int i = 1; i <= life; i++) {
-            lifePointImage.setPosition(350 + (i*lifeWidth), screenHeight - 20);
-            lifePointImage.draw(mainBatch);
+            lifePointImage.setPosition(350 + (i*lifeWidth), set.screenHeight - 20);
+            lifePointImage.draw(set.mainBatch);
         }
 
-        mainFont.draw(mainBatch, currentHordeCountString, 450, screenHeight - 10);
+        set.mainFont.draw(set.mainBatch, enemy.currentHordeCountString, 450, set.screenHeight - 10);
     }
 
     private void renderSprites() {
+        agentRegistry.render(Time.FRAME, set.mainBatch);
 
-        agentRegistry.render(Time.FRAME, mainBatch);
-
-        //renderSprites_Cover();
-
-        int removedHordes = hordeGroup.removeKilledHordes();
+        int removedHordes = enemy.hordeGroup.removeKilledHordes();
         if (removedHordes > 0) {
-            currentHordeCount -= removedHordes;
-            currentHordeCountString = String.valueOf(currentHordeCount);
+            enemy.currentHordeCount -= removedHordes;
+            enemy.currentHordeCountString = String.valueOf(enemy.currentHordeCount);
         }
 
         score.updateScore();
     }
 
-    private void renderSprites_Cover() {
-        if (hero.isCoverLeft()) {
-            mainBatch.draw(grayScreenTexture,
-                    hero.getX() - grayScreenTexture.getWidth(),
-                    mainCamera.position.y - grayScreenTexture.getHeight()/2);
-        }
-        if (hero.isCoverUp()) {
-            mainBatch.draw(grayScreenTexture,
-                    mainCamera.position.x - grayScreenTexture.getWidth()/2,
-                    hero.getY() + hero.getHeight());
-        }
-        if (hero.isCoverRight()) {
-            mainBatch.draw(grayScreenTexture,
-                    hero.getX() + hero.getWidth(),
-                    mainCamera.position.y - grayScreenTexture.getHeight()/2);
-        }
-        if (hero.isCoverDown()) {
-            mainBatch.draw(grayScreenTexture,
-                    mainCamera.position.x - grayScreenTexture.getWidth()/2,
-                    hero.getY() - grayScreenTexture.getHeight());
-        }
-    }
-
     private void renderFoeRadar() {
-        Horde globalHorde = hordeGroup.getGlobalHorde();
+        Horde globalHorde = enemy.hordeGroup.getGlobalHorde();
         boolean thereIsFoeOnCamera = false;
         for (int i = 0; i < globalHorde.size(); i++){
             Foe foe = globalHorde.getFoe(i);
-            if (mainCamera.isOnCamera(foe) && !foe.isDying()) {
+            if (set.mainCamera.isOnCamera(foe) && !foe.isDying()) {
                 thereIsFoeOnCamera = true;
                 break;
             }
         }
 
         if (!thereIsFoeOnCamera) {
-            for (int i = 0; i < hordeGroup.size(); i++){
-                Horde horde = hordeGroup.getHorde(i);
+            for (int i = 0; i < enemy.hordeGroup.size(); i++){
+                Horde horde = enemy.hordeGroup.getHorde(i);
                 if (!horde.isKilled()) {
                     radar.updateStateTime();
                     renderFoeRadar_indicator(horde.getReferencePosition());
@@ -565,112 +457,109 @@ public class LevelScreen implements Screen {
 
 
     private void renderFoeRadar_indicator(Vector2 referencePos) {
-        DirectionSelector directionSelector = mainCamera.getOutDirection(referencePos.x, referencePos.y);
+        DirectionSelector directionSelector = set.mainCamera.getOutDirection(referencePos.x, referencePos.y);
         TextureRegion textureRegion = radar.getCurrentKeyFrame();
         float spriteLeft, spriteBottom;
 
         if (directionSelector.isUp()) {
-            spriteBottom = mainCamera.getUp() - textureRegion.getRegionHeight();
-            if (directionSelector.isLeft()) {
-                spriteLeft = mainCamera.getLeft();
-            } else if (directionSelector.isRight()) {
-                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
-            } else {
-                spriteLeft = referencePos.x - textureRegion.getRegionWidth()/2f;
-                if (spriteLeft < mainCamera.getLeft()) {
-                    spriteLeft = mainCamera.getLeft();
-                } else if ((spriteLeft+textureRegion.getRegionWidth()) > mainCamera.getRight()) {
-                    spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
-                }
-            }
+            spriteBottom = set.mainCamera.getUp() - textureRegion.getRegionHeight();
+            spriteLeft = renderFoeRadar_indicator_spriteLeft(directionSelector, textureRegion, referencePos);
         } else if (directionSelector.isDown()) {
-            spriteBottom = mainCamera.getDown();
-            if (directionSelector.isLeft()) {
-                spriteLeft = mainCamera.getLeft();
-            } else if (directionSelector.isRight()) {
-                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
-            } else {
-                spriteLeft = referencePos.x - textureRegion.getRegionWidth() / 2f;
-                if (spriteLeft < mainCamera.getLeft()) {
-                    spriteLeft = mainCamera.getLeft();
-                } else if ((spriteLeft+textureRegion.getRegionWidth()) > mainCamera.getRight()) {
-                    spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
-                }
-            }
+            spriteBottom = set.mainCamera.getDown();
+            spriteLeft = renderFoeRadar_indicator_spriteLeft(directionSelector, textureRegion, referencePos);
         } else {
             if (directionSelector.isLeft()) {
-                spriteLeft = mainCamera.getLeft();
                 spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
+                spriteLeft = set.mainCamera.getLeft();
             } else { // isRight()
-                spriteLeft = mainCamera.getRight() - textureRegion.getRegionWidth();
                 spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
+                spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
             }
 
-            if (spriteBottom < mainCamera.getDown()) {
-                spriteBottom = mainCamera.getDown();
-            } else if ((spriteBottom+textureRegion.getRegionHeight()) > mainCamera.getUp()) {
-                spriteBottom = mainCamera.getUp() - textureRegion.getRegionHeight();
+            if (spriteBottom < set.mainCamera.getDown()) {
+                spriteBottom = set.mainCamera.getDown();
+            } else if ((spriteBottom + textureRegion.getRegionHeight()) > set.mainCamera.getUp()) {
+                spriteBottom = set.mainCamera.getUp() - textureRegion.getRegionHeight();
             }
         }
 
-        mainBatch.draw(textureRegion, spriteLeft, spriteBottom);
+        set.mainBatch.draw(textureRegion, spriteLeft, spriteBottom);
+    }
+
+    private float renderFoeRadar_indicator_spriteLeft(DirectionSelector directionSelector,
+                                                      TextureRegion textureRegion,
+                                                      Vector2 referencePos) {
+        float spriteLeft;
+        if (directionSelector.isLeft()) {
+            spriteLeft = set.mainCamera.getLeft();
+        } else if (directionSelector.isRight()) {
+            spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
+        } else {
+            spriteLeft = referencePos.x - textureRegion.getRegionWidth()/2f;
+            if (spriteLeft < set.mainCamera.getLeft()) {
+                spriteLeft = set.mainCamera.getLeft();
+            } else if ((spriteLeft+textureRegion.getRegionWidth()) > set.mainCamera.getRight()) {
+                spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
+            }
+        }
+        return spriteLeft;
     }
 
     private void inputForHero() {
-        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
+        Vector2 touchDownPointOnCamera = set.mainInputTranslator.getTouchDownPointOnCamera(set.mainCamera);
         if (touchDownPointOnCamera != null) {
             hero.programNextPos(touchDownPointOnCamera.x, touchDownPointOnCamera.y);
         }
     }
 
     public void activateBulletTime() {
-        bulletTime = Time.BULLET_TIME;
+        variables.bulletTime = Time.BULLET_TIME;
     }
 
     public void deactivateBulletTime() {
-        bulletTime = 0;
-        comboLivingFoes.clear();
-        firstComboFoe = null;
+        variables.bulletTime = 0;
+        enemy.comboLivingFoes.clear();
+        enemy.firstComboFoe = null;
     }
 
     public boolean thereAreComboLivingFoesThatContains(Foe foe) {
-        return comboLivingFoes.size == 0 || comboLivingFoes.contains(foe, true);
+        return enemy.comboLivingFoes.size == 0 || enemy.comboLivingFoes.contains(foe, true);
     }
 
     public void removeComboLivingFoe(Foe foe) {
-        comboLivingFoes.removeValue(foe, true);
+        enemy.comboLivingFoes.removeValue(foe, true);
     }
 
     public void addComboFoe(Foe foe) {
         if (!foe.isDying()) {
-            comboLivingFoes.add(foe);
+            enemy.comboLivingFoes.add(foe);
         }
 
-        if (firstComboFoe == null) {
-            firstComboFoe = foe;
+        if (enemy.firstComboFoe == null) {
+            enemy.firstComboFoe = foe;
         }
     }
 
     public void restoreNotAttackedFoesAccordingToComboLivingFoes(Array<Foe> attackedFoes) {
-        for (int i = 0; i < comboLivingFoes.size; i++) {
-            Foe comboLivingFoe = comboLivingFoes.get(i);
+        for (int i = 0; i < enemy.comboLivingFoes.size; i++) {
+            Foe comboLivingFoe = enemy.comboLivingFoes.get(i);
             if (!attackedFoes.contains(comboLivingFoe, true)) {
                 comboLivingFoe.recoverLife();
-                if (firstComboFoe == comboLivingFoe) {
-                    firstComboFoe = null;
+                if (enemy.firstComboFoe == comboLivingFoe) {
+                    enemy.firstComboFoe = null;
                 }
-                comboLivingFoes.removeValue(comboLivingFoe, true);
+                enemy.comboLivingFoes.removeValue(comboLivingFoe, true);
                 i--;
             }
         }
     }
 
     public boolean isFirstComboFoe(Foe foe) {
-        return firstComboFoe == foe;
+        return enemy.firstComboFoe == foe;
     }
 
     public boolean isBulletTime() {
-        return bulletTime > 0;
+        return variables.bulletTime > 0;
     }
 
     public void register(Agent agent, EAgentLayer layer) {
@@ -678,13 +567,12 @@ public class LevelScreen implements Screen {
     }
 
     public void addTime(float extraTime) {
-        time += extraTime;
-        timeString = String.valueOf(((int)(time*10))/10f);
+        variables.time += extraTime;
+        variables.timeString = String.valueOf(((int)(variables.time*10))/10f);
     }
 
     private void renderDebugger() {
-
-        mainShape.setProjectionMatrix(mainCamera.combined);
+        set.mainShape.setProjectionMatrix(set.mainCamera.combined);
         Horde globalHorde = getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {
             Foe foe = globalHorde.getFoe(i);
@@ -704,18 +592,18 @@ public class LevelScreen implements Screen {
                 hidden = true;
             }
 
-            if (!hidden && mainCamera.isOnCamera(foe)) {
-                mainShape.begin(ShapeRenderer.ShapeType.Line);
-                mainShape.line(foePosition.x, foePosition.y,
+            if (!hidden && set.mainCamera.isOnCamera(foe)) {
+                set.mainShape.begin(ShapeRenderer.ShapeType.Line);
+                set.mainShape.line(foePosition.x, foePosition.y,
                         hero.getX() + hero.getWidth() / 2, hero.getY() + hero.getHeight() / 2);
-                mainShape.end();
+                set.mainShape.end();
             }
         }
     }
 
     @Override
     public void show() {
-        badassMusic.play();
+        GlobalAudio.playOnly(audio.badassMusic);
     }
 
     @Override
@@ -735,8 +623,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void dispose() {
-        map.dispose();
+        basics.map.dispose();
     }
-
-
 }

@@ -15,7 +15,6 @@ public class Score {
     private static final int MAX_SCORE_COUNT_PHASE = 7;
     private static final int CHAIN_SCORE_DURATION = 90;
     private static final int SCORE_COUNT_PHASE_DURATION = 90;
-
     private static final int MAX_CHAIN_SCORE_FACTOR = 500;
     private static final int LIFE_SCORE_FACTOR = 200;
     private static final int TIME_SCORE_FACTOR = 250;
