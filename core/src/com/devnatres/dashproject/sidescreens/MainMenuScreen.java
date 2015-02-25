@@ -18,6 +18,8 @@ import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * Represents a game screen for the main menu. <br>
+ *     <br>
  * Created by DevNatres on 30/11/2014.
  */
 public class MainMenuScreen implements Screen, IButtonExecutable {

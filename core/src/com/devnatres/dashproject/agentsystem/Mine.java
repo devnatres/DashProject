@@ -4,7 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.gameconstants.EAnimation;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**

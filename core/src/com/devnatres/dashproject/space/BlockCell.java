@@ -1,6 +1,10 @@
 package com.devnatres.dashproject.space;
 
 /**
+ * Represents a block cell of a map. <br>
+ * A block cell has a height (EBlockHeight) and a DirectionSelect object for different purposes.
+ * For example, the DirectionSelect object can be used to indicate the free adjacent cells of the block.
+ *     <br>
  * Created by DevNatres on 09/01/2015.
  */
 public class BlockCell {

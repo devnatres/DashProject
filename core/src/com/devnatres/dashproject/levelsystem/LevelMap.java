@@ -24,6 +24,7 @@ import com.devnatres.dashproject.dnagdx.DnaOrthogonalTiledMapRenderer;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.RegisterHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.BlockCell;
 import com.devnatres.dashproject.space.BlockLayerWithHeight;

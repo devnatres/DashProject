@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Auxiliary class to optimize basic volume calculations.<br>
+ * Auxiliary class to optimize rectangular volume calculations.<br>
  * <br>
  * Created by DevNatres on 21/02/2015.
  */

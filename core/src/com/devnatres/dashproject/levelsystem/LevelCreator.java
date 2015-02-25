@@ -2,6 +2,7 @@ package com.devnatres.dashproject.levelsystem;
 
 import com.badlogic.gdx.Screen;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 
 /**
  * Helper class to create a new game level. <br>

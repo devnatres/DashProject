@@ -8,6 +8,8 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
+ * This enum is a builder for prefabricated tutorials. <br>
+ *     <br>
  * Created by DevNatres on 17/02/2015.
  */
 public enum ETutorial {

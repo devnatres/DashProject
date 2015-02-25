@@ -1,6 +1,6 @@
 package com.devnatres.dashproject.levelscriptcmd;
 
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 
 /**
  * Root class for level-script commands <br>

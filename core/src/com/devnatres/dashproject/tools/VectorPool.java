@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 
 /**
- * Pool.
+ * Specific pool for vectors.
  */
 public final class VectorPool {
     public static final int MAX_VECTORS = 10;

@@ -8,6 +8,9 @@ import com.devnatres.dashproject.gameconstants.Time;
 import java.util.ArrayList;
 
 /**
+ * Represents an animated figure for tutorials. <br>
+ * It is composed with agents.
+ *     <br>
  * Created by DevNatres on 17/02/2015.
  */
 public class Figure {

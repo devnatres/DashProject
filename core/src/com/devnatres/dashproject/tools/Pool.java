@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 /**
- * Pool.
+ * Pool for any class objects.
  */
 public final class Pool<T> {
     public interface Generable<T> {

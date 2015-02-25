@@ -23,6 +23,9 @@ import com.devnatres.dashproject.tutorial.ETutorial;
 import com.devnatres.dashproject.tutorial.TutorialScreen;
 
 /**
+ * Represents a game screen for the "lobby room",
+ * where the player selects the level to play and can see other information. <br>
+ *     <br>
  * Created by DevNatres on 14/01/2015.
  */
 public class LobbyScreen implements Screen, IButtonExecutable {
@@ -64,6 +67,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         background = lobbyHyperStore.getTexture("lobby_background.png");
 
         gameState = dashGame.getGameState();
+        updateCurrentLevel();
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
@@ -125,10 +129,6 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
-
-        // TODO Update currentLevelId and eTutorial only when level is changed
-        currentLevelId = gameState.getCurrentLevelId();
-        eTutorial = currentLevelId.getETutorial();
 
         Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         goButton.act(Time.FRAME, touchDownPointOnCamera);
@@ -252,15 +252,24 @@ public class LobbyScreen implements Screen, IButtonExecutable {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         } else if (button == up2Button) {
             gameState.displaceCurrentLevel(2);
+            updateCurrentLevel();
         } else if (button == upButton) {
             gameState.displaceCurrentLevel(1);
+            updateCurrentLevel();
         } else if (button == downButton) {
             gameState.displaceCurrentLevel(-1);
+            updateCurrentLevel();
         } else if (button == down2Button) {
             gameState.displaceCurrentLevel(-2);
+            updateCurrentLevel();
         } else if (button == tutorialButton) {
             dashGame.setScreen(new TutorialScreen(dashGame, eTutorial, null));
             gameState.setTutorialVisited(currentLevelId);
         }
+    }
+
+    private void updateCurrentLevel() {
+        currentLevelId = gameState.getCurrentLevelId();
+        eTutorial = currentLevelId.getETutorial();
     }
 }

@@ -10,6 +10,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * Represents a store for media objects. <br>
+ * It works as a flyweight pattern.
+ * If the requested object hasn't been loaded, it is loaded and returned.
+ * It the requested object has been loaded before, it is just returned.
+ *     <br>
  * Created by DevNatres on 05/12/2014.
  */
 public class Store<T extends Disposable> implements Disposable {

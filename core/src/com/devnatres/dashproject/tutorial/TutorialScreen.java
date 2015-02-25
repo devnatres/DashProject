@@ -12,6 +12,10 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 
 /**
+ * Represents a screen to render a Tutorial object. <br>
+ * When the tutorial is finished,
+ * if a levelId has been specified then the corresponding level will be created. <br>
+ *     <br>
  * Created by DevNatres on 17/02/2015.
  */
 public class TutorialScreen implements Screen {

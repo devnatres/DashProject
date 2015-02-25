@@ -15,6 +15,9 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.tools.VectorPool;
 
+/**
+ * The game's main loop (specifically, the render() method).
+ */
 public class DashGame extends Game {
     public static final String TITLE = "Dash Project";
     public static final int INITIAL_SCREEN_WIDTH = 480;

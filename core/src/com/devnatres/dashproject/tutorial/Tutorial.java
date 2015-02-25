@@ -10,6 +10,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import java.util.ArrayList;
 
 /**
+ * Represents a tutorial
  * Created by DevNatres on 17/02/2015.
  */
 public class Tutorial implements Disposable {

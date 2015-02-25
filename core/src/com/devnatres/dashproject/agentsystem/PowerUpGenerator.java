@@ -2,7 +2,7 @@ package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.levelsystem.LevelMap;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.CoordinateInt;
 import com.devnatres.dashproject.tools.Tools;

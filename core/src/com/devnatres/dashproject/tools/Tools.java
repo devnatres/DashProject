@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import java.util.Random;
 
 /**
+ * Helper class for a different functions. <br>
+ *     <br>
  * Created by DevNatres on 03/12/2014.
  */
 final public class Tools {

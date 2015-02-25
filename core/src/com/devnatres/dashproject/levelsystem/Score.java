@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * Represents the current score. <br>
+ *     <br>
  * Created by DevNatres on 10/01/2015.
  */
 public class Score {
@@ -98,6 +101,7 @@ public class Score {
         if (scoreCountPhaseDuration > 0) {
             scoreCountPhaseDuration--;
         }
+
         if (scoreCountPhaseDuration == 0 && scoreCountPhase <= MAX_SCORE_COUNT_PHASE) {
             scoreCountPhase++;
             scoreCountPhaseDuration = SCORE_COUNT_PHASE_DURATION;

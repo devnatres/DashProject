@@ -4,7 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 

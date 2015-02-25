@@ -11,6 +11,8 @@ import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * Represents a game screen for credits. <br>
+ *     <br>
  * Created by DevNatres on 20/01/2015.
  */
 public class CreditScreen implements Screen {
@@ -33,7 +35,6 @@ public class CreditScreen implements Screen {
         background = creditHyperStore.getTexture("credits.png");
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
-
     }
 
     @Override

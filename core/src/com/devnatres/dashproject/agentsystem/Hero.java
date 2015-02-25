@@ -13,7 +13,7 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.tools.VectorPool;

@@ -19,6 +19,8 @@ import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
+ * Represents a game screen for the option menu. <br>
+ *     <br>
  * Created by DevNatres on 20/01/2015.
  */
 public class OptionScreen implements Screen, IButtonExecutable {

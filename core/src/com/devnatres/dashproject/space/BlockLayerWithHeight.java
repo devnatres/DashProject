@@ -5,6 +5,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import static com.devnatres.dashproject.space.BlockCell.*;
 
 /**
+ * Represents a pair (block layer, block height). <br>
+ *     <br>
  * Created by DevNatres on 09/01/2015.
  */
 public class BlockLayerWithHeight {

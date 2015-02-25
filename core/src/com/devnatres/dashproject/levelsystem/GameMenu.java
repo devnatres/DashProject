@@ -11,6 +11,7 @@ import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**

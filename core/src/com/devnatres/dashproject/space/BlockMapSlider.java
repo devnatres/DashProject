@@ -8,6 +8,10 @@ import com.devnatres.dashproject.gameconstants.EDirection;
 import static com.devnatres.dashproject.space.BlockCell.*;
 
 /**
+ * Represents a "slider" map. <br>
+ * This abstract map moves (slides) a rectangle that represents a volume to a nearby free position. <br>
+ * It has other helper functions too.<br>
+ * <br>
  * Created by DevNatres on 07/12/2014.
  */
 public class BlockMapSlider {
@@ -339,5 +343,4 @@ public class BlockMapSlider {
         }
         return blockMap[column][row];
     }
-
 }

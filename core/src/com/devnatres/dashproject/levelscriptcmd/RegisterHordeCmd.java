@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.levelscriptcmd;
 
 import com.devnatres.dashproject.agentsystem.Horde;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 
 /**
  * Represents a command that register a horde in the specified levelScreen. <br>

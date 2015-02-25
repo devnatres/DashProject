@@ -2,7 +2,7 @@ package com.devnatres.dashproject.agentsystem;
 
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.gameconstants.EAnimation;
-import com.devnatres.dashproject.levelsystem.LevelScreen;
+import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**

@@ -1,6 +1,9 @@
 package com.devnatres.dashproject.space;
 
 /**
+ * Represents four flags for each direction (left, up, right, down). <br>
+ * It can be used for multiple purposes. <br>
+ *     <br>
  * Created by DevNatres on 07/12/2014.
  */
 public class DirectionSelector {
