@@ -108,5 +108,20 @@ final public class Tools {
         return moveToAction;
     }
 
+    /**
+     * @param base
+     * @param nonNegativeExponent must be > 0
+     * @return base ^ nonNegativeExponent
+     */
+    public static int integerPow(int base, int nonNegativeExponent) {
+        if (nonNegativeExponent == 0) return 1;
+
+        int pow = base;
+        for (int i = 2; i <= nonNegativeExponent; i++) {
+            pow *= base;
+        }
+        return pow;
+    }
+
     private Tools() {}
 }
