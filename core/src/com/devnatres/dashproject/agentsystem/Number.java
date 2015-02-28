@@ -7,6 +7,8 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
+ * Represents a number that draws itself with a bitmap atlas. <br>
+ *     <br>
  * Created by DevNatres on 26/02/2015.
  */
 public class Number extends Agent {
@@ -15,7 +17,7 @@ public class Number extends Agent {
         DECIMAL1
     }
 
-    private static final int PRECISION = 10;
+    private static final int PRECISION = 9;
     private static final int INCREMENT_DURATION = 45;
 
     private float increment;
@@ -38,27 +40,24 @@ public class Number extends Agent {
         super(animation);
         this.numberType = (numberType == null) ? ENumberType.INTEGER : numberType;
 
-        if (this.numberType == ENumberType.DECIMAL1) {
-            maxIntegerDigits = PRECISION - 1;
-            maxValue = Tools.integerPow(10, maxIntegerDigits) - 1f + 0.9f;
-        } else {
-            maxIntegerDigits = PRECISION;
-            maxValue = Tools.integerPow(10, maxIntegerDigits) - 1f;
-        }
-
         Texture numberTexture = getAnimation().getCurrentKeyFrame().getTexture();
         digitWidth = (int)(numberTexture.getWidth() / 10.5f);
         digitHeight = numberTexture.getHeight() / getAnimation().getKeyFrames().length;
         decimalSeparatorWidth = digitWidth / 2;
         decimalImageX = digitWidth * 10;
 
-        for (int i = 0; i < PRECISION; i++) {
-            regions[i] = new TextureRegion(numberTexture);
-        }
-
         if (this.numberType == ENumberType.DECIMAL1) {
+            maxIntegerDigits = PRECISION - 1;
+            maxValue = Tools.integerPow(10, maxIntegerDigits) - 1f + 0.9f;
             decimalSeparatorRegion = new TextureRegion(numberTexture);
             decimalSeparatorRegion.setRegion(10 * digitWidth, 0, decimalSeparatorWidth, digitHeight);
+        } else {
+            maxIntegerDigits = PRECISION;
+            maxValue = Tools.integerPow(10, maxIntegerDigits) - 1f;
+        }
+
+        for (int i = 0; i < PRECISION; i++) {
+            regions[i] = new TextureRegion(numberTexture);
         }
     }
 
