@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
+import com.devnatres.dashproject.agentsystem.Number;
+import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -46,7 +48,7 @@ public class Score {
     private String fullChainScoreString;
     private String totalScoreString;
 
-    private int actionScore;
+    //private int actionScore;
     private int timeScore;
     private int lifeScore;
     private int chainScore;
@@ -55,28 +57,33 @@ public class Score {
 
     private boolean isFinalCountCalculated;
 
-    public Score(HyperStore hyperStore, LevelScreen levelScreen) {
+    private final Number actionScoreNumber;
+
+    public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
         youWinMessage = hyperStore.getTexture("message_youwin.png");
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         this.hero = levelScreen.getHero();
         this.hordeGroup = levelScreen.getHordeGroup();
+
+        actionScoreNumber = new Number(EAnimation.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
+        actionScoreNumber.setPosition(100, 700);
     }
 
     public void updateScore() {
-        if (lastActionScore != actionScore) {
-            lastActionScore = actionScore;
-            actionScoreHubString = String.valueOf(actionScore);
+        if (lastActionScore != actionScoreNumber.getIntValue()) {
+            lastActionScore = actionScoreNumber.getIntValue();
+            actionScoreHubString = String.valueOf(actionScoreNumber.getIntValue());
         }
     }
 
     public void sumFoeScore(int foeScore) {
-        actionScore += foeScore;
+        actionScoreNumber.sumValue(foeScore);
     }
 
     public void sumChainScore(int chainScore) {
-        actionScore += chainScore;
+        actionScoreNumber.sumValue(chainScore);
         chainScoreString = String.valueOf(chainScore);
         chainScoreDuration = CHAIN_SCORE_DURATION;
     }
@@ -87,6 +94,8 @@ public class Score {
             font.draw(preparedBatch, chainScoreString, screenWidth/2, screenHeight - 100);
             chainScoreDuration--;
         }
+
+        actionScoreNumber.draw(preparedBatch);
     }
 
     public void renderFinalCount(Batch preparedBatch, BitmapFont font) {
@@ -133,8 +142,8 @@ public class Score {
     }
 
     public void calculateFinalCount() {
-        actionScoreString = String.valueOf("Action: " + actionScore);
-        totalScore = actionScore;
+        actionScoreString = String.valueOf("Action: " + actionScoreNumber.getIntValue());
+        totalScore = actionScoreNumber.getIntValue();
 
         final float time = ((int)(levelScreen.getTime()*10))/10f;
         timeScore = (int)(time * TIME_SCORE_FACTOR);
@@ -178,7 +187,7 @@ public class Score {
     }
 
     public int getActionScore() {
-        return actionScore;
+        return actionScoreNumber.getIntValue();
     }
 
     public int getTimeScore() {

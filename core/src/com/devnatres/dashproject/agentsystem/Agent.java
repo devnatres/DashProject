@@ -143,4 +143,5 @@ public class Agent extends Actor {
     public Rectangle getVolumeRectangle() {
         return volume.getRectangle();
     }
+
 }

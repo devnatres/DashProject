@@ -45,4 +45,8 @@ public class DnaAnimation extends Animation {
     public TextureRegion getCurrentKeyFrame() {
         return getKeyFrame(currentStateTime);
     }
+
+    public int getCurrentKeyFrameIndex() {
+        return getKeyFrameIndex(currentStateTime);
+    }
 }

@@ -8,7 +8,7 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
  * Created by DevNatres on 14/02/2015.
  */
 public class TransientUpAgent extends TransientAgent {
-    private static final float SPEED = .5f;
+    private static final float SPEED = .75f;
 
     public TransientUpAgent(DnaAnimation animation) {
         super(animation);

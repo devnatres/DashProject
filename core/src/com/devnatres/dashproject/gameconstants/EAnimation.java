@@ -131,6 +131,18 @@ public enum EAnimation {
         }
     },
 
+    TIME_HALO {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "time_halo.png", 3, 1, 10, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
+    NUMBERS_GOLD {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "numbers/numbers_gold.png", 1, 2, 10, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
     BUTTON_PLAY_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_play_standby.png");

@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.*;
+import com.devnatres.dashproject.agentsystem.Number;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
@@ -19,7 +20,10 @@ import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
-import com.devnatres.dashproject.levelsystem.*;
+import com.devnatres.dashproject.levelsystem.GameMenu;
+import com.devnatres.dashproject.levelsystem.LevelId;
+import com.devnatres.dashproject.levelsystem.LevelMap;
+import com.devnatres.dashproject.levelsystem.Score;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -69,13 +73,13 @@ public class LevelScreen implements Screen {
         enemy = new LevelScreenEnemy(this, set, level);
         audio = new LevelScreenAudio(set);
         messages = new LevelScreenMessages(set);
-        variables = new LevelScreenVariables();
+        variables = new LevelScreenVariables(set.hyperStore);
 
         radar = EAnimation.RADAR_INDICATOR.create(set.hyperStore);
         lifePointImage = new Sprite(set.hyperStore.getTexture("heal_point.png"));
 
         gameMenu = new GameMenu(this, set.hyperStore, gameState);
-        score = new Score(set.hyperStore, this);
+        score = new Score(this, set.hyperStore);
 
         prepareGame();
 
@@ -382,6 +386,14 @@ public class LevelScreen implements Screen {
         score.renderActionScore(set.mainBatch, set.mainFont);
 
         set.mainFont.draw(set.mainBatch, variables.getTimeString(), set.screenWidth/2, set.screenHeight - 10);
+
+        Number timeNumber = variables.getTimeNumber();
+        if (timeNumber.getValue() < 2.5) {
+            Agent timeHalo = variables.getTimeHalo();
+            timeHalo.act(Time.FRAME);
+            timeHalo.draw(set.mainBatch);
+        }
+        timeNumber.draw(set.mainBatch);
 
         int life = hero.getLife();
         float lifeWidth = lifePointImage.getWidth() + 1;
