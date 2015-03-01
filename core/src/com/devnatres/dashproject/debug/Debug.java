@@ -88,10 +88,10 @@ abstract public class Debug {
         DebugFPS.update();
 
         batch.begin();
-        font.draw(batch,"FPS: " + DebugFPS.lastFrameCount
-                + "   AVG(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.lastAvgFps
-                + "   MIN(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.minFps
-                + "   MAX(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.maxFps
+        font.draw(batch,"FPS: " + DebugFPS.measuredFPS
+                + "   AVG(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.avgFps
+                + "   MIN(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.minFps
+                + "   MAX(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.maxFps
                 , 10, 15);
         batch.end();
     }
