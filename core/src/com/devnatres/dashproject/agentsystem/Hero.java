@@ -103,12 +103,14 @@ public class Hero extends Agent {
         centerAccessories();
 
         map = levelScreen.getMap();
+        map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
     }
 
     @Override
     public void positionChanged() {
         super.positionChanged();
         if (dashHalo != null) centerAccessories();
+        map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
     }
 
     private void centerAccessories() {
@@ -148,7 +150,6 @@ public class Hero extends Agent {
 
             nextVolumeRect.setPosition(limitPositionX(nextVolumeRect.x), limitPositionY(nextVolumeRect.y));
             setCenter(nextVolumeRect.x + nextVolumeRect.width / 2, nextVolumeRect.y + nextVolumeRect.height / 2);
-            map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
 
             globalAudio.play(dashSound, .1f);
         } else {
