@@ -52,11 +52,11 @@ public class Tutorial implements Disposable {
 
         if (index == figures.size()-1) {
             batch.draw(tapToFinish,
-                    (DashGame.getGlobalScreenWidth()-tapToFinish.getWidth())/2,
+                    (DashGame.getInstance().getScreenWidth()-tapToFinish.getWidth())/2,
                     0);
         } else {
             batch.draw(tapToNext,
-                    (DashGame.getGlobalScreenWidth()-tapToNext.getWidth())/2,
+                    (DashGame.getInstance().getScreenWidth()-tapToNext.getWidth())/2,
                     0);
         }
 

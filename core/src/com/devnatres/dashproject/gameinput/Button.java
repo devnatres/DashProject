@@ -2,9 +2,9 @@ package com.devnatres.dashproject.gameinput;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.agentsystem.Agent;
 
 /**
  * High level entity that represent button.<br>
@@ -15,6 +15,7 @@ public class Button extends Agent {
     private DnaAnimation standbyAnimation;
     private DnaAnimation pushAnimation;
     private final IButtonExecutable executable;
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private final Sound sound;
     private boolean isAutomaticSoundOn = true;
     private boolean isPushed = false;
@@ -55,7 +56,7 @@ public class Button extends Agent {
             if (touchPoint != null && getVolumeRectangle().contains(touchPoint)) {
                 isPushed = true;
                 if (isAutomaticSoundOn) {
-                    GlobalAudio.play(sound);
+                    globalAudio.play(sound);
                 }
                 if (pushAnimation != null) {
                     setAnimation(pushAnimation);
@@ -80,6 +81,6 @@ public class Button extends Agent {
     }
 
     public void playSound() {
-        GlobalAudio.play(sound);
+        globalAudio.play(sound);
     }
 }

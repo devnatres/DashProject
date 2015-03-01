@@ -18,6 +18,7 @@ public class AgentRegistry {
     }
 
     private static final int LAYER_SIZE = EAgentLayer.values().length;
+
     private final Array<Array<Agent>> layers = new Array(LAYER_SIZE);
 
     public AgentRegistry() {

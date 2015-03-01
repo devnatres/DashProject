@@ -7,7 +7,6 @@ package com.devnatres.dashproject.space;
  * Created by DevNatres on 07/12/2014.
  */
 public class DirectionSelector {
-
     private static final int LEFT = 1;
     private static final int UP = 2;
     private static final int RIGHT = 4;

@@ -28,13 +28,13 @@ public class Store<T extends Disposable> implements Disposable {
         GLOBAL_SOUND {
             @Override
             void dispose(Disposable disposable) {
-                GlobalAudio.dispose((Sound)disposable);
+                GlobalAudio.getInstance().dispose((Sound) disposable);
             }
         },
         GLOBAL_MUSIC {
             @Override
             void dispose(Disposable disposable) {
-                GlobalAudio.dispose((Music)disposable);
+                GlobalAudio.getInstance().dispose((Music)disposable);
             }
         };
         abstract void dispose(Disposable disposable);

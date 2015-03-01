@@ -18,6 +18,8 @@ public class Mine extends Agent {
     private final LevelScreen levelScreen;
     private final TransientAgent explosion;
     private final Hero hero;
+
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private final Sound explosionSound;
 
     public Mine(LevelScreen levelScreen, HyperStore hyperStore) {
@@ -38,7 +40,7 @@ public class Mine extends Agent {
             explosion.setCenter(getCenter());
             levelScreen.register(explosion, EAgentLayer.FLOOR);
 
-            GlobalAudio.play(explosionSound, .1f);
+            globalAudio.play(explosionSound, .1f);
             setVisible(false);
         }
     }

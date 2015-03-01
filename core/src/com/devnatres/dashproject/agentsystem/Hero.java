@@ -42,6 +42,7 @@ public class Hero extends Agent {
     private boolean thereIsNextPosFromInput;
     private Array<Foe> attackedFoes = new Array();
 
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private final Sound dashSound;
     private final Sound failDashSound;
     private final Sound hitSound;
@@ -149,9 +150,9 @@ public class Hero extends Agent {
             setCenter(nextVolumeRect.x + nextVolumeRect.width / 2, nextVolumeRect.y + nextVolumeRect.height / 2);
             map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
 
-            GlobalAudio.play(dashSound, .1f);
+            globalAudio.play(dashSound, .1f);
         } else {
-            GlobalAudio.play(failDashSound);
+            globalAudio.play(failDashSound);
         }
 
         VectorPool.recycle(vTarget);
@@ -233,9 +234,9 @@ public class Hero extends Agent {
                 foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
                 if (levelScreen.isBulletTime()) {
-                    GlobalAudio.play(comboSound, .1f);
+                    globalAudio.play(comboSound, .1f);
                 } else {
-                    GlobalAudio.play(hitSound, .1f);
+                    globalAudio.play(hitSound, .1f);
                 }
 
                 attackedFoes.add(foe);
@@ -269,7 +270,7 @@ public class Hero extends Agent {
     public void receiveDamage(int damage) {
         if (!dying && immunityDuration == 0) {
             damageImageDuration = DAMAGE_DURATION;
-            GlobalAudio.play(failDashSound);
+            globalAudio.play(failDashSound);
             if (life > 0) {
                 life -= damage;
                 if (life < 0) life = 0;
@@ -282,7 +283,7 @@ public class Hero extends Agent {
     }
 
     public void die() {
-        GlobalAudio.play(deadSound);
+        globalAudio.play(deadSound);
         dying = true;
         setAnimation(deadAnimation);
     }

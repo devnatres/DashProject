@@ -1,6 +1,7 @@
 package com.devnatres.dashproject.levelsystem.levelscreen;
 
 import com.badlogic.gdx.audio.Music;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 
 /**
  * Auxiliary structure for the audio objects of LevelScreen. <br>
@@ -8,8 +9,9 @@ import com.badlogic.gdx.audio.Music;
  * Created by DevNatres on 24/02/2015.
  */
 class LevelScreenAudio {
-    Music badassMusic;
-    Music endOkMusic;
+    final GlobalAudio globalAudio = GlobalAudio.getInstance();
+    final Music badassMusic;
+    final Music endOkMusic;
 
     public LevelScreenAudio(LevelScreenSet set) {
         badassMusic = set.hyperStore.getMusic("music/badass.ogg");

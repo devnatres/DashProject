@@ -10,9 +10,9 @@ import com.devnatres.dashproject.levelsystem.LevelMap;
  * Created by DevNatres on 24/02/2015.
  */
 class LevelScreenLevel {
-    LevelId levelId;
-    LevelMap map;
-    LevelScript levelScript;
+    final LevelId levelId;
+    final LevelMap map;
+    final LevelScript levelScript;
 
     public LevelScreenLevel(LevelScreenSet set, LevelId levelId) {
         this.levelId = levelId;

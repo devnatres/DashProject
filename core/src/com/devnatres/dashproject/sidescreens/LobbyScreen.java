@@ -29,7 +29,7 @@ import com.devnatres.dashproject.tutorial.TutorialScreen;
  * Created by DevNatres on 14/01/2015.
  */
 public class LobbyScreen implements Screen, IButtonExecutable {
-    private static int ARROW_BUTTON_X = 420;
+    private static final int ARROW_BUTTON_X = 420;
 
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
@@ -54,6 +54,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private LevelId currentLevelId;
     private ETutorial eTutorial;
+
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
 
     public LobbyScreen(DashGame dashGame) {
         this.dashGame = dashGame;
@@ -218,7 +220,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     @Override
     public void show() {
-        GlobalAudio.stopMusic();
+        globalAudio.stopMusic();
     }
 
     @Override

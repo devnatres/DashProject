@@ -19,6 +19,8 @@ public class HyperStore implements Disposable {
     private final Store<Sound> soundStore;
     private final Store<Music> musicStore;
 
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
+
     public Texture getTexture(String resourceFileName) {
         return textureStore.getResource(resourceFileName);
     }
@@ -48,14 +50,14 @@ public class HyperStore implements Disposable {
         soundStore = new Store<Sound>(new Store.Generable<Sound>() {
             @Override
             public Sound generate(String resourceFileName) {
-                return GlobalAudio.newSound(resourceFileName);
+                return globalAudio.newSound(resourceFileName);
             }
         });
 
         musicStore = new Store<Music>(new Store.Generable<Music>() {
             @Override
             public Music generate(String resourceFileName) {
-                return GlobalAudio.newMusic(resourceFileName);
+                return globalAudio.newMusic(resourceFileName);
             }
         });
 

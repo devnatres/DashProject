@@ -24,13 +24,15 @@ class PowerUp extends Agent {
     static final int IMMUNITY_DURATION = 300;
     static final int EXTRA_DASH_DURATION = 600;
 
-    final Hero hero;
-    final Sound captureSound;
-    final EPowerUpType type;
-    final LevelScreen levelScreen;
-    final HyperStore hyperStore;
-    final Agent messageAgent;
-    boolean flying;
+    private final Hero hero;
+    private final EPowerUpType type;
+    private final LevelScreen levelScreen;
+    private final HyperStore hyperStore;
+    private final Agent messageAgent;
+    private boolean flying;
+
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
+    private final Sound captureSound;
 
     PowerUp(LevelScreen levelScreen,
                     HyperStore hyperStore,
@@ -70,7 +72,7 @@ class PowerUp extends Agent {
                 type.activateEffect(levelScreen);
                 levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
 
-                GlobalAudio.play(captureSound, .1f);
+                globalAudio.play(captureSound, .1f);
                 setVisible(false);
             }
         }

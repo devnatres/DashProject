@@ -36,6 +36,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     private final Button creditsButton;
     private final Button exitButton;
 
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private final Music music;
 
     public MainMenuScreen(DashGame dashGame) {
@@ -108,7 +109,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     public void show() {
         if (!music.isPlaying()) {
             music.setLooping(true);
-            GlobalAudio.playOnly(music);
+            globalAudio.playOnly(music);
         }
     }
 

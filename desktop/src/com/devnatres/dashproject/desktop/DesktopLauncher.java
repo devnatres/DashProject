@@ -12,6 +12,6 @@ public class DesktopLauncher {
         config.width = DashGame.INITIAL_SCREEN_WIDTH;
         config.height = DashGame.INITIAL_SCREEN_HEIGHT;
 
-		new LwjglApplication(new DashGame(), config);
+		new LwjglApplication(DashGame.newInstance(), config);
 	}
 }

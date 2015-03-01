@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
-import com.devnatres.dashproject.gameconstants.Time;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ import java.util.ArrayList;
  *     <br>
  * Created by DevNatres on 08/12/2014.
  */
-public class Debug {
+abstract public class Debug {
     public static final boolean DEBUG = true;
     private static final boolean DEBUG_FRAMES = DEBUG && true;
     private static final boolean DEBUG_POINTS = DEBUG && false;
@@ -46,14 +45,6 @@ public class Debug {
 
     private static int count;
 
-    private static int lastFrameCount;
-    private static int currentFrameCount;
-    private static float initialFrameTime;
-    private static float currentFrameTime;
-    private static float[] lastFrameCounts = new float[5]; // Last seconds to consider for average fps.
-    private static int lastFrameCountsIndex;
-    private static float lastAvgFps;
-
     public static void begin(Camera gameCamera) {
         if (!DEBUG) return;
 
@@ -69,14 +60,16 @@ public class Debug {
         shape = new ShapeRenderer();
 
         debugCamera = new OrthographicCamera();
-        debugCamera.setToOrtho(false, DashGame.getGlobalScreenWidth(), DashGame.getGlobalScreenHeight());
+        DashGame dashGame = DashGame.getInstance();
+        debugCamera.setToOrtho(false, dashGame.getScreenWidth(), dashGame.getScreenHeight());
 
         font = new BitmapFont();
-        font.setColor(Color.RED);
+        font.setColor(Color.GREEN);
+
+        count = 0;
+        DebugFPS.start();
 
         initialized = true;
-
-        initialFrameTime = System.nanoTime();
     }
 
     public static void end() {
@@ -85,34 +78,20 @@ public class Debug {
         font.dispose();
         shape.dispose();
         batch.dispose();
+
+        initialized = false;
     }
 
     public static void drawFrames() {
         if (!DEBUG_FRAMES) return;
 
-        currentFrameCount++;
-        currentFrameTime = System.nanoTime();
-        float deltaFrameTime = (currentFrameTime - initialFrameTime) / Time.NANO_TIME;
-        if (deltaFrameTime >= 1f) {
-            initialFrameTime = currentFrameTime;
-            lastFrameCount = currentFrameCount;
-            currentFrameCount = 0;
-
-            lastFrameCounts[lastFrameCountsIndex] = lastFrameCount;
-            lastFrameCountsIndex++;
-            if (lastFrameCountsIndex == lastFrameCounts.length) lastFrameCountsIndex = 0;
-
-            lastAvgFps = 0;
-            for (int i = 0; i < lastFrameCounts.length; i++) {
-                lastAvgFps += lastFrameCounts[i];
-            }
-            lastAvgFps /= lastFrameCounts.length;
-            lastAvgFps = (int)(lastAvgFps * 10f) / 10f;
-        }
+        DebugFPS.update();
 
         batch.begin();
-        font.draw(batch,"FPS: " + lastFrameCount
-                + "   AVG(" + lastFrameCounts.length + "): " + lastAvgFps
+        font.draw(batch,"FPS: " + DebugFPS.lastFrameCount
+                + "   AVG(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.lastAvgFps
+                + "   MIN(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.minFps
+                + "   MAX(" + DebugFPS.lastFrameCounts.length + "s): " + DebugFPS.maxFps
                 , 10, 15);
         batch.end();
     }

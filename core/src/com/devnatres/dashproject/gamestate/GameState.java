@@ -66,6 +66,7 @@ public class GameState {
 
     private final Preferences preferences;
 
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private boolean isSoundActivated;
     private boolean isCameraAssistantActivated;
 
@@ -325,9 +326,9 @@ public class GameState {
 
     private void updateGlobalSound() {
         if (isSoundActivated) {
-            GlobalAudio.enableAudio();
+            globalAudio.enableAudio();
         } else {
-            GlobalAudio.disableAudio();
+            globalAudio.disableAudio();
         }
     }
 

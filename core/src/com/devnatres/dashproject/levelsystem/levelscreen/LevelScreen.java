@@ -15,7 +15,6 @@ import com.devnatres.dashproject.agentsystem.Number;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
-import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gamestate.GameState;
@@ -206,7 +205,7 @@ public class LevelScreen implements Screen {
         playMode = EPlayMode.SCORE_COUNT;
         score.calculateFinalCount();
         gameState.updateCurrentLevelScore(score);
-        GlobalAudio.playOnly(audio.endOkMusic);
+        audio.globalAudio.playOnly(audio.endOkMusic);
         variables.waitingTime = MIN_FINAL_TIME;
     }
 
@@ -270,7 +269,7 @@ public class LevelScreen implements Screen {
     }
 
     public void menuReset() {
-        GlobalAudio.stopMusic();
+        audio.globalAudio.stopMusic();
         set.dashGame.setScreen(new LobbyScreen(set.dashGame));
     }
 
@@ -564,7 +563,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
-        GlobalAudio.playOnly(audio.badassMusic);
+        audio.globalAudio.playOnly(audio.badassMusic);
     }
 
     @Override

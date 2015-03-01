@@ -17,16 +17,16 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 24/02/2015.
  */
 class LevelScreenSet {
-    DashGame dashGame;
+    final DashGame dashGame;
     float screenWidth;
     float screenHeight;
-    SpriteBatch mainBatch;
-    ShapeRenderer mainShape;
-    BitmapFont mainFont;
-    DnaCamera mainCamera;
-    DnaCamera fixedCamera;
-    HyperStore hyperStore;
-    InputTranslator mainInputTranslator;
+    final SpriteBatch mainBatch;
+    final ShapeRenderer mainShape;
+    final BitmapFont mainFont;
+    final DnaCamera mainCamera;
+    final DnaCamera fixedCamera;
+    final HyperStore hyperStore;
+    final InputTranslator mainInputTranslator;
     boolean skipCameraAssistant;
 
     public LevelScreenSet(LevelScreen levelScreen, DashGame game) {

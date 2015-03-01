@@ -12,9 +12,9 @@ public class LevelScreenMessages {
     Agent agentMessage;
     int agentMessageDuration;
 
-    Texture dissipatedMessage;
-    Texture timeoutMessage;
-    Texture readyMessage;
+    final Texture dissipatedMessage;
+    final Texture timeoutMessage;
+    final Texture readyMessage;
 
     public LevelScreenMessages(LevelScreenSet set) {
         dissipatedMessage = set.hyperStore.getTexture("message_dissipated.png");

@@ -22,13 +22,31 @@ import com.badlogic.gdx.utils.Array;
  * Created by DevNatres on 17/01/2015.
  */
 public class GlobalAudio {
-    private static boolean isAudioEnabled = true;
-    private static Array<Music> musics = new Array();
-    private static Array<Float> musicVolumesWhenEnabled = new Array();
+    private static GlobalAudio instance;
+
+    public static GlobalAudio getInstance() {
+        if (instance == null) {
+            instance = new GlobalAudio();
+        }
+
+        return instance;
+    }
+
+    /**
+     * Assures a new instance, not a preexisting one from other execution. (Android issue.) <br>
+     */
+    public static GlobalAudio newInstance() {
+        instance = new GlobalAudio();
+        return instance;
+    }
+
+    private boolean isAudioEnabled = true;
+    private Array<Music> musics = new Array();
+    private Array<Float> musicVolumesWhenEnabled = new Array();
 
     private GlobalAudio() {}
 
-    public static Music newMusic(String resourceFileName) {
+    public Music newMusic(String resourceFileName) {
         Music music = Gdx.audio.newMusic(Gdx.files.internal(resourceFileName));
         musics.add(music);
         musicVolumesWhenEnabled.add(music.getVolume());
@@ -38,12 +56,12 @@ public class GlobalAudio {
         return music;
     }
 
-    public static Sound newSound(String resourceFileName) {
+    public Sound newSound(String resourceFileName) {
         Sound sound = Gdx.audio.newSound(Gdx.files.internal(resourceFileName));
         return sound;
     }
 
-    public static void setVolume(Music music, float volume) {
+    public void setVolume(Music music, float volume) {
         int i = musics.indexOf(music, true);
         if (i > -1) {
             if (isAudioEnabled) {
@@ -53,7 +71,7 @@ public class GlobalAudio {
         }
     }
 
-    public static void stopMusic() {
+    public void stopMusic() {
         for (int i = 0; i < musics.size; i++) {
             Music music = musics.get(i);
             if (music.isPlaying()) {
@@ -62,28 +80,28 @@ public class GlobalAudio {
         }
     }
 
-    public static void playOnly(Music music) {
+    public void playOnly(Music music) {
         stopMusic();
         music.play();
     }
 
-    public static void play(Sound sound, float volume) {
+    public void play(Sound sound, float volume) {
         if (isAudioEnabled) {
             sound.play(volume);
         }
     }
 
-    public static void play(Sound sound) {
+    public void play(Sound sound) {
         if (isAudioEnabled) {
             sound.play();
         }
     }
 
-    public static void dispose(Sound sound) {
+    public void dispose(Sound sound) {
         sound.dispose();
     }
 
-    public static void dispose(Music music) {
+    public void dispose(Music music) {
         int i = musics.indexOf(music, true);
         if (i > -1) {
             musics.removeIndex(i);
@@ -92,7 +110,7 @@ public class GlobalAudio {
         music.dispose();
     }
 
-    public static void disableAudio() {
+    public void disableAudio() {
         for (int i = 0; i < musics.size; i++) {
             Music music = musics.get(i);
             if (isAudioEnabled) {
@@ -104,7 +122,7 @@ public class GlobalAudio {
         isAudioEnabled = false;
     }
 
-    public static void enableAudio() {
+    public void enableAudio() {
         for (int i = 0; i < musics.size; i++) {
             Music music = musics.get(i);
             float volume = musicVolumesWhenEnabled.get(i);

@@ -15,6 +15,6 @@ public class AndroidLauncher extends AndroidApplication {
         config.useAccelerometer = DashGame.USE_ACCELEROMETER;
         config.useCompass = DashGame.USE_COMPASS;
 
-		initialize(new DashGame(), config);
+		initialize(DashGame.newInstance(), config);
 	}
 }
