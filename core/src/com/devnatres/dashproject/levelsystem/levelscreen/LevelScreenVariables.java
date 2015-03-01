@@ -22,11 +22,11 @@ class LevelScreenVariables {
 
     public LevelScreenVariables(HyperStore hyperStore) {
         timeNumber = new Number(EAnimation.NUMBERS_GOLD.create(hyperStore), ENumberType.DECIMAL1);
-        timeNumber.setPosition(240, 700);
+        timeNumber.setUnitPosition(240, 700);
 
         timeHalo = new Agent(EAnimation.TIME_HALO.create(hyperStore));
-        timeHalo.setCenter(timeNumber.getX()+timeNumber.getDigitWidth()+timeNumber.getDecimalSeparatorWidth()/2,
-                timeNumber.getY()+timeNumber.getDigitHeight()/2);
+        timeHalo.setCenter(timeNumber.getUnitX()+timeNumber.getDigitWidth()+timeNumber.getDecimalSeparatorWidth()/2,
+                timeNumber.getUnitY()+timeNumber.getDigitHeight()/2);
     }
 
     public float getTime() {

@@ -103,10 +103,6 @@ public class LevelScreen implements Screen {
         return level;
     }
 
-    LevelId getLevelId() {
-        return level.levelId;
-    }
-
     public Hero getHero() {
         return hero;
     }
@@ -393,7 +389,7 @@ public class LevelScreen implements Screen {
             timeHalo.act(Time.FRAME);
             timeHalo.draw(set.mainBatch);
         }
-        timeNumber.draw(set.mainBatch);
+        timeNumber.render(set.mainBatch);
 
         int life = hero.getLife();
         float lifeWidth = lifePointImage.getWidth() + 1;

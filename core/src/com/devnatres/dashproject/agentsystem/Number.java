@@ -3,6 +3,7 @@ package com.devnatres.dashproject.agentsystem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.tools.Tools;
 
@@ -11,7 +12,7 @@ import com.devnatres.dashproject.tools.Tools;
  *     <br>
  * Created by DevNatres on 26/02/2015.
  */
-public class Number extends Agent {
+public class Number {
     public enum ENumberType {
         INTEGER,
         DECIMAL1
@@ -36,13 +37,18 @@ public class Number extends Agent {
     private final int digitHeight;
     private int decimalSeparatorWidth;
 
+    private final DnaAnimation animation;
+    private final Vector2 unitPosition;
+
     public Number(DnaAnimation animation, ENumberType numberType) {
-        super(animation);
+        this.animation = animation;
         this.numberType = (numberType == null) ? ENumberType.INTEGER : numberType;
 
-        Texture numberTexture = getAnimation().getCurrentKeyFrame().getTexture();
+        unitPosition = new Vector2();
+
+        Texture numberTexture = animation.getCurrentKeyFrame().getTexture();
         digitWidth = (int)(numberTexture.getWidth() / 10.5f);
-        digitHeight = numberTexture.getHeight() / getAnimation().getKeyFrames().length;
+        digitHeight = numberTexture.getHeight() / animation.getKeyFrames().length;
         decimalSeparatorWidth = digitWidth / 2;
         decimalImageX = digitWidth * 10;
 
@@ -69,8 +75,8 @@ public class Number extends Agent {
             incrementingValue = value;
         }
 
-        getAnimation().updateStateTime();
-        int numberFrameY = getAnimation().getCurrentKeyFrameIndex() * digitHeight;
+        animation.updateStateTime();
+        int numberFrameY = animation.getCurrentKeyFrameIndex() * digitHeight;
         currentDigits = 0;
         int integerPart = (int)incrementingValue;
 
@@ -93,6 +99,18 @@ public class Number extends Agent {
             currentDigits++;
             n /= 10;
         } while (n > 0);
+    }
+
+    public float getUnitX() {
+        return unitPosition.x;
+    }
+
+    public float getUnitY() {
+        return unitPosition.y;
+    }
+
+    public void setUnitPosition(float x, float y) {
+        unitPosition.set(x, y);
     }
 
     public void setValue(float numberValue) {
@@ -122,30 +140,27 @@ public class Number extends Agent {
         return (int)value;
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        if (isVisible()) {
-            updateNumberGraphics();
+    public void render(Batch batch) {
+        updateNumberGraphics();
 
-            float x = getX();
-            float y = getY();
+        float x = unitPosition.x;
+        float y = unitPosition.y;
 
-            int unitIndex = (numberType == ENumberType.DECIMAL1) ? 1: 0;
+        int unitIndex = (numberType == ENumberType.DECIMAL1) ? 1: 0;
 
-            for (int i = unitIndex; i < currentDigits; i++) {
-                if ((i>unitIndex) && ((i-unitIndex)%3 == 0)) {
-                    x -= digitWidth/4;
-                }
-                batch.draw(regions[i], x, y);
-                x -= digitWidth;
+        for (int i = unitIndex; i < currentDigits; i++) {
+            if ((i>unitIndex) && ((i-unitIndex)%3 == 0)) {
+                x -= digitWidth/4;
             }
+            batch.draw(regions[i], x, y);
+            x -= digitWidth;
+        }
 
-            if (numberType == ENumberType.DECIMAL1) {
-                x = getX() + digitWidth;
-                batch.draw(decimalSeparatorRegion, x, y);
-                x += decimalSeparatorWidth;
-                batch.draw(regions[0], x, y);
-            }
+        if (numberType == ENumberType.DECIMAL1) {
+            x = unitPosition.x + digitWidth;
+            batch.draw(decimalSeparatorRegion, x, y);
+            x += decimalSeparatorWidth;
+            batch.draw(regions[0], x, y);
         }
     }
 

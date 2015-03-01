@@ -132,7 +132,7 @@ public class DashGame extends Game {
 
 	@Override
 	public void render() {
-        //TODO Enable try
+        //TODO Enable try/catch
         //try {
             super.render(); // Render the Screen set in create()
             if (Debug.DEBUG) Debug.draw();
@@ -140,18 +140,24 @@ public class DashGame extends Game {
             timing();
 
             if (deltaFrameTime < Time.FPS_TIME) {
-                // What to do if there is remaining time? Sleep. (But we could do other things.)
-                // TODO Enable Thread.sleep
-                //Thread.sleep((long) (Time.FPS_TIME - deltaFrameTime) * 1000);
+                // If there is remaining time we sleep the thread to help the system to do other tasks.
+                // But we could execute in advance some heavy processes of the game.
+                // TODO Remove this try/catch when the external try/catch is enabled
+                try {
+                    Thread.sleep((long) (Time.FPS_TIME - deltaFrameTime) * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 // Check if there is still remaining time. In that case we consume it.
-                timing();
-                while (deltaFrameTime < Time.FPS_TIME) {
-                    timing();
-                }
+                do {
+                  timing();
+                } while (deltaFrameTime < Time.FPS_TIME);
             }
 
             initialFrameTime = currentFrameTime;
+
+            if (Debug.DEBUG) Debug.drawFrames();
         /*} catch (Exception e) {
             if (Debug.DEBUG) Debug.drawError(e.toString());
             System.out.println(e.getMessage());

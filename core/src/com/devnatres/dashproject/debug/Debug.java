@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.gameconstants.Time;
 
 import java.util.ArrayList;
 
@@ -20,9 +21,10 @@ import java.util.ArrayList;
  * Created by DevNatres on 08/12/2014.
  */
 public class Debug {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
+    private static final boolean DEBUG_FRAMES = DEBUG && true;
     private static final boolean DEBUG_POINTS = DEBUG && false;
-    private static final boolean DEBUG_RECTANGLES = DEBUG && true;
+    private static final boolean DEBUG_RECTANGLES = DEBUG && false;
     private static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
     public static final boolean IMMORTAL = true;
@@ -43,6 +45,14 @@ public class Debug {
     private static Array<DebugCell> testCells;
 
     private static int count;
+
+    private static int lastFrameCount;
+    private static int currentFrameCount;
+    private static float initialFrameTime;
+    private static float currentFrameTime;
+    private static float[] lastFrameCounts = new float[5]; // Last seconds to consider for average fps.
+    private static int lastFrameCountsIndex;
+    private static float lastAvgFps;
 
     public static void begin(Camera gameCamera) {
         if (!DEBUG) return;
@@ -65,6 +75,8 @@ public class Debug {
         font.setColor(Color.RED);
 
         initialized = true;
+
+        initialFrameTime = System.nanoTime();
     }
 
     public static void end() {
@@ -73,6 +85,36 @@ public class Debug {
         font.dispose();
         shape.dispose();
         batch.dispose();
+    }
+
+    public static void drawFrames() {
+        if (!DEBUG_FRAMES) return;
+
+        currentFrameCount++;
+        currentFrameTime = System.nanoTime();
+        float deltaFrameTime = (currentFrameTime - initialFrameTime) / Time.NANO_TIME;
+        if (deltaFrameTime >= 1f) {
+            initialFrameTime = currentFrameTime;
+            lastFrameCount = currentFrameCount;
+            currentFrameCount = 0;
+
+            lastFrameCounts[lastFrameCountsIndex] = lastFrameCount;
+            lastFrameCountsIndex++;
+            if (lastFrameCountsIndex == lastFrameCounts.length) lastFrameCountsIndex = 0;
+
+            lastAvgFps = 0;
+            for (int i = 0; i < lastFrameCounts.length; i++) {
+                lastAvgFps += lastFrameCounts[i];
+            }
+            lastAvgFps /= lastFrameCounts.length;
+            lastAvgFps = (int)(lastAvgFps * 10f) / 10f;
+        }
+
+        batch.begin();
+        font.draw(batch,"FPS: " + lastFrameCount
+                + "   AVG(" + lastFrameCounts.length + "): " + lastAvgFps
+                , 10, 15);
+        batch.end();
     }
 
     public static void addPoint(float x, float y, Color color) {
@@ -170,7 +212,7 @@ public class Debug {
             } else {
                 shape.setColor(128, 0, 128, .7f);
             }
-            shape.begin(ShapeRenderer.ShapeType.Filled);
+           shape.begin(ShapeRenderer.ShapeType.Filled);
            shape.circle((debugCell.getColumn() * DebugCell.CELL_PIXEL_WIDTH) + DebugCell.CELL_PIXEL_WIDTH / 2,
                    (debugCell.getRow() * DebugCell.CELL_PIXEL_HEIGHT) + DebugCell.CELL_PIXEL_HEIGHT / 2,
                    DebugCell.CELL_PIXEL_WIDTH / 2);

@@ -68,7 +68,7 @@ public class Score {
         this.hordeGroup = levelScreen.getHordeGroup();
 
         actionScoreNumber = new Number(EAnimation.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
-        actionScoreNumber.setPosition(100, 700);
+        actionScoreNumber.setUnitPosition(100, 700);
     }
 
     public void updateScore() {
@@ -95,7 +95,7 @@ public class Score {
             chainScoreDuration--;
         }
 
-        actionScoreNumber.draw(preparedBatch);
+        actionScoreNumber.render(preparedBatch);
     }
 
     public void renderFinalCount(Batch preparedBatch, BitmapFont font) {
