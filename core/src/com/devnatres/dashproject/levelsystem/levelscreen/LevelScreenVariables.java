@@ -1,5 +1,7 @@
 package com.devnatres.dashproject.levelsystem.levelscreen;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.agentsystem.Number;
 import com.devnatres.dashproject.agentsystem.Number.ENumberType;
@@ -16,6 +18,10 @@ class LevelScreenVariables {
     private String timeString;
     int waitingTime;
     boolean comboCameraChasing;
+    final Vector3 cameraTarget;
+
+    final Vector2 savedCameraPosition;
+    final Vector2 movementCameraCorrection;
 
     private final Number timeNumber;
     private final Agent timeHalo;
@@ -27,6 +33,11 @@ class LevelScreenVariables {
         timeHalo = new Agent(EAnimation.TIME_HALO.create(hyperStore));
         timeHalo.setCenter(timeNumber.getUnitX()+timeNumber.getDigitWidth()+timeNumber.getDecimalSeparatorWidth()/2,
                 timeNumber.getUnitY()+timeNumber.getDigitHeight()/2);
+
+        cameraTarget = new Vector3();
+
+        savedCameraPosition = new Vector2();
+        movementCameraCorrection = new Vector2();
     }
 
     public float getTime() {

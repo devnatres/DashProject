@@ -17,8 +17,8 @@ public class LevelScreenMessages {
     final Texture readyMessage;
 
     public LevelScreenMessages(LevelScreenSet set) {
-        dissipatedMessage = set.hyperStore.getTexture("message_dissipated.png");
-        timeoutMessage = set.hyperStore.getTexture("message_timeout.png");
-        readyMessage = set.hyperStore.getTexture("message_ready.png");
+        dissipatedMessage = set.localHyperStore.getTexture("message_dissipated.png");
+        timeoutMessage = set.localHyperStore.getTexture("message_timeout.png");
+        readyMessage = set.localHyperStore.getTexture("message_ready.png");
     }
 }

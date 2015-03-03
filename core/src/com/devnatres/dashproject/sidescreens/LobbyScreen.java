@@ -38,12 +38,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private final Texture heroTexture;
     private final Texture background;
-    private final HyperStore lobbyHyperStore;
+    private final HyperStore localHyperStore;
 
     private final InputTranslator mainInputTranslator;
     private final GameState gameState;
 
-    private final HyperStore hyperStore;
     private final Button goButton;
     private final Button backButton;
     private final Button tutorialButton;
@@ -62,11 +61,10 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch = dashGame.getMainBatch();
         mainFont = dashGame.getMainFont();
         mainCamera = dashGame.getCenteredMainCamera();
-        hyperStore = dashGame.getHyperStore();
 
-        lobbyHyperStore = new HyperStore();
-        heroTexture = lobbyHyperStore.getTexture("mark.png");
-        background = lobbyHyperStore.getTexture("lobby_background.png");
+        localHyperStore = new HyperStore();
+        heroTexture = localHyperStore.getTexture("mark.png");
+        background = localHyperStore.getTexture("lobby_background.png");
 
         gameState = dashGame.getGameState();
         updateCurrentLevel();
@@ -74,51 +72,51 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         goButton = new Button(380, 64,
-                EAnimation.BUTTON_GO_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_GO_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_GO_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_GO_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         backButton = new Button(100, 64,
-                EAnimation.BUTTON_BACK_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_BACK_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_BACK_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_BACK_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         tutorialButton = new Button(240, 64,
-                EAnimation.BUTTON_TUTORIAL_STANDBY.create(hyperStore),
+                EAnimation.BUTTON_TUTORIAL_STANDBY.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         up2Button = new Button(ARROW_BUTTON_X, 510,
-                EAnimation.BUTTON_ARROW_UP2.create(hyperStore),
+                EAnimation.BUTTON_ARROW_UP2.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         upButton = new Button(ARROW_BUTTON_X, 430,
-                EAnimation.BUTTON_ARROW_UP.create(hyperStore),
+                EAnimation.BUTTON_ARROW_UP.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         downButton = new Button(ARROW_BUTTON_X, 300,
-                EAnimation.BUTTON_ARROW_DOWN.create(hyperStore),
+                EAnimation.BUTTON_ARROW_DOWN.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         down2Button = new Button(ARROW_BUTTON_X, 210,
-                EAnimation.BUTTON_ARROW_DOWN2.create(hyperStore),
+                EAnimation.BUTTON_ARROW_DOWN2.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
@@ -238,7 +236,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     @Override
     public void dispose() {
-        lobbyHyperStore.dispose();
+        localHyperStore.dispose();
     }
 
     @Override

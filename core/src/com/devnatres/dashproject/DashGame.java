@@ -73,10 +73,6 @@ public class DashGame extends Game {
         return screenHeight;
     }
 
-    public Application.ApplicationType getAppType() {
-        return appType;
-    }
-
     public SpriteBatch getMainBatch() {
         return mainBatch;
     }

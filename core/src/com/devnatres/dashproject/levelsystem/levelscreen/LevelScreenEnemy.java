@@ -28,7 +28,7 @@ class LevelScreenEnemy {
 
         LevelMap map = level.map;
         LevelId levelId = level.levelId;
-        maxHordeCount = map.extractLevelScript(levelScreen, set.hyperStore, levelId.getScriptName());
+        maxHordeCount = map.extractLevelScript(levelScreen, set.localHyperStore, levelId.getScriptName());
 
         lastHordeCount = maxHordeCount;
         currentHordeCount = maxHordeCount;

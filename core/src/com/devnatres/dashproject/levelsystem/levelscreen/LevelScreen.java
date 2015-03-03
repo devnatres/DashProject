@@ -60,10 +60,10 @@ public class LevelScreen implements Screen {
     private EPlayMode playMode;
 
     public LevelScreen(DashGame game, LevelId levelId) {
-        set = new LevelScreenSet(this, game);
+        set = new LevelScreenSet(game);
         level = new LevelScreenLevel(set, levelId);
 
-        hero = new Hero(this, set.hyperStore);
+        hero = new Hero(this, set.localHyperStore);
 
         agentRegistry = new AgentRegistry();
         agentRegistry.register(hero, AgentRegistry.EAgentLayer.TRUNK);
@@ -72,13 +72,13 @@ public class LevelScreen implements Screen {
         enemy = new LevelScreenEnemy(this, set, level);
         audio = new LevelScreenAudio(set);
         messages = new LevelScreenMessages(set);
-        variables = new LevelScreenVariables(set.hyperStore);
+        variables = new LevelScreenVariables(set.localHyperStore);
 
-        radar = EAnimation.RADAR_INDICATOR.create(set.hyperStore);
-        lifePointImage = new Sprite(set.hyperStore.getTexture("heal_point.png"));
+        radar = EAnimation.RADAR_INDICATOR.create(set.localHyperStore);
+        lifePointImage = new Sprite(set.localHyperStore.getTexture("heal_point.png"));
 
-        gameMenu = new GameMenu(this, set.hyperStore, gameState);
-        score = new Score(this, set.hyperStore);
+        gameMenu = new GameMenu(this, set.localHyperStore, gameState);
+        score = new Score(this, set.localHyperStore);
 
         prepareGame();
 
@@ -191,7 +191,7 @@ public class LevelScreen implements Screen {
             enemy.updateLastHordeCount();
             addTime(TIME_BONUS);
             Vector2 powerUpBasePos = (enemy.thereIsLastDeadFoe()) ? enemy.getLastDeadFoeCenter() : hero.getCenter();
-            PowerUpGenerator.generatePowerUpIfLucky(set.hyperStore, this, powerUpBasePos);
+            PowerUpGenerator.generatePowerUpIfLucky(set.localHyperStore, this, powerUpBasePos);
         }
         inputForHero();
         decideToChaseHeroWithCamera();
@@ -308,16 +308,18 @@ public class LevelScreen implements Screen {
     }
 
     private void moveCameraTo(float posX, float posY, float speed) {
+        variables.savedCameraPosition.set(set.mainCamera.position.x, set.mainCamera.position.y);
+
         posX = limitCameraTargetX(posX);
         posY = limitCameraTargetY(posY);
 
         if (posX != set.mainCamera.position.x || posY != set.mainCamera.position.y) {
-            Vector3 vTarget = new Vector3(posX, posY, 0);
-            if (speed == 0 || Math.abs(vTarget.dst(set.mainCamera.position)) <= speed) {
-                set.mainCamera.position.set(vTarget);
+            variables.cameraTarget.set(posX, posY, 0);
+            if (speed == 0 || Math.abs(variables.cameraTarget.dst(set.mainCamera.position)) <= speed) {
+                set.mainCamera.position.set(variables.cameraTarget);
                 variables.comboCameraChasing = false;
             } else {
-                Vector3 vJump = vTarget.sub(set.mainCamera.position).nor().scl(speed);
+                Vector3 vJump = variables.cameraTarget.sub(set.mainCamera.position).nor().scl(speed);
                 // Slow movement needs to be rounded to avoid seeing tile map flickering
                 if (speed < Time.MEDIUM_CAMERA_SPEED) {
                     set.mainCamera.translate(Math.round(vJump.x), Math.round(vJump.y));
@@ -328,6 +330,8 @@ public class LevelScreen implements Screen {
         } else {
             variables.comboCameraChasing = false;
         }
+        variables.movementCameraCorrection.set(variables.savedCameraPosition);
+        variables.movementCameraCorrection.sub(set.mainCamera.position.x, set.mainCamera.position.y);
     }
 
     public void processFoeDamageResult(Foe foe, FoeDamageResult foeDamageResult) {
@@ -486,6 +490,7 @@ public class LevelScreen implements Screen {
     private void inputForHero() {
         Vector2 touchDownPointOnCamera = set.mainInputTranslator.getTouchDownPointOnCamera(set.mainCamera);
         if (touchDownPointOnCamera != null) {
+            touchDownPointOnCamera.add(variables.movementCameraCorrection);
             hero.programNextPos(touchDownPointOnCamera.x, touchDownPointOnCamera.y);
         }
     }
@@ -584,5 +589,6 @@ public class LevelScreen implements Screen {
     @Override
     public void dispose() {
         level.map.dispose();
+        set.localHyperStore.dispose();
     }
 }

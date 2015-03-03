@@ -27,7 +27,8 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     private final SpriteBatch mainBatch;
     private final BitmapFont mainFont;
     private final DnaCamera mainCamera;
-    private final HyperStore hyperStore;
+    private final HyperStore mainHyperStore;
+    private final HyperStore localHyperStore;
 
     private final InputTranslator mainInputTranslator;
 
@@ -44,38 +45,39 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         mainBatch = dashGame.getMainBatch();
         mainFont = dashGame.getMainFont();
         mainCamera = dashGame.getCenteredMainCamera();
-        hyperStore = dashGame.getHyperStore();
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
+        mainHyperStore = dashGame.getHyperStore();
+        localHyperStore = new HyperStore();
 
         playButton = new Button(240, 500,
-                EAnimation.BUTTON_PLAY_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_PLAY_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_PLAY_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_PLAY_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         optionsButton = new Button(240, 300,
-                EAnimation.BUTTON_OPTIONS_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_OPTIONS_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_OPTIONS_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_OPTIONS_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         creditsButton = new Button(240, 200,
-                EAnimation.BUTTON_CREDITS_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_CREDITS_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_CREDITS_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_CREDITS_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         exitButton = new Button(240, 100,
-                EAnimation.BUTTON_EXIT_STANDBY.create(hyperStore),
-                EAnimation.BUTTON_EXIT_PUSHED.create(hyperStore),
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                EAnimation.BUTTON_EXIT_STANDBY.create(localHyperStore),
+                EAnimation.BUTTON_EXIT_PUSHED.create(localHyperStore),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
-        music = hyperStore.getMusic("music/menu.ogg");
+        music = mainHyperStore.getMusic("music/menu.ogg");
     }
 
     @Override
@@ -130,6 +132,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
 
     @Override
     public void dispose() {
+        localHyperStore.dispose();
     }
 
     @Override

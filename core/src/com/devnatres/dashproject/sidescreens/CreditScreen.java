@@ -22,7 +22,7 @@ public class CreditScreen implements Screen {
 
     private final InputTranslator mainInputTranslator;
 
-    private final HyperStore creditHyperStore;
+    private final HyperStore localHyperStore;
 
     private final Texture background;
 
@@ -31,8 +31,8 @@ public class CreditScreen implements Screen {
         mainBatch = dashGame.getMainBatch();
         mainCamera = dashGame.getCenteredMainCamera();
 
-        creditHyperStore = new HyperStore();
-        background = creditHyperStore.getTexture("credits.png");
+        localHyperStore = new HyperStore();
+        background = localHyperStore.getTexture("credits.png");
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
     }
@@ -80,7 +80,7 @@ public class CreditScreen implements Screen {
 
     @Override
     public void dispose() {
-        creditHyperStore.dispose();
+        localHyperStore.dispose();
     }
 
 }

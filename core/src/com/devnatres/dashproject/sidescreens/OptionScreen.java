@@ -30,7 +30,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
     private final SpriteBatch mainBatch;
     private final BitmapFont mainFont;
     private final DnaCamera mainCamera;
-    private final HyperStore hyperStore;
+    private final HyperStore localHyperStore;
     private final GameState gameState;
 
     private final InputTranslator mainInputTranslator;
@@ -52,47 +52,48 @@ public class OptionScreen implements Screen, IButtonExecutable {
         mainBatch = dashGame.getMainBatch();
         mainFont = dashGame.getMainFont();
         mainCamera = dashGame.getCenteredMainCamera();
-        hyperStore = dashGame.getHyperStore();
         gameState = dashGame.getGameState();
+
+        localHyperStore = new HyperStore();
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         soundButton = new Button(240, 700,
-                EAnimation.BUTTON_OPT_SOUND.create(hyperStore),
+                EAnimation.BUTTON_OPT_SOUND.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
         soundButton.setAutomaticSoundOff();
 
         cameraButton = new Button(240, 500,
-                EAnimation.BUTTON_OPT_CAMERA.create(hyperStore),
+                EAnimation.BUTTON_OPT_CAMERA.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         tutorialsButton = new Button(240, 300,
-                EAnimation.BUTTON_OPT_TUTORIAL.create(hyperStore),
+                EAnimation.BUTTON_OPT_TUTORIAL.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         backButton = new Button(240, 100,
-                EAnimation.BUTTON_OPT_BACK.create(hyperStore),
+                EAnimation.BUTTON_OPT_BACK.create(localHyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
-        soundSymbol = new Agent(hyperStore.getTexture("symbols/symbol_sound.png"));
+        soundSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_sound.png"));
         soundSymbol.setCenter(soundButton.getCenter().x, soundButton.getY()-soundSymbol.getHeight()/2);
-        cameraSymbol = new Agent(hyperStore.getTexture("symbols/symbol_camera.png"));
+        cameraSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_camera.png"));
         cameraSymbol.setCenter(cameraButton.getCenter().x, cameraButton.getY()-cameraSymbol.getHeight()/2);
-        offSymbol = new Agent(hyperStore.getTexture("symbols/symbol_off.png"));
+        offSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_off.png"));
 
-        tutorialsResettingDone = hyperStore.getTexture("message_done.png");
+        tutorialsResettingDone = localHyperStore.getTexture("message_done.png");
     }
 
     @Override
@@ -160,6 +161,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
     @Override
     public void dispose() {
+        localHyperStore.dispose();
     }
 
     @Override

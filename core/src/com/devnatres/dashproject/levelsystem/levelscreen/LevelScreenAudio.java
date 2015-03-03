@@ -14,8 +14,8 @@ class LevelScreenAudio {
     final Music endOkMusic;
 
     public LevelScreenAudio(LevelScreenSet set) {
-        badassMusic = set.hyperStore.getMusic("music/badass.ogg");
+        badassMusic = set.localHyperStore.getMusic("music/badass.ogg");
         badassMusic.setLooping(true);
-        endOkMusic = set.hyperStore.getMusic("music/end_ok.ogg");
+        endOkMusic = set.localHyperStore.getMusic("music/end_ok.ogg");
     }
 }

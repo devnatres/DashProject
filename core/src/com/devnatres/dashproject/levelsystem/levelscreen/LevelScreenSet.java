@@ -25,11 +25,11 @@ class LevelScreenSet {
     final BitmapFont mainFont;
     final DnaCamera mainCamera;
     final DnaCamera fixedCamera;
-    final HyperStore hyperStore;
+    final HyperStore localHyperStore;
     final InputTranslator mainInputTranslator;
     boolean skipCameraAssistant;
 
-    public LevelScreenSet(LevelScreen levelScreen, DashGame game) {
+    public LevelScreenSet(DashGame game) {
         this.dashGame = game;
         screenWidth = game.getScreenWidth();
         screenHeight = game.getScreenHeight();
@@ -39,11 +39,12 @@ class LevelScreenSet {
         mainFont = game.getMainFont();
         mainCamera = game.getMainCamera();
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
-        hyperStore = game.getHyperStore();
         mainInputTranslator = game.getClearedMainInputTranslator();
         mainInputTranslator.clear();
         fixedCamera = new DnaCamera();
         fixedCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
+
+        localHyperStore = new HyperStore();
     }
 
     public void drawCentered(Texture texture) {
