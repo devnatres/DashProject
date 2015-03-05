@@ -3,6 +3,7 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -59,6 +60,8 @@ public class LevelScreen implements Screen {
     private Score score;
     private EPlayMode playMode;
 
+    private final TextureRegion background;
+
     public LevelScreen(DashGame game, LevelId levelId) {
         set = new LevelScreenSet(game);
         level = new LevelScreenLevel(set, levelId);
@@ -79,6 +82,10 @@ public class LevelScreen implements Screen {
 
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
+
+        Texture backgroundTexture = set.localHyperStore.getTexture("lobby_background.png");
+        backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        background = new TextureRegion(backgroundTexture);
 
         prepareGame();
 
@@ -373,6 +380,8 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackground() {
+        set.mainBatch.draw(background, 0, 0);
+        background.scroll(0f, -.01f);
     }
 
     private void renderMap() {

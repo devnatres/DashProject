@@ -8,13 +8,18 @@ import com.devnatres.dashproject.gameconstants.EDirection;
 import static com.devnatres.dashproject.space.BlockCell.*;
 
 /**
- * Represents a "slider" map. <br>
+ * Represents a "slider" map. It needs to call the method compile() when all block layers are added.<br>
  * This abstract map moves (slides) a rectangle that represents a volume to a nearby free position. <br>
  * It has other helper functions too.<br>
  * <br>
  * Created by DevNatres on 07/12/2014.
  */
 public class BlockMapSlider {
+    public enum EBlockDecision {
+        BLOCK_WHEN_TILE,
+        BLOCK_WHEN_HOLE
+    }
+
     private final BlockCell[][] blockMap;
     private final int mapWidth;
     private final int mapHeight;
@@ -29,7 +34,7 @@ public class BlockMapSlider {
      * The layer in the first blockLayersWithHeight can not be null.
      * Any layer can be empty, i.e., it's not null but it doesn't have blocks.
      */
-    public BlockMapSlider(BlockLayerWithHeight... blockLayersWithHeight) {
+    public BlockMapSlider(EBlockDecision eBlockDecision, BlockLayerWithHeight... blockLayersWithHeight) {
         TiledMapTileLayer firstBlockLayer = blockLayersWithHeight[0].getBlockLayer();
 
         mapWidth = firstBlockLayer.getWidth();
@@ -43,20 +48,21 @@ public class BlockMapSlider {
         blockMap = new BlockCell[mapWidth][mapHeight];
 
         for (int i = 0; i < blockLayersWithHeight.length; i++) {
-            TiledMapTileLayer blockLayer = blockLayersWithHeight[i].getBlockLayer();
-            EBlockHeight blockHeight = blockLayersWithHeight[i].getBlockHeight();
-            if (blockLayer!=null && blockHeight!=null) {
-                addBlockLayer(blockLayer, blockHeight);
-            }
+            addBlockLayerWithHeight(eBlockDecision, blockLayersWithHeight[i]);
         }
-
-        calculateSliders();
     }
 
     /**
-     * Additional block layer must have the same dimensions of the one passed to the constructor
+     * Additional block layer must have the same dimensions of the one passed to the constructor.
+     * The BlockLayerWithHeight can contain null components (layer and height).
      */
-    public void addBlockLayer(TiledMapTileLayer blockLayer, EBlockHeight eBlockHeight) {
+    public void addBlockLayerWithHeight(EBlockDecision eBlockDecision, BlockLayerWithHeight blockLayerWithHeight) {
+
+        TiledMapTileLayer blockLayer = blockLayerWithHeight.getBlockLayer();
+        EBlockHeight blockHeight = blockLayerWithHeight.getBlockHeight();
+        if (blockLayer==null || blockHeight==null) {
+            return;
+        }
         if (mapWidth != blockLayer.getWidth()
             || mapHeight != blockLayer.getHeight()
             || tilePixelWidth != blockLayer.getTileWidth()
@@ -65,16 +71,19 @@ public class BlockMapSlider {
             throw new RuntimeException("Layer dimensions don't match with the first one");
         }
 
+        // A PLAIN block is created when there is no tile (i.e., there is a hole in the map)
+        // Others block height need a tile.
         for (int column = 0; column < mapWidth; column++) {
             for (int row = 0; row < mapHeight; row++) {
-                if (blockLayer.getCell(column, row) != null) {
-                    blockMap[column][row] = new BlockCell(eBlockHeight);
+                boolean thereIsATile = (blockLayer.getCell(column, row) != null);
+                if ((eBlockDecision == EBlockDecision.BLOCK_WHEN_HOLE) ^ thereIsATile) {
+                    blockMap[column][row] = new BlockCell(blockHeight);
                 }
             }
         }
     }
 
-    private void calculateSliders() {
+    public void compile() {
         for (int column = 0; column < mapWidth; column++) {
             for (int row = 0; row < mapHeight; row++) {
                 BlockCell blockCell = blockMap[column][row];

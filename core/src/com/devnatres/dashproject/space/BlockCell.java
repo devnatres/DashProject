@@ -10,7 +10,8 @@ package com.devnatres.dashproject.space;
 public class BlockCell {
     public enum EBlockHeight {
         HIGH,
-        LOW
+        LOW,
+        PLAIN //A block (it can't be occupied) without height
     }
 
     private final DirectionSelector directionSelector;

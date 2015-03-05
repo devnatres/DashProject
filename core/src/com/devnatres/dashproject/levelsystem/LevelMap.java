@@ -29,6 +29,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.BlockCell;
 import com.devnatres.dashproject.space.BlockLayerWithHeight;
 import com.devnatres.dashproject.space.BlockMapSlider;
+import com.devnatres.dashproject.space.BlockMapSlider.EBlockDecision;
 import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.tools.Tools;
 
@@ -74,12 +75,18 @@ public class LevelMap implements Disposable {
 
         TiledMapTileLayer blockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("blocks");
         TiledMapTileLayer lowBlockLayer = (TiledMapTileLayer)tiledMap.getLayers().get("lowblocks");
+        TiledMapTileLayer groundLayer = (TiledMapTileLayer)tiledMap.getLayers().get("ground");
 
-        // Only lowBlockLayer can be null (that layer is not mandatory).
-        // Any layer can be empty, i.e., it's not null but it doesn't have blocks.
-        blockMapSlider = new BlockMapSlider(
+
+        blockMapSlider = new BlockMapSlider(EBlockDecision.BLOCK_WHEN_TILE,
                 new BlockLayerWithHeight(blockLayer, EBlockHeight.HIGH),
                 new BlockLayerWithHeight(lowBlockLayer, EBlockHeight.LOW));
+
+        // In the ground layer, the holes are the blocks.
+        blockMapSlider.addBlockLayerWithHeight(EBlockDecision.BLOCK_WHEN_HOLE,
+                new BlockLayerWithHeight(groundLayer, EBlockHeight.PLAIN));
+
+        blockMapSlider.compile();
     }
 
     public Batch getBatch() {
@@ -119,7 +126,7 @@ public class LevelMap implements Disposable {
         float xCheck = rectangle.getX() - marginX;
         float yCheck = centerRectangleY;
         BlockCell blockCell = getBlockAt(xCheck, yCheck);
-        if (blockCell != null) {
+        if (isBlockWithSomeHeight(blockCell)) {
             if (blockCell.isHeight(EBlockHeight.LOW)) lowCoverDirection.setLeft();
             coverDirection.setLeft();
         }
@@ -128,7 +135,7 @@ public class LevelMap implements Disposable {
         xCheck = centerRectangleX;
         yCheck = (rectangle.getY() + rectangle.getHeight() + marginY);
         blockCell = getBlockAt(xCheck, yCheck);
-        if (blockCell != null) {
+        if (isBlockWithSomeHeight(blockCell)) {
             if (blockCell.isHeight(EBlockHeight.LOW)) lowCoverDirection.setUp();
             coverDirection.setUp();
         }
@@ -137,7 +144,7 @@ public class LevelMap implements Disposable {
         xCheck = (rectangle.getX() + rectangle.getWidth() + marginX);
         yCheck = centerRectangleY;
         blockCell = getBlockAt(xCheck, yCheck);
-        if (blockCell != null) {
+        if (isBlockWithSomeHeight(blockCell)) {
             if (blockCell.isHeight(EBlockHeight.LOW)) lowCoverDirection.setRight();
             coverDirection.setRight();
         }
@@ -146,10 +153,14 @@ public class LevelMap implements Disposable {
         xCheck = centerRectangleX;
         yCheck = (rectangle.getY() - marginY);
         blockCell = getBlockAt(xCheck, yCheck);
-        if (blockCell != null) {
+        if (isBlockWithSomeHeight(blockCell)) {
             if (blockCell.isHeight(EBlockHeight.LOW)) lowCoverDirection.setDown();
             coverDirection.setDown();
         }
+    }
+
+    private boolean isBlockWithSomeHeight(BlockCell blockCell) {
+        return blockCell != null && !blockCell.isHeight(EBlockHeight.PLAIN);
     }
 
     private BlockCell getBlockAt(float x, float y) {
