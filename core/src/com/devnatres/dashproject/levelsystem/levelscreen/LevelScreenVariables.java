@@ -21,7 +21,7 @@ class LevelScreenVariables {
     final Vector3 cameraTarget;
 
     final Vector2 savedCameraPosition;
-    final Vector2 movementCameraCorrection;
+    final Vector2 cameraMovementDone;
 
     private final Number timeNumber;
     private final Agent timeHalo;
@@ -37,7 +37,7 @@ class LevelScreenVariables {
         cameraTarget = new Vector3();
 
         savedCameraPosition = new Vector2();
-        movementCameraCorrection = new Vector2();
+        cameraMovementDone = new Vector2();
     }
 
     public float getTime() {

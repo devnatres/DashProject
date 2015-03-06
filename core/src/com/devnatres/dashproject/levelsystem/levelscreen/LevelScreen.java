@@ -3,7 +3,6 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -24,6 +23,7 @@ import com.devnatres.dashproject.levelsystem.GameMenu;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.Score;
+import com.devnatres.dashproject.scroll.ScrollPlane;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -60,7 +60,8 @@ public class LevelScreen implements Screen {
     private Score score;
     private EPlayMode playMode;
 
-    private final TextureRegion background;
+    private final ScrollPlane groundScroll;
+    private final ScrollPlane cloudScroll;
 
     public LevelScreen(DashGame game, LevelId levelId) {
         set = new LevelScreenSet(game);
@@ -83,9 +84,15 @@ public class LevelScreen implements Screen {
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
 
-        Texture backgroundTexture = set.localHyperStore.getTexture("lobby_background.png");
-        backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        background = new TextureRegion(backgroundTexture);
+        groundScroll = new ScrollPlane(set.localHyperStore.getTexture("bg_land.png"),
+                new Vector2(0f, 0f),
+                new Vector2(0f, -0.001f),
+                .1f);
+
+        cloudScroll = new ScrollPlane(set.localHyperStore.getTexture("bg_clouds.png"),
+                new Vector2(0f, 0f),
+                new Vector2(0f, -0.005f),
+                .3f);
 
         prepareGame();
 
@@ -151,6 +158,7 @@ public class LevelScreen implements Screen {
         renderBackground();
         renderMap();
         renderSprites();
+        renderForeground();
         renderFoeRadar();
         renderHub();
         set.mainBatch.end();
@@ -337,8 +345,8 @@ public class LevelScreen implements Screen {
         } else {
             variables.comboCameraChasing = false;
         }
-        variables.movementCameraCorrection.set(variables.savedCameraPosition);
-        variables.movementCameraCorrection.sub(set.mainCamera.position.x, set.mainCamera.position.y);
+        variables.cameraMovementDone.set(set.mainCamera.position.x, set.mainCamera.position.y);
+        variables.cameraMovementDone.sub(variables.savedCameraPosition);
     }
 
     public void processFoeDamageResult(Foe foe, FoeDamageResult foeDamageResult) {
@@ -380,8 +388,12 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackground() {
-        set.mainBatch.draw(background, 0, 0);
-        background.scroll(0f, -.01f);
+        groundScroll.render(set.mainBatch, variables.cameraMovementDone);
+        cloudScroll.render(set.mainBatch, variables.cameraMovementDone);
+    }
+
+    private void renderForeground() {
+        
     }
 
     private void renderMap() {
@@ -499,7 +511,7 @@ public class LevelScreen implements Screen {
     private void inputForHero() {
         Vector2 touchDownPointOnCamera = set.mainInputTranslator.getTouchDownPointOnCamera(set.mainCamera);
         if (touchDownPointOnCamera != null) {
-            touchDownPointOnCamera.add(variables.movementCameraCorrection);
+            touchDownPointOnCamera.sub(variables.cameraMovementDone);
             hero.programNextPos(touchDownPointOnCamera.x, touchDownPointOnCamera.y);
         }
     }
