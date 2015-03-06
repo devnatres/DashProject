@@ -8,7 +8,7 @@
  </tileset>
  <layer name="ground" width="32" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2WSw6AMAhEq0m9/5F1011JP5YyTCExL13ogMCkOaX0fE8G4g2Sx0heF0B+wXlG//zs4aq+/q1Pil31oehLZ+1+WujvqL93LqWw2jdr/VPJ4NOaPrHjPeZ+ecs3eB7Z7u9s9axk+BEfY959c2X/WPebtS5v84XEEtb6Uh61YNbvDWT9EZ/R0Leuf8Q/Wt+thaf5b/mmpItCVt9n5sw9J/qs819bfAFlLP72ACAAAA==
+   H4sIAAAAAAAAC+2XUQ+AIAiEqc3+/0+uF18aTDPhEGFrtx7ax4nerBDR9TzFkZ5O+vjS1+Ggv9Rxzfmtcw5nzfWvP6ms/HnhS+/a80TwLfz37kupUOcNzd9VI+S0Zk5YfBd5Xqv1m7qfRru/R/MzUzOP4mgt1H6vhfa/On90fu+yPt8cX4vH+bLko/338KV+tPKhl4/2j+JztTufnPO/5KcGH+2fUyk/Rgq9/2b4bvHR+a+d+xLfyndk/sj9Lf93dda1pTdyZMSfACAAAA==
   </data>
  </layer>
  <layer name="lowblocks" width="32" height="64">
@@ -18,7 +18,7 @@
  </layer>
  <layer name="blocks" width="32" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2Y4QrDIAyECxt0sMH2/k/bChNKoCbGi4noB9L6oza56kW7bYsr77N9Cv3W8Ti+Z/sV+rVon0frUAtah0Vfes8XCnK+pFz2S5PklfNH6PAg/afgmZw/QgfN+zOI/FMOr/99utbks3xj4cmoPqiNm/qe1ge1cVPf0/pg730fxWvfl4k6b5F1tcTd+Mi6WsK7bkX9/hyjxj07qLqhBVU3vOF0tNaT0xGl5+zrvPf6oERfH6P9v0LHV5s/en/c+v8OFa9WV9T3slof1vlLx+V8yDr/6D40C1Hrca/9j/S86OUHXuflzOjn5ajz2wrpOcJKF+k5Yvl+GweFli06ACAAAA==
+   H4sIAAAAAAAAC+2Y4QrDIAyECxtssMH2/k+7CguUQE1MLyaiH0jrjzov6sVs2xZHXnt7V/pXx5P47O1b6bdi/R4dh1bQcVj0pfd+4SD3S9HyODSNLtKPiMON9e+Kb0g/Ig6W3ycQ+ouG5/+9PFv0LN9YRDKqD1rnzX3P6oPWeXPfs/pg73sfJ+reR2Tdt8i8WuNsfGRerRGdt7Kuv8So854dVN6wgsob0Uhx9I6nFEdUPGc/573PByf7+Zj9/ytv/dJ43vq143mtu3Zcr3XPol/yIW/92X1oFrLm4173H229GOUHUfUyMXq9nHV/e6GtI7zioq0jlu9f4wdysAlzACAAAA==
   </data>
  </layer>
  <objectgroup name="horde0">
@@ -50,7 +50,8 @@
  <objectgroup name="levelscript1">
   <properties>
    <property name="step0" value="heroposition,0,63"/>
-   <property name="step1" value="createhorde,1"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,1"/>
   </properties>
  </objectgroup>
 </map>

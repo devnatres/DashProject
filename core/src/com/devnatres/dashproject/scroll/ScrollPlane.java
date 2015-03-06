@@ -8,6 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
+ * Represents a plane scroll. <br>
+ * To be used with Scroll.
+ *     <br>
  * Created by DevNatres on 06/03/2015.
  */
 public class ScrollPlane {
@@ -41,7 +44,7 @@ public class ScrollPlane {
     public void render(Batch batch, Vector2 cameraDisplacement) {
         batch.draw(textureRegion, position.x, position.y);
         effectiveVelocity.set(speed);
-        effectiveVelocity.add(cameraDisplacement.x/width * deepFactor, cameraDisplacement.y/height * deepFactor);
+        effectiveVelocity.add(cameraDisplacement.x/width * deepFactor, -cameraDisplacement.y/height * deepFactor);
         textureRegion.scroll(effectiveVelocity.x, effectiveVelocity.y);
     }
 }

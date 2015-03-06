@@ -21,6 +21,7 @@ import com.devnatres.dashproject.agentsystem.Foe;
 import com.devnatres.dashproject.agentsystem.Horde;
 import com.devnatres.dashproject.agentsystem.Mine;
 import com.devnatres.dashproject.dnagdx.DnaOrthogonalTiledMapRenderer;
+import com.devnatres.dashproject.gameconstants.EScroll;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
 import com.devnatres.dashproject.levelscriptcmd.RegisterHordeCmd;
 import com.devnatres.dashproject.levelscriptcmd.WaitHordeKilledCmd;
@@ -217,6 +218,12 @@ public class LevelMap implements Disposable {
                 int heroX = Integer.parseInt(command[1])*tilePixelWidth;
                 int heroY = (mapHeight-1-Integer.parseInt(command[2])) * tilePixelHeight;
                 levelScreen.getHero().setPosition(heroX, heroY);
+            } else if (command[0].equals("backscroll")) {
+                EScroll eScroll = EScroll.valueOf(command[1]);
+                levelScreen.setBackScroll(eScroll);
+            } else if (command[0].equals("forescroll")) {
+                EScroll eScroll = EScroll.valueOf(command[1]);
+                levelScreen.setForeScroll(eScroll);
             }
             stepNumber++;
         }

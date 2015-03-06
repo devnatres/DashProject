@@ -16,6 +16,7 @@ import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.gameconstants.EAnimation;
+import com.devnatres.dashproject.gameconstants.EScroll;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelscriptcmd.LevelScript;
@@ -23,7 +24,6 @@ import com.devnatres.dashproject.levelsystem.GameMenu;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.Score;
-import com.devnatres.dashproject.scroll.ScrollPlane;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -60,9 +60,6 @@ public class LevelScreen implements Screen {
     private Score score;
     private EPlayMode playMode;
 
-    private final ScrollPlane groundScroll;
-    private final ScrollPlane cloudScroll;
-
     public LevelScreen(DashGame game, LevelId levelId) {
         set = new LevelScreenSet(game);
         level = new LevelScreenLevel(set, levelId);
@@ -83,16 +80,6 @@ public class LevelScreen implements Screen {
 
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
-
-        groundScroll = new ScrollPlane(set.localHyperStore.getTexture("bg_land.png"),
-                new Vector2(0f, 0f),
-                new Vector2(0f, -0.001f),
-                .1f);
-
-        cloudScroll = new ScrollPlane(set.localHyperStore.getTexture("bg_clouds.png"),
-                new Vector2(0f, 0f),
-                new Vector2(0f, -0.005f),
-                .3f);
 
         prepareGame();
 
@@ -135,6 +122,14 @@ public class LevelScreen implements Screen {
     public void addHorde(Horde horde) {
         agentRegistry.register(horde, EAgentLayer.FLOOR);
         enemy.getHordeGroup().addLinked(horde);
+    }
+
+    public void setBackScroll(EScroll eScroll) {
+        level.backScroll = eScroll.create(set.localHyperStore);
+    }
+
+    public void setForeScroll(EScroll eScroll) {
+        level.foreScroll = eScroll.create(set.localHyperStore);
     }
 
     @Override
@@ -388,12 +383,11 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackground() {
-        groundScroll.render(set.mainBatch, variables.cameraMovementDone);
-        cloudScroll.render(set.mainBatch, variables.cameraMovementDone);
+        if (level.backScroll != null) level.backScroll.render(set.mainBatch, variables.cameraMovementDone);
     }
 
     private void renderForeground() {
-        
+        if (level.foreScroll != null) level.foreScroll.render(set.mainBatch, variables.cameraMovementDone);
     }
 
     private void renderMap() {
