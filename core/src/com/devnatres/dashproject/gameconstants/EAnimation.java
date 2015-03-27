@@ -26,7 +26,7 @@ public enum EAnimation {
     },
     HERO_ATTACKING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "mark_attacking.png", 2, 1, 15f, PlayMode.NORMAL);
+            return createAnimation(hyperStore, "mark_attacking.png", 3, 1, 15f, PlayMode.NORMAL);
         }
     },
     HERO_DASHING {

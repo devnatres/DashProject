@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 /**
  * All music and sound created and managed throw this class attend the audio enable/disable status.
- * It's recommend to manage the music and sound created with this class only with its methods, not directly.
+ * It's recommended to manage the music and sound created with this class only with its methods, not directly.
  * <br><br>
  * When audio is disabled, the music that is playing is "stopped".
  * However, the sounds are not stopped when playing. So the sounds should always be short
