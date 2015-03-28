@@ -142,7 +142,7 @@ public class LevelScreen implements Screen {
         clearScreen();
         playMode.render(this);
 
-        if (Debug.DEBUG) renderDebugger();
+        //if (Debug.DEBUG) renderDebugLines();
     }
 
     private void renderStandardComponents() {
@@ -551,7 +551,7 @@ public class LevelScreen implements Screen {
         variables.setTime(variables.getTime() + extraTime);
     }
 
-    private void renderDebugger() {
+    private void renderDebugLines() {
         set.mainShape.setProjectionMatrix(set.mainCamera.combined);
         Horde globalHorde = getGlobalHorde();
         for (int i = 0, n = globalHorde.size(); i < n; i++) {

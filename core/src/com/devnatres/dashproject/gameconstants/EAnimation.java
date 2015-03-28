@@ -36,7 +36,7 @@ public enum EAnimation {
     },
     HERO_DYING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "mark_dying.png", 3, 1, 15f, PlayMode.NORMAL);
+            return createAnimation(hyperStore, "mark_dying.png", 9, 1, 10f, PlayMode.NORMAL);
         }
     },
 

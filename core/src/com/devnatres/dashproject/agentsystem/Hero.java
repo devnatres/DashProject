@@ -284,9 +284,11 @@ public class Hero extends Agent {
     }
 
     public void die() {
-        globalAudio.play(deadSound);
-        dying = true;
-        setAnimation(deadAnimation);
+        if (!dying) {
+            globalAudio.play(deadSound);
+            dying = true;
+            setAnimation(deadAnimation);
+        }
     }
 
     public int getLife() {
