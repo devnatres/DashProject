@@ -1,6 +1,7 @@
 package com.devnatres.dashproject.dnagdx;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.gameconstants.Time;
@@ -48,5 +49,10 @@ public class DnaAnimation extends Animation {
 
     public int getCurrentKeyFrameIndex() {
         return getKeyFrameIndex(currentStateTime);
+    }
+
+    public void render(Batch batch, float x, float y) {
+        updateStateTime();
+        batch.draw(getCurrentKeyFrame(), x, y);
     }
 }

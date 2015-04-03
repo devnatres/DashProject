@@ -42,6 +42,7 @@ public class LevelScreen implements Screen {
     private static final int MIN_FINAL_TIME = 120;
     private static final int MIN_READY_TIME = 15;
     private static final float TIME_BONUS = 3f;
+    private static final float CRITICAL_TIME = 2.5f;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -59,6 +60,11 @@ public class LevelScreen implements Screen {
     private GameMenu gameMenu;
     private Score score;
     private EPlayMode playMode;
+
+    private final DnaAnimation damageSoftFlashing;
+    private final DnaAnimation damageHardFlashing;
+    private int damageSoftFlashingDuration;
+    private int damageHardFlashingDuration;
 
     public LevelScreen(DashGame game, LevelId levelId) {
         set = new LevelScreenSet(game);
@@ -80,6 +86,9 @@ public class LevelScreen implements Screen {
 
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
+
+        damageSoftFlashing = EAnimation.DAMAGE_SOFT_FLASHING.create(set.localHyperStore);
+        damageHardFlashing = EAnimation.DAMAGE_HARD_FLASHING.create(set.localHyperStore);
 
         prepareGame();
 
@@ -148,13 +157,13 @@ public class LevelScreen implements Screen {
     private void renderStandardComponents() {
         set.mainCamera.update();
         set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
-
         set.mainBatch.begin();
         renderBackground();
         renderMap();
         renderSprites();
         renderForeground();
         renderFoeRadar();
+        renderDamageFlashing();
         renderHub();
         set.mainBatch.end();
     }
@@ -394,6 +403,25 @@ public class LevelScreen implements Screen {
         level.map.paint(set.mainCamera);
     }
 
+    private void renderDamageFlashing() {
+        if (damageHardFlashingDuration > 0) {
+            damageSoftFlashingDuration = 0; // If any.
+            damageHardFlashingDuration--;
+            damageHardFlashing.render(set.mainBatch, set.mainCamera.getLeft(), set.mainCamera.getDown());
+        } else if (damageSoftFlashingDuration > 0) {
+            damageSoftFlashingDuration--;
+            damageSoftFlashing.render(set.mainBatch, set.mainCamera.getLeft(), set.mainCamera.getDown());
+        }
+    }
+
+    public void setDamageSoftFlashingDuration(int duration) {
+        damageSoftFlashingDuration = duration;
+    }
+
+    public void setDamageHardFlashingDuration(int duration) {
+        damageHardFlashingDuration = duration;
+    }
+
     private void renderHub() {
         set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
 
@@ -402,7 +430,7 @@ public class LevelScreen implements Screen {
         set.mainFont.draw(set.mainBatch, variables.getTimeString(), set.screenWidth/2, set.screenHeight - 10);
 
         Number timeNumber = variables.getTimeNumber();
-        if (timeNumber.getValue() < 2.5) {
+        if (timeNumber.getValue() < CRITICAL_TIME) {
             Agent timeHalo = variables.getTimeHalo();
             timeHalo.act(Time.FRAME);
             timeHalo.draw(set.mainBatch);
@@ -441,12 +469,12 @@ public class LevelScreen implements Screen {
         }
 
         if (!thereIsFoeOnCamera) {
+            radar.updateStateTime();
             HordeGroup hordeGroup = enemy.getHordeGroup();
             int numberOfHordes = hordeGroup.size();
             for (int i = 0; i < numberOfHordes; i++){
                 Horde horde = hordeGroup.getHorde(i);
                 if (!horde.isKilled()) {
-                    radar.updateStateTime();
                     renderFoeRadar_indicator(horde.getReferencePosition());
                 }
             }

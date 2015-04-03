@@ -1,7 +1,6 @@
 package com.devnatres.dashproject.agentsystem;
 
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 import com.devnatres.dashproject.debug.Debug;
+import com.devnatres.dashproject.dnagdx.AlphaModifier;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
@@ -29,6 +29,8 @@ public class Hero extends Agent {
     private static final int STANDARD_ATTACK_DAMAGE = 1;
     private static final float ATTACK_RADIO = 64;
     private static final float ATTACK_RADIO2 = ATTACK_RADIO * ATTACK_RADIO;
+    private static final float IMMUNITY_ALPHA = .5f;
+    private static final int DAMAGE_FLASHING_DURATION = 15;
 
     private boolean dying;
     private int life = MAX_LIFE;
@@ -61,6 +63,7 @@ public class Hero extends Agent {
     private final DnaAnimation deadAnimation;
     private final DnaAnimation attackingAnimation;
     private float attackingTime;
+    private AlphaModifier alphaModifier = new AlphaModifier();
 
     private final LevelScreen levelScreen;
     private final LevelMap map;
@@ -272,6 +275,12 @@ public class Hero extends Agent {
         if (!dying && immunityDuration == 0) {
             damageImageDuration = DAMAGE_DURATION;
             globalAudio.play(failDashSound);
+            if (damage > 1) {
+                levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);
+            } else {
+                levelScreen.setDamageSoftFlashingDuration(DAMAGE_FLASHING_DURATION);
+            }
+
             if (life > 0) {
                 life -= damage;
                 if (life < 0) life = 0;
@@ -356,15 +365,9 @@ public class Hero extends Agent {
         dashHalo.draw(batch);
 
         if (immunityDuration > 0) {
-            Color color = batch.getColor();
-            float alpha = color.a;
-            color.a = .5f;
-            batch.setColor(color);
-
+            alphaModifier.modify(batch, IMMUNITY_ALPHA);
             super.draw(batch);
-
-            color.a = alpha;
-            batch.setColor(color);
+            alphaModifier.restore(batch);
         } else {
             super.draw(batch);
         }

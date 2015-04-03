@@ -143,6 +143,18 @@ public enum EAnimation {
         }
     },
 
+    DAMAGE_SOFT_FLASHING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "damage_soft_flashing.png", 2, 1, 5, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
+    DAMAGE_HARD_FLASHING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "damage_hard_flashing.png", 2, 1, 5, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
     BUTTON_PLAY_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_play_standby.png");
