@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.tutorial;
+package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
@@ -8,21 +8,21 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
- * This enum is a builder for prefabricated tutorials. <br>
+ * This enum is a builder for prefabricated expositions. <br>
  *     <br>
  * Created by DevNatres on 17/02/2015.
  */
-public enum ETutorial {
+public enum EExposition {
     NONE {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
-            return new Tutorial(dashgame, null);
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
+            return new Exposition(dashgame, null);
         }
     },
     BASICS1 {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
-            Tutorial tutorial = new Tutorial(dashgame, hyperStore.getTexture("message_movement.png"));
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
+            Exposition exposition = new Exposition(dashgame, hyperStore.getTexture("message_movement.png"));
 
             Figure figure1 = new Figure(hyperStore.getTexture("message_basics1a.png"));
 
@@ -36,7 +36,7 @@ public enum ETutorial {
             robot.setPosition(400, 300);
             figure1.add(robot);
 
-            tutorial.add(figure1);
+            exposition.add(figure1);
 
             Figure figure2 = new Figure(hyperStore.getTexture("message_basics1b.png"));
 
@@ -50,40 +50,40 @@ public enum ETutorial {
             block.setPosition(200, 300);
             figure2.add(block);
 
-            tutorial.add(figure2);
+            exposition.add(figure2);
 
-            return tutorial;
+            return exposition;
         }
     },
     BASICS2 {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     COMBOS {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     TANKS {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     LOW_OBSTACLES {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     },
     MINES {
         @Override
-        public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore) {
+        public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
             return null;
         }
     };
-    abstract public Tutorial createTutorial(DashGame dashgame, HyperStore hyperStore);
+    abstract public Exposition createExposition(DashGame dashgame, HyperStore hyperStore);
 }

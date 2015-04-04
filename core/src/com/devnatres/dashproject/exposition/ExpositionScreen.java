@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.tutorial;
+package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -12,35 +12,35 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 
 /**
- * Represents a screen to render a Tutorial object. <br>
- * When the tutorial is finished,
+ * Represents a screen to render a Exposition object. <br>
+ * When the exposition is finished,
  * if a levelId has been specified then the corresponding level will be created. <br>
  *     <br>
  * Created by DevNatres on 17/02/2015.
  */
-public class TutorialScreen implements Screen {
+public class ExpositionScreen implements Screen {
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final DnaCamera mainCamera;
 
-    private final Tutorial tutorial;
+    private final Exposition exposition;
     private final LevelId levelId;
 
     private final HyperStore localHyperStore;
 
-    public TutorialScreen(DashGame dashGame, ETutorial eTutorial, LevelId levelId) {
+    public ExpositionScreen(DashGame dashGame, EExposition eExposition, LevelId levelId) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
         mainCamera = dashGame.getCenteredMainCamera();
 
         localHyperStore = new HyperStore();
-        this.tutorial = eTutorial.createTutorial(dashGame, localHyperStore);
+        this.exposition = eExposition.createExposition(dashGame, localHyperStore);
         this.levelId = levelId;
     }
 
     @Override
     public void render(float delta) {
-        if (tutorial == null || tutorial.isFinished()) {
+        if (exposition == null || exposition.isFinished()) {
             if (levelId == null) {
                 dashGame.setScreen(new LobbyScreen(dashGame));
             } else {
@@ -55,7 +55,7 @@ public class TutorialScreen implements Screen {
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
         mainBatch.begin();
-        tutorial.render(mainBatch);
+        exposition.render(mainBatch);
         mainBatch.end();
     }
 
@@ -86,7 +86,7 @@ public class TutorialScreen implements Screen {
 
     @Override
     public void dispose() {
-        tutorial.dispose();
+        exposition.dispose();
         localHyperStore.dispose();
     }
 }

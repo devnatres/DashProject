@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.tutorial;
+package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,7 +8,7 @@ import com.devnatres.dashproject.gameconstants.Time;
 import java.util.ArrayList;
 
 /**
- * Represents an animated figure for tutorials. <br>
+ * Represents an animated figure for expositions. <br>
  * It is composed with agents.
  *     <br>
  * Created by DevNatres on 17/02/2015.

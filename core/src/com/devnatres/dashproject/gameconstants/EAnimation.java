@@ -40,6 +40,18 @@ public enum EAnimation {
         }
     },
 
+    DASH_HALO_NORMAL {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "dash_halo_normal.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
+    DASH_HALO_EXTRA {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "dash_halo_extra.png", 2, 1, 5f, PlayMode.LOOP_PINGPONG);
+        }
+    },
+
     FOE_ROBOT_WALKING {
         public DnaAnimation create(HyperStore hyperStore) {
             return createAnimation(hyperStore, "foe_robot_walking.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);

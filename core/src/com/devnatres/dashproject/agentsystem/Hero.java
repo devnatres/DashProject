@@ -50,10 +50,10 @@ public class Hero extends Agent {
     private final Sound hitSound;
     private final Sound comboSound;
     private final Sound deadSound;
-    private final Sprite dashHalo_normal;
-    private final Sprite dashHalo_extra;
+    private Agent currentDashHalo;
+    private final Agent dashHalo_normal;
+    private final Agent dashHalo_extra;
     private float dashRadio;
-    private Sprite dashHalo;
     private final float scopeRadio;
     private final float scopeRadio2;
     private final Sprite damageImage;
@@ -94,8 +94,8 @@ public class Hero extends Agent {
         lowCoverDirection = new DirectionSelector();
         nextVolumeRect = new Rectangle(getVolumeRectangle());
 
-        dashHalo_normal = new Sprite(hyperStore.getTexture("dash_radio.png"));
-        dashHalo_extra = new Sprite(hyperStore.getTexture("dash_radio_extra.png"));
+        dashHalo_extra = new Agent(EAnimation.DASH_HALO_EXTRA.create(hyperStore));
+        dashHalo_normal = new Agent(EAnimation.DASH_HALO_NORMAL.create(hyperStore));
         setDashHalo(dashHalo_normal);
 
         scopeRadio = dashRadio + ATTACK_RADIO;
@@ -112,12 +112,12 @@ public class Hero extends Agent {
     @Override
     public void positionChanged() {
         super.positionChanged();
-        if (dashHalo != null) centerAccessories();
+        centerAccessories();
         map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
     }
 
     private void centerAccessories() {
-        dashHalo.setCenter(getCenterX(), getCenterY());
+        currentDashHalo.setCenter(getCenterX(), getCenterY());
         damageImage.setCenter(getCenterX(), getCenterY());
     }
 
@@ -319,9 +319,9 @@ public class Hero extends Agent {
         centerAccessories();
     }
 
-    private void setDashHalo(Sprite newDashHalo) {
-        dashHalo = newDashHalo;
-        dashRadio = dashHalo.getWidth() / 2;
+    private void setDashHalo(Agent newDashHalo) {
+        currentDashHalo = newDashHalo;
+        dashRadio = currentDashHalo.getWidth() / 2;
     }
 
     public boolean hasExtraDash() {
@@ -362,7 +362,8 @@ public class Hero extends Agent {
 
     @Override
     public void draw(Batch batch) {
-        dashHalo.draw(batch);
+        //dashHalo.draw(batch);
+        currentDashHalo.render(batch);
 
         if (immunityDuration > 0) {
             alphaModifier.modify(batch, IMMUNITY_ALPHA);

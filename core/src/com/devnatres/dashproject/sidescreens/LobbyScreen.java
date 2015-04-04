@@ -19,8 +19,8 @@ import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.resourcestore.HyperStore;
-import com.devnatres.dashproject.tutorial.ETutorial;
-import com.devnatres.dashproject.tutorial.TutorialScreen;
+import com.devnatres.dashproject.exposition.EExposition;
+import com.devnatres.dashproject.exposition.ExpositionScreen;
 
 /**
  * Represents a game screen for the "lobby room",
@@ -52,7 +52,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final Button down2Button;
 
     private LevelId currentLevelId;
-    private ETutorial eTutorial;
+    private EExposition eExposition;
 
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
 
@@ -133,7 +133,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         goButton.act(Time.FRAME, touchDownPointOnCamera);
         backButton.act(Time.FRAME, touchDownPointOnCamera);
-        if (eTutorial != ETutorial.NONE) tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
+        if (eExposition != EExposition.NONE) tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
         upButton.act(Time.FRAME, touchDownPointOnCamera);
         up2Button.act(Time.FRAME, touchDownPointOnCamera);
         downButton.act(Time.FRAME, touchDownPointOnCamera);
@@ -204,7 +204,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);
-        if (eTutorial != ETutorial.NONE) tutorialButton.draw(mainBatch);
+        if (eExposition != EExposition.NONE) tutorialButton.draw(mainBatch);
         up2Button.draw(mainBatch);
         upButton.draw(mainBatch);
         downButton.draw(mainBatch);
@@ -242,10 +242,10 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     @Override
     public void execute(Button button) {
         if (button == goButton) {
-            if (eTutorial == ETutorial.NONE || gameState.isTutorialVisited(currentLevelId)) {
+            if (eExposition == EExposition.NONE || gameState.isTutorialVisited(currentLevelId)) {
                 dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
             } else {
-                dashGame.setScreen(new TutorialScreen(dashGame, eTutorial, currentLevelId));
+                dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, currentLevelId));
                 gameState.setTutorialVisited(currentLevelId);
             }
         } else if (button == backButton) {
@@ -263,13 +263,13 @@ public class LobbyScreen implements Screen, IButtonExecutable {
             gameState.displaceCurrentLevel(-2);
             updateCurrentLevel();
         } else if (button == tutorialButton) {
-            dashGame.setScreen(new TutorialScreen(dashGame, eTutorial, null));
+            dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, null));
             gameState.setTutorialVisited(currentLevelId);
         }
     }
 
     private void updateCurrentLevel() {
         currentLevelId = gameState.getCurrentLevelId();
-        eTutorial = currentLevelId.getETutorial();
+        eExposition = currentLevelId.getETutorial();
     }
 }

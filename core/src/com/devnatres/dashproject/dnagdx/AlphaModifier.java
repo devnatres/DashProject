@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
+ * An AlphaModifier object can save the alpha value of the specified batch and set a new alpha value for it.
+ * An AlphaModifier object can restore the saved alpha value for the specified batch. <br>
+ *     <br>
  * Created by DevNatres on 03/04/2015.
  */
 public class AlphaModifier {

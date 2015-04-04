@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.space.Volume;
 
 /**
@@ -102,6 +103,11 @@ public class Agent extends Actor {
 
     public void draw(Batch batch) {
         draw(batch, DEFAULT_PARENT_ALPHA);
+    }
+
+    public void render(Batch batch) {
+        act(Time.FPS_TIME);
+        draw(batch);
     }
 
     public float getSpeed() {

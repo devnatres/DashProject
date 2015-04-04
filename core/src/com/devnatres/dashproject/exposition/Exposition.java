@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.tutorial;
+package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,11 +10,11 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import java.util.ArrayList;
 
 /**
- * Represents a tutorial <br>
+ * Represents a exposition <br>
  *     <br>
  * Created by DevNatres on 17/02/2015.
  */
-public class Tutorial implements Disposable {
+public class Exposition implements Disposable {
     private final ArrayList<Figure> figures = new ArrayList<Figure>();
     private Figure currentFigure;
     private int index;
@@ -25,7 +25,7 @@ public class Tutorial implements Disposable {
     private final Texture tapToFinish;
     private final HyperStore localHyperStore;
 
-    public Tutorial(DashGame dashGame, Texture title) {
+    public Exposition(DashGame dashGame, Texture title) {
         this.title = title;
 
         localHyperStore = new HyperStore();

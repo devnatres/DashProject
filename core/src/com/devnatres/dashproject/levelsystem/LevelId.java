@@ -1,6 +1,6 @@
 package com.devnatres.dashproject.levelsystem;
 
-import com.devnatres.dashproject.tutorial.ETutorial;
+import com.devnatres.dashproject.exposition.EExposition;
 
 /**
  * Identify a level and contains its information. <br>
@@ -78,12 +78,12 @@ public class LevelId {
         return initialTime;
     }
 
-    public ETutorial getETutorial() {
-        ETutorial eTutorial = ETutorial.NONE;
+    public EExposition getETutorial() {
+        EExposition eExposition = EExposition.NONE;
         try {
-            eTutorial = ETutorial.valueOf(tutorialName);
+            eExposition = EExposition.valueOf(tutorialName);
         } catch (Exception e) {
         }
-        return eTutorial;
+        return eExposition;
     }
 }
