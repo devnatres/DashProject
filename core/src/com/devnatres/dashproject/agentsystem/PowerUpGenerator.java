@@ -20,23 +20,14 @@ public class PowerUpGenerator {
     public static void generatePowerUpIfLucky(HyperStore hyperStore,
                                               LevelScreen levelScreen,
                                               Vector2 baseCenter) {
-
-        boolean thereIsLuck = Tools.randomBoolean(FAVORABLE_CASES, POSSIBLE_CASES);
-        if (!thereIsLuck) return;
-
-        EPowerUpType type = selectRandomType(levelScreen);
-
-        if (type != null) {
-            CoordinateInt coordinateInt = selectRandomPosition(levelScreen, baseCenter);
-            Vector2 targetCenter = new Vector2();
-            levelScreen.getMap().setThisCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
-            PowerUp powerUP = new PowerUp(levelScreen, hyperStore, type, baseCenter, targetCenter);
-            levelScreen.register(powerUP, AgentRegistry.EAgentLayer.FLOOR);
+        if (Tools.randomBoolean(FAVORABLE_CASES, POSSIBLE_CASES)) {
+            EPowerUpType type = selectRandomType(levelScreen);
+            if (type != null) generatePowerUpInRandomPosition(hyperStore, levelScreen, baseCenter, type);
         }
     }
 
     private static EPowerUpType selectRandomType(LevelScreen levelScreen) {
-        int index = Tools.randomInt(0, EPowerUpType.powerUpTypes.length-1);
+        int index = Tools.randomInt(0, EPowerUpType.powerUpTypes.length - 1);
         int initialIndex = index;
         EPowerUpType powerUpType = EPowerUpType.powerUpTypes[index];
         while (!powerUpType.isConvenient(levelScreen)) {
@@ -91,6 +82,17 @@ public class PowerUpGenerator {
             }
         }
         return thereIsTargetPosition ? new CoordinateInt(column, row) : null;
+    }
+
+    private static void generatePowerUpInRandomPosition(HyperStore hyperStore,
+                                                        LevelScreen levelScreen,
+                                                        Vector2 baseCenter,
+                                                        EPowerUpType type) {
+        CoordinateInt coordinateInt = selectRandomPosition(levelScreen, baseCenter);
+        Vector2 targetCenter = new Vector2();
+        levelScreen.getMap().setThisCellCenter(coordinateInt.a, coordinateInt.b, targetCenter);
+        PowerUp powerUP = new PowerUp(levelScreen, hyperStore, type, baseCenter, targetCenter);
+        levelScreen.register(powerUP, AgentRegistry.EAgentLayer.FLOOR);
     }
 
 

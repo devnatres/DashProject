@@ -317,13 +317,12 @@ public enum EAnimation {
         }
     },
     ;
+
     private static int SCORE_DURATION = 90;
 
     public static DnaAnimation createButtonAnimation(HyperStore hyperStore, String fileName) {
         return createAnimation(hyperStore, fileName, 3, 1, 5, PlayMode.LOOP_PINGPONG);
     }
-
-    abstract public DnaAnimation create(HyperStore hyperStore);
 
     static private DnaAnimation createAnimation(HyperStore hyperStore,
                                       String fileName,
@@ -347,4 +346,6 @@ public enum EAnimation {
         DnaAnimation animation = new DnaAnimation(frameDuration, frames, playMode);
         return animation;
     }
+
+    abstract public DnaAnimation create(HyperStore hyperStore);
 }

@@ -46,6 +46,7 @@ public class Foe extends Agent {
     private static final int TOTAL_SHAKE_DURATION = 40;
     private static final int PUM_DURATION = 15;
     private static final int FIRE_WAIT = 30;
+    private static final int PUM_IMAGE_Y_ADJUSTMENT = -3;
 
     private boolean dying;
     private int life;
@@ -254,7 +255,7 @@ public class Foe extends Agent {
             super.draw(batch, parentAlpha);
             if (pumImageDuration > 0) {
                 pumImageDuration--;
-                pumImage.setCenter(getCenterX(), getCenterY());
+                pumImage.setCenter(getCenterX(), getCenterY() + PUM_IMAGE_Y_ADJUSTMENT);
                 pumImage.draw(batch);
             }
         }

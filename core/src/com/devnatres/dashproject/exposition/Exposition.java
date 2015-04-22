@@ -10,7 +10,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import java.util.ArrayList;
 
 /**
- * Represents a exposition <br>
+ * Represents an exposition <br>
  *     <br>
  * Created by DevNatres on 17/02/2015.
  */

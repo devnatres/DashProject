@@ -27,7 +27,6 @@ class PowerUp extends Agent {
     private final Hero hero;
     private final EPowerUpType type;
     private final LevelScreen levelScreen;
-    private final HyperStore hyperStore;
     private final Agent messageAgent;
     private boolean flying;
 
@@ -45,7 +44,6 @@ class PowerUp extends Agent {
 
         this.type = type;
         this.levelScreen = levelScreen;
-        this.hyperStore = hyperStore;
 
         hero = levelScreen.getHero();
         captureSound = hyperStore.getSound("sounds/power_up.ogg");

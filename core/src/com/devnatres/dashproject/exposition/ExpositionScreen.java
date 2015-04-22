@@ -12,7 +12,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 
 /**
- * Represents a screen to render a Exposition object. <br>
+ * Represents a screen to render an Exposition object. <br>
  * When the exposition is finished,
  * if a levelId has been specified then the corresponding level will be created. <br>
  *     <br>
