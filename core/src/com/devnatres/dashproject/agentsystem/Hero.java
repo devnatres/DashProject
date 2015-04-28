@@ -48,7 +48,6 @@ public class Hero extends Agent {
     private final Sound dashSound;
     private final Sound failDashSound;
     private final Sound hitSound;
-    private final Sound comboSound;
     private final Sound deadSound;
     private Agent currentDashHalo;
     private final Agent dashHalo_normal;
@@ -87,7 +86,6 @@ public class Hero extends Agent {
         dashSound = hyperStore.getSound("sounds/dash.ogg");
         failDashSound = hyperStore.getSound("sounds/fail_hit.ogg");
         hitSound = hyperStore.getSound("sounds/hit.ogg");
-        comboSound = hyperStore.getSound("sounds/combo.ogg");
         deadSound = hyperStore.getSound("sounds/hit.ogg");
 
         coverDirection = new DirectionSelector();
@@ -237,11 +235,7 @@ public class Hero extends Agent {
                 attackingTime = attackingAnimation.getAnimationDuration();
                 foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
-                if (levelScreen.isBulletTime()) {
-                    globalAudio.play(comboSound, .1f);
-                } else {
-                    globalAudio.play(hitSound, .1f);
-                }
+                globalAudio.play(hitSound, .1f);
 
                 attackedFoes.add(foe);
             }

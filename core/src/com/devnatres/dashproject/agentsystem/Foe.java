@@ -1,10 +1,12 @@
 package com.devnatres.dashproject.agentsystem;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
@@ -76,6 +78,9 @@ public class Foe extends Agent {
     private final TransientAgent comboScoreAgent;
     private final int comboScore;
 
+    private final GlobalAudio globalAudio = GlobalAudio.getInstance();
+    private final Sound dieSound;
+
     public Foe(LevelScreen levelScreen,
                HyperStore hyperStore,
                EAnimation basicEAnimation,
@@ -119,6 +124,8 @@ public class Foe extends Agent {
         }
 
         foeDamageResult = new FoeDamageResult();
+
+        dieSound = hyperStore.getSound("sounds/dead_foe.ogg");
     }
 
 
@@ -202,6 +209,8 @@ public class Foe extends Agent {
         if (life > 0) life -= damagePoints;
 
         if (life <= 0) {
+            globalAudio.play(dieSound, .2f);
+
             if (horde != null) horde.countKilledFoe();
 
             dying = true;
