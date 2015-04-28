@@ -137,6 +137,8 @@ public class Foe extends Agent {
                 }
                 super.act(delta);
                 shotIfHeroInSight();
+            } else {
+                getAnimation().updateStateTime();
             }
             heroLastCenter.set(hero.getCenter());
         }

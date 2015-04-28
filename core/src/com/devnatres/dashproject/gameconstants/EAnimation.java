@@ -65,7 +65,7 @@ public enum EAnimation {
 
     FOE_TANK_WALKING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "foe_tank_walking.png", 2, 1, 10f, PlayMode.LOOP_PINGPONG);
+            return createAnimation(hyperStore, "foe_tank_walking.png", 2, 1, 15f, PlayMode.LOOP_PINGPONG);
         }
     },
     FOE_TANK_DYING {
@@ -75,7 +75,7 @@ public enum EAnimation {
     },
     FOE_TANK_STUNNING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "foe_tank_stunning.png", 2, 1, 30f, PlayMode.NORMAL);
+            return createAnimation(hyperStore, "foe_tank_stunning.png", 2, 1, 5f, PlayMode.LOOP_PINGPONG);
         }
     },
 
