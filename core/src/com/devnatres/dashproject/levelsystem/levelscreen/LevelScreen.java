@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -26,7 +25,6 @@ import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.Score;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
-import com.devnatres.dashproject.space.DirectionSelector;
 import com.devnatres.dashproject.tools.Tools;
 
 import static com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
@@ -56,7 +54,7 @@ public class LevelScreen implements Screen {
     AgentRegistry agentRegistry;
     GameState gameState;
     private Sprite lifePointImage;
-    private DnaAnimation radar;
+    private final Radar radar;
     private GameMenu gameMenu;
     private Score score;
     private EPlayMode playMode;
@@ -81,7 +79,7 @@ public class LevelScreen implements Screen {
         messages = new LevelScreenMessages(set);
         variables = new LevelScreenVariables(set.localHyperStore);
 
-        radar = EAnimation.RADAR_INDICATOR.create(set.localHyperStore);
+        radar = new Radar(this, set.localHyperStore);
         lifePointImage = new Sprite(set.localHyperStore.getTexture("heal_point.png"));
 
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
@@ -468,66 +466,18 @@ public class LevelScreen implements Screen {
             }
         }
 
-        if (!thereIsFoeOnCamera) {
-            radar.updateStateTime();
+        if (numberOfFoes > 0 && !thereIsFoeOnCamera) {
+            radar.act(Time.FRAME);
             HordeGroup hordeGroup = enemy.getHordeGroup();
             int numberOfHordes = hordeGroup.size();
             for (int i = 0; i < numberOfHordes; i++){
                 Horde horde = hordeGroup.getHorde(i);
                 if (!horde.isKilled()) {
-                    renderFoeRadar_indicator(horde.getReferencePosition());
+                    radar.lookAt(horde.getReferencePosition());
+                    radar.draw(set.mainBatch);
                 }
             }
         }
-    }
-
-    private void renderFoeRadar_indicator(Vector2 referencePos) {
-        DirectionSelector directionSelector = set.mainCamera.getOutDirection(referencePos.x, referencePos.y);
-        TextureRegion textureRegion = radar.getCurrentKeyFrame();
-        float spriteLeft, spriteBottom;
-
-        if (directionSelector.isUp()) {
-            spriteBottom = set.mainCamera.getUp() - textureRegion.getRegionHeight();
-            spriteLeft = renderFoeRadar_indicator_spriteLeft(directionSelector, textureRegion, referencePos);
-        } else if (directionSelector.isDown()) {
-            spriteBottom = set.mainCamera.getDown();
-            spriteLeft = renderFoeRadar_indicator_spriteLeft(directionSelector, textureRegion, referencePos);
-        } else {
-            if (directionSelector.isLeft()) {
-                spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
-                spriteLeft = set.mainCamera.getLeft();
-            } else { // isRight()
-                spriteBottom = referencePos.y - textureRegion.getRegionHeight()/2f;
-                spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
-            }
-
-            if (spriteBottom < set.mainCamera.getDown()) {
-                spriteBottom = set.mainCamera.getDown();
-            } else if ((spriteBottom + textureRegion.getRegionHeight()) > set.mainCamera.getUp()) {
-                spriteBottom = set.mainCamera.getUp() - textureRegion.getRegionHeight();
-            }
-        }
-
-        set.mainBatch.draw(textureRegion, spriteLeft, spriteBottom);
-    }
-
-    private float renderFoeRadar_indicator_spriteLeft(DirectionSelector directionSelector,
-                                                      TextureRegion textureRegion,
-                                                      Vector2 referencePos) {
-        float spriteLeft;
-        if (directionSelector.isLeft()) {
-            spriteLeft = set.mainCamera.getLeft();
-        } else if (directionSelector.isRight()) {
-            spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
-        } else {
-            spriteLeft = referencePos.x - textureRegion.getRegionWidth()/2f;
-            if (spriteLeft < set.mainCamera.getLeft()) {
-                spriteLeft = set.mainCamera.getLeft();
-            } else if ((spriteLeft+textureRegion.getRegionWidth()) > set.mainCamera.getRight()) {
-                spriteLeft = set.mainCamera.getRight() - textureRegion.getRegionWidth();
-            }
-        }
-        return spriteLeft;
     }
 
     private void inputForHero() {

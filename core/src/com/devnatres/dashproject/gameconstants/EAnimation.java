@@ -100,9 +100,19 @@ public enum EAnimation {
         }
     },
 
-    RADAR_INDICATOR {
+    RADAR_RIGHT {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createAnimation(hyperStore, "radar_indicator.png", 4, 1, 5, PlayMode.LOOP_PINGPONG);
+            return createAnimation(hyperStore, "radar_right.png", 1, 1, 8, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    RADAR_UP {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "radar_up.png", 1, 1, 8, PlayMode.LOOP_PINGPONG);
+        }
+    },
+    RADAR_RIGHT_UP {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return createAnimation(hyperStore, "radar_rightup.png", 1, 1, 8, PlayMode.LOOP_PINGPONG);
         }
     },
 
