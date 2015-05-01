@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.animations.EAnimButton;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimation;
+import com.devnatres.dashproject.exposition.EExposition;
+import com.devnatres.dashproject.exposition.ExpositionScreen;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
@@ -19,8 +21,6 @@ import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.resourcestore.HyperStore;
-import com.devnatres.dashproject.exposition.EExposition;
-import com.devnatres.dashproject.exposition.ExpositionScreen;
 
 /**
  * Represents a game screen for the "lobby room",
@@ -72,49 +72,49 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         goButton = new Button(380, 64,
-                EAnimation.BUTTON_GO_STANDBY.create(localHyperStore),
-                EAnimation.BUTTON_GO_PUSHED.create(localHyperStore),
+                EAnimButton.BUTTON_GO_STANDBY.create(localHyperStore),
+                EAnimButton.BUTTON_GO_PUSHED.create(localHyperStore),
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         backButton = new Button(100, 64,
-                EAnimation.BUTTON_BACK_STANDBY.create(localHyperStore),
-                EAnimation.BUTTON_BACK_PUSHED.create(localHyperStore),
+                EAnimButton.BUTTON_BACK_STANDBY.create(localHyperStore),
+                EAnimButton.BUTTON_BACK_PUSHED.create(localHyperStore),
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         tutorialButton = new Button(240, 64,
-                EAnimation.BUTTON_TUTORIAL_STANDBY.create(localHyperStore),
+                EAnimButton.BUTTON_TUTORIAL_STANDBY.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         up2Button = new Button(ARROW_BUTTON_X, 510,
-                EAnimation.BUTTON_ARROW_UP2.create(localHyperStore),
+                EAnimButton.BUTTON_ARROW_UP2.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         upButton = new Button(ARROW_BUTTON_X, 430,
-                EAnimation.BUTTON_ARROW_UP.create(localHyperStore),
+                EAnimButton.BUTTON_ARROW_UP.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         downButton = new Button(ARROW_BUTTON_X, 300,
-                EAnimation.BUTTON_ARROW_DOWN.create(localHyperStore),
+                EAnimButton.BUTTON_ARROW_DOWN.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         down2Button = new Button(ARROW_BUTTON_X, 210,
-                EAnimation.BUTTON_ARROW_DOWN2.create(localHyperStore),
+                EAnimButton.BUTTON_ARROW_DOWN2.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,

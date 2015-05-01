@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.agentsystem.Number;
 import com.devnatres.dashproject.agentsystem.Number.ENumberType;
-import com.devnatres.dashproject.gameconstants.EAnimation;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
@@ -27,10 +27,10 @@ class LevelScreenVariables {
     private final Agent timeHalo;
 
     public LevelScreenVariables(HyperStore hyperStore) {
-        timeNumber = new Number(EAnimation.NUMBERS_GOLD.create(hyperStore), ENumberType.DECIMAL1);
+        timeNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(hyperStore), ENumberType.DECIMAL1);
         timeNumber.setUnitPosition(240, 700);
 
-        timeHalo = new Agent(EAnimation.TIME_HALO.create(hyperStore));
+        timeHalo = new Agent(EAnimMedley.TIME_HALO.create(hyperStore));
         timeHalo.setCenter(timeNumber.getUnitX()+timeNumber.getDigitWidth()+timeNumber.getDecimalSeparatorWidth()/2,
                 timeNumber.getUnitY()+timeNumber.getDigitHeight()/2);
 

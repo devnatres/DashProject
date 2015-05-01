@@ -4,10 +4,12 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.animations.EAnimFoe;
+import com.devnatres.dashproject.animations.EAnimScore;
+import com.devnatres.dashproject.animations.IAnimCreator;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
@@ -21,9 +23,9 @@ public class Foe extends Agent {
     public static Foe buildRobot(LevelScreen levelScreen, HyperStore hyperStore) {
       return new Foe(levelScreen,
               hyperStore,
-              EAnimation.FOE_ROBOT_WALKING,
-              EAnimation.FOE_ROBOT_WALKING,
-              EAnimation.FOE_ROBOT_DYING,
+              EAnimFoe.FOE_ROBOT_WALKING,
+              EAnimFoe.FOE_ROBOT_WALKING,
+              EAnimFoe.FOE_ROBOT_DYING,
               "pum.png",
               1,
               1,
@@ -34,9 +36,9 @@ public class Foe extends Agent {
     public static Foe buildTank(LevelScreen levelScreen, HyperStore hyperStore) {
         return new Foe(levelScreen,
                 hyperStore,
-                EAnimation.FOE_TANK_WALKING,
-                EAnimation.FOE_TANK_STUNNING,
-                EAnimation.FOE_TANK_DYING,
+                EAnimFoe.FOE_TANK_WALKING,
+                EAnimFoe.FOE_TANK_STUNNING,
+                EAnimFoe.FOE_TANK_DYING,
                 "pum.png",
                 2,
                 2,
@@ -83,20 +85,20 @@ public class Foe extends Agent {
 
     public Foe(LevelScreen levelScreen,
                HyperStore hyperStore,
-               EAnimation basicEAnimation,
-               EAnimation stunEAnimation,
-               EAnimation deadEAnimation,
+               IAnimCreator basicAnimCreator,
+               IAnimCreator stunAnimCreator,
+               IAnimCreator deadAnimCreator,
                String pumTexture,
                int life,
                int damage,
                int standardScore,
                int comboScore) {
 
-        super(basicEAnimation.create(hyperStore));
+        super(basicAnimCreator.create(hyperStore));
 
         basicAnimation = getAnimation();
-        stunAnimation = stunEAnimation.create(hyperStore);
-        deadAnimation = deadEAnimation.create(hyperStore);
+        stunAnimation = stunAnimCreator.create(hyperStore);
+        deadAnimation = deadAnimCreator.create(hyperStore);
         pumImage = new Sprite(hyperStore.getTexture(pumTexture));
 
         this.life = life;
@@ -113,14 +115,14 @@ public class Foe extends Agent {
         this.standardScore = standardScore;
         this.comboScore = comboScore;
         if (standardScore == 50) {
-            standardScoreAgent = new TransientUpAgent(EAnimation.SCORE_50.create(hyperStore));
+            standardScoreAgent = new TransientUpAgent(EAnimScore.SCORE_50.create(hyperStore));
         } else {
-            standardScoreAgent = new TransientUpAgent(EAnimation.SCORE_75.create(hyperStore));
+            standardScoreAgent = new TransientUpAgent(EAnimScore.SCORE_75.create(hyperStore));
         }
         if (comboScore == 100) {
-            comboScoreAgent = new TransientUpAgent(EAnimation.SCORE_100.create(hyperStore));
+            comboScoreAgent = new TransientUpAgent(EAnimScore.SCORE_100.create(hyperStore));
         } else {
-            comboScoreAgent = new TransientUpAgent(EAnimation.SCORE_150.create(hyperStore));
+            comboScoreAgent = new TransientUpAgent(EAnimScore.SCORE_150.create(hyperStore));
         }
 
         foeDamageResult = new FoeDamageResult();

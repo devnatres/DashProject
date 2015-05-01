@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
 import com.devnatres.dashproject.agentsystem.Number;
-import com.devnatres.dashproject.gameconstants.EAnimation;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -67,7 +67,7 @@ public class Score {
         this.hero = levelScreen.getHero();
         this.hordeGroup = levelScreen.getHordeGroup();
 
-        actionScoreNumber = new Number(EAnimation.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
+        actionScoreNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
         actionScoreNumber.setUnitPosition(100, 700);
     }
 

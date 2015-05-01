@@ -1,7 +1,7 @@
 package com.devnatres.dashproject.agentsystem;
 
+import com.devnatres.dashproject.animations.EAnimPowerUp;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -19,7 +19,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getAnimation(HyperStore hyperStore) {
-            return EAnimation.POWER_UP.create(hyperStore);
+            return EAnimPowerUp.POWER_UP.create(hyperStore);
         }
 
         @Override
@@ -29,7 +29,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getMessage(HyperStore hyperStore) {
-            return EAnimation.POWER_UP_MESSAGE_TIME.create(hyperStore);
+            return EAnimPowerUp.POWER_UP_MESSAGE_TIME.create(hyperStore);
         }
     },
     LIFE {
@@ -40,7 +40,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getAnimation(HyperStore hyperStore) {
-            return EAnimation.POWER_UP.create(hyperStore);
+            return EAnimPowerUp.POWER_UP.create(hyperStore);
         }
 
         @Override
@@ -50,7 +50,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getMessage(HyperStore hyperStore) {
-            return EAnimation.POWER_UP_MESSAGE_LIFE.create(hyperStore);
+            return EAnimPowerUp.POWER_UP_MESSAGE_LIFE.create(hyperStore);
         }
     },
     DASH {
@@ -61,7 +61,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getAnimation(HyperStore hyperStore) {
-            return EAnimation.POWER_UP.create(hyperStore);
+            return EAnimPowerUp.POWER_UP.create(hyperStore);
         }
 
         @Override
@@ -71,7 +71,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getMessage(HyperStore hyperStore) {
-            return EAnimation.POWER_UP_MESSAGE_DASH.create(hyperStore);
+            return EAnimPowerUp.POWER_UP_MESSAGE_DASH.create(hyperStore);
         }
     },
     IMMUNITY {
@@ -82,7 +82,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getAnimation(HyperStore hyperStore) {
-            return EAnimation.POWER_UP.create(hyperStore);
+            return EAnimPowerUp.POWER_UP.create(hyperStore);
         }
 
         @Override
@@ -92,7 +92,7 @@ enum EPowerUpType {
 
         @Override
         DnaAnimation getMessage(HyperStore hyperStore) {
-            return EAnimation.POWER_UP_MESSAGE_IMMUNITY.create(hyperStore);
+            return EAnimPowerUp.POWER_UP_MESSAGE_IMMUNITY.create(hyperStore);
         }
     };
     abstract boolean isConvenient(LevelScreen levelScreen);

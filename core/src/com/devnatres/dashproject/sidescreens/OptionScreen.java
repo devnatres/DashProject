@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Agent;
+import com.devnatres.dashproject.animations.EAnimButton;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.Button;
 import com.devnatres.dashproject.gameinput.IButtonExecutable;
@@ -59,7 +59,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
 
         soundButton = new Button(240, 700,
-                EAnimation.BUTTON_OPT_SOUND.create(localHyperStore),
+                EAnimButton.BUTTON_OPT_SOUND.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
@@ -67,21 +67,21 @@ public class OptionScreen implements Screen, IButtonExecutable {
         soundButton.setAutomaticSoundOff();
 
         cameraButton = new Button(240, 500,
-                EAnimation.BUTTON_OPT_CAMERA.create(localHyperStore),
+                EAnimButton.BUTTON_OPT_CAMERA.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         tutorialsButton = new Button(240, 300,
-                EAnimation.BUTTON_OPT_TUTORIAL.create(localHyperStore),
+                EAnimButton.BUTTON_OPT_TUTORIAL.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         backButton = new Button(240, 100,
-                EAnimation.BUTTON_OPT_BACK.create(localHyperStore),
+                EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,

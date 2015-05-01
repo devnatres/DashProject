@@ -3,11 +3,11 @@ package com.devnatres.dashproject.agentsystem;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.dnagdx.AlphaModifier;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.space.DirectionSelector;
@@ -38,11 +38,11 @@ public class Radar extends Agent {
     private final Sound radarSound;
 
     public Radar(LevelScreen levelScreen, HyperStore hyperStore) {
-        super(EAnimation.RADAR_RIGHT.create(hyperStore));
+        super(EAnimMedley.RADAR_RIGHT.create(hyperStore));
 
         rightAnimation = getAnimation();
-        upAnimation = EAnimation.RADAR_UP.create(hyperStore);
-        rightUpAnimation = EAnimation.RADAR_RIGHT_UP.create(hyperStore);
+        upAnimation = EAnimMedley.RADAR_UP.create(hyperStore);
+        rightUpAnimation = EAnimMedley.RADAR_RIGHT_UP.create(hyperStore);
 
         camera = levelScreen.getCamera();
 

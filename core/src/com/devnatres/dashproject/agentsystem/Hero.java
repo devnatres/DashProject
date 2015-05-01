@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
+import com.devnatres.dashproject.animations.EAnimHero;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.AlphaModifier;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;
@@ -73,15 +73,15 @@ public class Hero extends Agent {
     }
 
     public Hero(LevelScreen levelScreen, HyperStore hyperStore) {
-        super(EAnimation.HERO_WALKING.create(hyperStore));
+        super(EAnimHero.HERO_WALKING.create(hyperStore));
 
         this.hyperStore = hyperStore;
         this.levelScreen = levelScreen;
 
         walkingAnimation = getAnimation();
-        crouchingAnimation = EAnimation.HERO_CROUCHING.create(hyperStore);
-        attackingAnimation = EAnimation.HERO_ATTACKING.create(hyperStore);
-        deadAnimation = EAnimation.HERO_DYING.create(hyperStore);
+        crouchingAnimation = EAnimHero.HERO_CROUCHING.create(hyperStore);
+        attackingAnimation = EAnimHero.HERO_ATTACKING.create(hyperStore);
+        deadAnimation = EAnimHero.HERO_DYING.create(hyperStore);
 
         dashSound = hyperStore.getSound("sounds/dash.ogg");
         failDashSound = hyperStore.getSound("sounds/fail_hit.ogg");
@@ -92,8 +92,8 @@ public class Hero extends Agent {
         lowCoverDirection = new DirectionSelector();
         nextVolumeRect = new Rectangle(getVolumeRectangle());
 
-        dashHalo_extra = new Agent(EAnimation.DASH_HALO_EXTRA.create(hyperStore));
-        dashHalo_normal = new Agent(EAnimation.DASH_HALO_NORMAL.create(hyperStore));
+        dashHalo_extra = new Agent(EAnimHero.DASH_HALO_EXTRA.create(hyperStore));
+        dashHalo_normal = new Agent(EAnimHero.DASH_HALO_NORMAL.create(hyperStore));
         setDashHalo(dashHalo_normal);
 
         scopeRadio = dashRadio + ATTACK_RADIO;
@@ -145,7 +145,7 @@ public class Hero extends Agent {
         nextVolumeRect.set(x, y, getVolumeWidth(), getVolumeHeight());
 
         if (map.slide(nextVolumeRect)) {
-            Agent dashShadow = new TransientAgent(EAnimation.HERO_DASHING.create(hyperStore));
+            Agent dashShadow = new TransientAgent(EAnimHero.HERO_DASHING.create(hyperStore));
             dashShadow.setCenter(getCenterX(), getCenterY());
             levelScreen.register(dashShadow, EAgentLayer.TRUNK);
 

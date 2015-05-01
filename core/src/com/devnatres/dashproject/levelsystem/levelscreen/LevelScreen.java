@@ -11,10 +11,10 @@ import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.*;
 import com.devnatres.dashproject.agentsystem.Number;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
-import com.devnatres.dashproject.gameconstants.EAnimation;
 import com.devnatres.dashproject.gameconstants.EScroll;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gamestate.GameState;
@@ -85,8 +85,8 @@ public class LevelScreen implements Screen {
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
 
-        damageSoftFlashing = EAnimation.DAMAGE_SOFT_FLASHING.create(set.localHyperStore);
-        damageHardFlashing = EAnimation.DAMAGE_HARD_FLASHING.create(set.localHyperStore);
+        damageSoftFlashing = EAnimMedley.DAMAGE_SOFT_FLASHING.create(set.localHyperStore);
+        damageHardFlashing = EAnimMedley.DAMAGE_HARD_FLASHING.create(set.localHyperStore);
 
         prepareGame();
 
