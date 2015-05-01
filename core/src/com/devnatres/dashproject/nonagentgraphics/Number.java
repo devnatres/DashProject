@@ -1,4 +1,4 @@
-package com.devnatres.dashproject.agentsystem;
+package com.devnatres.dashproject.nonagentgraphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

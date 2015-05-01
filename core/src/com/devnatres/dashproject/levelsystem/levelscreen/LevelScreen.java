@@ -3,14 +3,12 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.*;
-import com.devnatres.dashproject.agentsystem.Number;
 import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
@@ -23,6 +21,8 @@ import com.devnatres.dashproject.levelsystem.GameMenu;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.levelsystem.LevelMap;
 import com.devnatres.dashproject.levelsystem.Score;
+import com.devnatres.dashproject.nonagentgraphics.LifeBar;
+import com.devnatres.dashproject.nonagentgraphics.Number;
 import com.devnatres.dashproject.sidescreens.LobbyScreen;
 import com.devnatres.dashproject.sidescreens.MainMenuScreen;
 import com.devnatres.dashproject.tools.Tools;
@@ -53,7 +53,7 @@ public class LevelScreen implements Screen {
     Hero hero;
     AgentRegistry agentRegistry;
     GameState gameState;
-    private Sprite lifePointImage;
+    private final LifeBar lifeBar;
     private final Radar radar;
     private GameMenu gameMenu;
     private Score score;
@@ -80,7 +80,7 @@ public class LevelScreen implements Screen {
         variables = new LevelScreenVariables(set.localHyperStore);
 
         radar = new Radar(this, set.localHyperStore);
-        lifePointImage = new Sprite(set.localHyperStore.getTexture("heal_point.png"));
+        lifeBar = new LifeBar(set.localHyperStore);
 
         gameMenu = new GameMenu(this, set.localHyperStore, gameState);
         score = new Score(this, set.localHyperStore);
@@ -435,12 +435,7 @@ public class LevelScreen implements Screen {
         }
         timeNumber.render(set.mainBatch);
 
-        int life = hero.getLife();
-        float lifeWidth = lifePointImage.getWidth() + 1;
-        for (int i = 1; i <= life; i++) {
-            lifePointImage.setPosition(350 + (i*lifeWidth), set.screenHeight - 20);
-            lifePointImage.draw(set.mainBatch);
-        }
+        lifeBar.paint(set.mainBatch, hero.getLife());
 
         set.mainFont.draw(set.mainBatch, enemy.getCurrentHordeCountString(), 450, set.screenHeight - 10);
     }

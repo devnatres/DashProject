@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
-import com.devnatres.dashproject.agentsystem.Number;
+import com.devnatres.dashproject.nonagentgraphics.Number;
 import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.resourcestore.HyperStore;

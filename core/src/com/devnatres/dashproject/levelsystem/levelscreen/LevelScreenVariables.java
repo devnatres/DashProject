@@ -3,8 +3,8 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.agentsystem.Agent;
-import com.devnatres.dashproject.agentsystem.Number;
-import com.devnatres.dashproject.agentsystem.Number.ENumberType;
+import com.devnatres.dashproject.nonagentgraphics.Number;
+import com.devnatres.dashproject.nonagentgraphics.Number.ENumberType;
 import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
