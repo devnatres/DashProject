@@ -10,7 +10,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 public enum EAnimPowerUp implements IAnimCreator {
     POWER_UP {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "power_up_anim.png", 8, 1, 10, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "power_up_anim.png", 8, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
     POWER_UP_MESSAGE_TIME {

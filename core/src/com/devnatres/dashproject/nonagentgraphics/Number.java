@@ -10,6 +10,10 @@ import com.devnatres.dashproject.tools.Tools;
 /**
  * Represents a number that draws itself with a bitmap atlas. <br>
  *     <br>
+ * The distribution of the numbers in each frame is: "0123456789."
+ * Where each number has the same width as the others, and the decimal separator has half-width.
+ * It can exist one row per frame if the numbers are animated.
+ *     <br>
  * Created by DevNatres on 26/02/2015.
  */
 public class Number {
