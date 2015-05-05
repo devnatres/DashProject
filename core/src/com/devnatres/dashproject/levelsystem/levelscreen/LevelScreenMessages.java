@@ -9,14 +9,15 @@ import com.devnatres.dashproject.agentsystem.Agent;
  * Created by DevNatres on 24/02/2015.
  */
 public class LevelScreenMessages {
-    Agent agentMessage;
-    int agentMessageDuration;
-
+    Agent messageAgent;
+    int messageAgentDuration;
+    final Agent lineAgent;
     final Texture dissipatedMessage;
     final Texture timeoutMessage;
     final Texture readyMessage;
 
     public LevelScreenMessages(LevelScreenSet set) {
+        lineAgent = new Agent(set.localHyperStore.getTexture("line.png"));
         dissipatedMessage = set.localHyperStore.getTexture("message_dissipated.png");
         timeoutMessage = set.localHyperStore.getTexture("message_timeout.png");
         readyMessage = set.localHyperStore.getTexture("message_ready.png");

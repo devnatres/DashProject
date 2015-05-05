@@ -378,14 +378,15 @@ public class LevelScreen implements Screen {
     }
 
     public void setAgentMessage(Agent agent, int duration) {
-        messages.agentMessage = agent;
-        messages.agentMessageDuration = duration;
+        messages.messageAgent = agent;
+        messages.messageAgentDuration = duration;
     }
 
     private void renderAnimatedMessage() {
-        if (messages.agentMessage != null && messages.agentMessageDuration > 0) {
-            messages.agentMessageDuration--;
-            set.drawCentered(messages.agentMessage);
+        if (messages.messageAgent != null && messages.messageAgentDuration > 0) {
+            messages.messageAgentDuration--;
+            set.drawCentered(messages.lineAgent);
+            set.drawCentered(messages.messageAgent);
         }
     }
 
