@@ -66,7 +66,7 @@ enum EPowerUpType {
 
         @Override
         void activateEffect(LevelScreen levelScreen) {
-            levelScreen.getHero().activateExtraDash(PowerUp.EXTRA_DASH_DURATION);
+            levelScreen.getHero().activateExtraDash(PowerUp.EXTRA_DASH_DURATION, PowerUp.EXTRA_DASH_DURATION_SHORT);
         }
 
         @Override
@@ -87,7 +87,7 @@ enum EPowerUpType {
 
         @Override
         void activateEffect(LevelScreen levelScreen) {
-            levelScreen.getHero().activateImmunity(PowerUp.IMMUNITY_DURATION);
+            levelScreen.getHero().activateImmunity(PowerUp.IMMUNITY_DURATION, PowerUp.IMMUNITY_DURATION_SHORT);
         }
 
         @Override

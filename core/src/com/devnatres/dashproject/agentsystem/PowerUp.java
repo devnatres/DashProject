@@ -22,7 +22,9 @@ class PowerUp extends Agent {
     static final float EXTRA_TIME = 2.5f;
     static final int EXTRA_LIFE = 3;
     static final int IMMUNITY_DURATION = 300;
+    static final int IMMUNITY_DURATION_SHORT = 100;
     static final int EXTRA_DASH_DURATION = 600;
+    static final int EXTRA_DASH_DURATION_SHORT = 150;
 
     private final Hero hero;
     private final EPowerUpType type;
