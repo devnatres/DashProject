@@ -31,11 +31,17 @@ public class Hero extends Agent {
     private static final float ATTACK_RADIO2 = ATTACK_RADIO * ATTACK_RADIO;
     private static final float IMMUNITY_ALPHA = .5f;
     private static final int DAMAGE_FLASHING_DURATION = 15;
+    private static final float POWER_UP_SHORT_FACTOR = 4f;
+    private static final int FLICK_DURATION = 5;
 
     private boolean dying;
     private int life = MAX_LIFE;
     private int immunityDuration;
+    private int immunityDuration_short;
+    private boolean showImmunity;
     private int extraDashDuration;
+    private int extraDashDuration_short;
+    private boolean hideExtraDash;
 
     private final DirectionSelector coverDirection;
     private final DirectionSelector lowCoverDirection;
@@ -199,13 +205,22 @@ public class Hero extends Agent {
                 assureNormalAnimation();
             }
 
-            if (immunityDuration > 0) immunityDuration--;
+            if (immunityDuration > 0) {
+                immunityDuration--;
+                if ((immunityDuration < immunityDuration_short) && ((immunityDuration % FLICK_DURATION) == 0)) {
+                    showImmunity = !showImmunity;
+                }
+            }
 
             if (extraDashDuration > 0) {
                 extraDashDuration--;
                 if (extraDashDuration == 0) {
                     setDashHalo(dashHalo_normal);
                     centerAccessories();
+                } else {
+                    if ((extraDashDuration < extraDashDuration_short) && ((extraDashDuration % FLICK_DURATION) == 0)) {
+                        hideExtraDash = !hideExtraDash;
+                    }
                 }
             }
         }
@@ -309,6 +324,9 @@ public class Hero extends Agent {
 
     public void activateExtraDash(int duration) {
         extraDashDuration = duration;
+        extraDashDuration_short = (int)(extraDashDuration / POWER_UP_SHORT_FACTOR);
+        hideExtraDash = false;
+
         setDashHalo(dashHalo_extra);
         centerAccessories();
     }
@@ -324,6 +342,8 @@ public class Hero extends Agent {
 
     public void addImmunity(int duration) {
         immunityDuration = duration;
+        immunityDuration_short = (int)(immunityDuration / POWER_UP_SHORT_FACTOR);
+        showImmunity = true;
     }
 
     public boolean hasImmunity() {
@@ -356,13 +376,18 @@ public class Hero extends Agent {
 
     @Override
     public void draw(Batch batch) {
-        //dashHalo.draw(batch);
-        currentDashHalo.render(batch);
+        if (extraDashDuration > 0) {
+            if (hideExtraDash) alphaModifier.modify(batch, IMMUNITY_ALPHA);
+            currentDashHalo.render(batch);
+            if (hideExtraDash) alphaModifier.restore(batch);
+        } else {
+            currentDashHalo.render(batch);
+        }
 
         if (immunityDuration > 0) {
-            alphaModifier.modify(batch, IMMUNITY_ALPHA);
+            if (showImmunity) alphaModifier.modify(batch, IMMUNITY_ALPHA);
             super.draw(batch);
-            alphaModifier.restore(batch);
+            if (showImmunity) alphaModifier.restore(batch);
         } else {
             super.draw(batch);
         }
@@ -372,5 +397,4 @@ public class Hero extends Agent {
             damageImage.draw(batch);
         }
     }
-
 }
