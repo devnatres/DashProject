@@ -87,7 +87,7 @@ enum EPowerUpType {
 
         @Override
         void activateEffect(LevelScreen levelScreen) {
-            levelScreen.getHero().addImmunity(PowerUp.IMMUNITY_DURATION);
+            levelScreen.getHero().activateImmunity(PowerUp.IMMUNITY_DURATION);
         }
 
         @Override
