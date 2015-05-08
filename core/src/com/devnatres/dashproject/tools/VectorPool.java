@@ -17,7 +17,7 @@ public final class VectorPool {
     }, MAX_VECTORS, true);
 
     /**
-     * To assure class pre-loading, not obligatory
+     * To assure VectorPool class pre-loading, not obligatory
      */
     public static final void initialize() {}
 

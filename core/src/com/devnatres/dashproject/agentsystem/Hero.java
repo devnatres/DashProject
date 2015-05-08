@@ -32,16 +32,14 @@ public class Hero extends Agent {
     private static final float STANDARD_ALPHA = .5f;
     private static final int DAMAGE_FLASHING_DURATION = 15;
 
-    private static final int FLICK_DURATION = 5;
+    static {
+        VectorPool.initialize();
+    }
 
     private boolean dying;
     private int life = MAX_LIFE;
-    private int immunityDuration;
-    private int immunityDurationShort;
-    private boolean showHeroAlpha;
-    private int extraDashDuration;
-    private int extraDashDurationShort;
-    private boolean showDashAlpha;
+    private final PowerUpExistence immunityPowerUpExistence;
+    private final PowerUpExistence extraDashPowerUpExistence;
 
     private final DirectionSelector coverDirection;
     private final DirectionSelector lowCoverDirection;
@@ -73,10 +71,6 @@ public class Hero extends Agent {
     private final LevelScreen levelScreen;
     private final LevelMap map;
     private final HyperStore hyperStore;
-
-    static {
-        VectorPool.initialize();
-    }
 
     public Hero(LevelScreen levelScreen, HyperStore hyperStore) {
         super(EAnimHero.HERO_WALKING.create(hyperStore));
@@ -111,6 +105,9 @@ public class Hero extends Agent {
 
         map = levelScreen.getMap();
         map.updateTheseCoverDirections(getVolumeRectangle(), coverDirection, lowCoverDirection);
+
+        immunityPowerUpExistence = new PowerUpExistence(hyperStore);
+        extraDashPowerUpExistence = new PowerUpExistence(hyperStore);
     }
 
     @Override
@@ -192,7 +189,9 @@ public class Hero extends Agent {
             if (getAnimation().isAnimationFinished()) setVisible(false);
         } else {
             super.act(delta);
+
             boolean moved = setNextPosIfAvailable(nextPositionFromInput.x, nextPositionFromInput.y);
+
             if (moved) {
                 Array<Foe> attackedFoes = attack();
                 if (attackedFoes.size == 0) levelScreen.deactivateBulletTime();
@@ -205,26 +204,11 @@ public class Hero extends Agent {
                 assureNormalAnimation();
             }
 
-            if (immunityDuration > 0) {
-                immunityDuration--;
-                if (immunityDuration == 0) {
-                    showHeroAlpha = false;
-                } else if ((immunityDuration < immunityDurationShort) && ((immunityDuration%FLICK_DURATION) == 0)) {
-                    showHeroAlpha = !showHeroAlpha;
-                }
-            }
+            immunityPowerUpExistence.update();
 
-            if (extraDashDuration > 0) {
-                extraDashDuration--;
-                if (extraDashDuration == 0) {
-                    showDashAlpha = false;
-                    setDashHalo(dashHalo_normal);
-                    centerAccessories();
-                } else {
-                    if ((extraDashDuration < extraDashDurationShort) && ((extraDashDuration % FLICK_DURATION) == 0)) {
-                        showDashAlpha = !showDashAlpha;
-                    }
-                }
+            if (!extraDashPowerUpExistence.update()) {
+                setDashHalo(dashHalo_normal);
+                centerAccessories();
             }
         }
     }
@@ -284,7 +268,7 @@ public class Hero extends Agent {
     }
 
     public void receiveDamage(int damage) {
-        if (!dying && immunityDuration == 0) {
+        if (!dying && immunityPowerUpExistence.getRemainingDuration() == 0) {
             damageImageDuration = DAMAGE_DURATION;
             globalAudio.play(failDashSound);
             if (damage > 1) {
@@ -326,10 +310,7 @@ public class Hero extends Agent {
     }
 
     public void activateExtraDash(int duration, int durationShort) {
-        extraDashDuration = duration;
-        extraDashDurationShort = durationShort;
-        showDashAlpha = false;
-
+        extraDashPowerUpExistence.initialize(duration, durationShort, false);
         setDashHalo(dashHalo_extra);
         centerAccessories();
     }
@@ -340,17 +321,15 @@ public class Hero extends Agent {
     }
 
     public boolean hasExtraDash() {
-        return extraDashDuration > 0;
+        return extraDashPowerUpExistence.getRemainingDuration() > 0;
     }
 
     public void activateImmunity(int duration, int durationShort) {
-        immunityDuration = duration;
-        immunityDurationShort = durationShort;
-        showHeroAlpha = true;
+        immunityPowerUpExistence.initialize(duration, durationShort, true);
     }
 
     public boolean hasImmunity() {
-        return immunityDuration > 0;
+        return immunityPowerUpExistence.getRemainingDuration() > 0;
     }
 
     public boolean isFoeOnScope(Foe foe) {
@@ -379,7 +358,7 @@ public class Hero extends Agent {
 
     @Override
     public void draw(Batch batch) {
-        if (showDashAlpha) {
+        if (extraDashPowerUpExistence.mustShow()) {
             alphaModifier.modify(batch, STANDARD_ALPHA);
             currentDashHalo.render(batch);
             alphaModifier.restore(batch);
@@ -387,7 +366,7 @@ public class Hero extends Agent {
             currentDashHalo.render(batch);
         }
 
-        if (showHeroAlpha) {
+        if (immunityPowerUpExistence.mustShow()) {
             alphaModifier.modify(batch, STANDARD_ALPHA);
             super.draw(batch);
             alphaModifier.restore(batch);
