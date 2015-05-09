@@ -105,7 +105,7 @@ public class Score {
 
         preparedBatch.draw(youWinMessage,
                 (screenWidth - youWinMessage.getWidth())/2,
-                screenHeight - youWinMessage.getHeight());
+                screenHeight - youWinMessage.getHeight()*2);
 
         if (scoreCountPhaseDuration > 0) {
             scoreCountPhaseDuration--;
