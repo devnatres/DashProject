@@ -27,7 +27,7 @@ class LevelScreenVariables {
     private final Agent timeHalo;
 
     public LevelScreenVariables(HyperStore hyperStore) {
-        timeNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(hyperStore), ENumberType.DECIMAL1);
+        timeNumber = new Number(EAnimMedley.NUMBERS_SILVER.create(hyperStore), ENumberType.DECIMAL1);
         timeNumber.setUnitPosition(240, 700);
 
         timeHalo = new Agent(EAnimMedley.TIME_HALO.create(hyperStore));

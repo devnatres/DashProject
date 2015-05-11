@@ -36,6 +36,12 @@ public enum EAnimMedley implements IAnimCreator {
         }
     },
 
+    NUMBERS_SILVER {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return AnimTools.create(hyperStore, "numbers/numbers_silver.png", 1, 2, 10, Animation.PlayMode.LOOP_PINGPONG);
+        }
+    },
+
     DAMAGE_SOFT_FLASHING {
         public DnaAnimation create(HyperStore hyperStore) {
             return AnimTools.create(hyperStore, "damage_soft_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);

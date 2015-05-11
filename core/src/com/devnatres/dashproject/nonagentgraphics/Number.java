@@ -44,6 +44,13 @@ public class Number {
     private final DnaAnimation animation;
     private final Vector2 unitPosition;
 
+    private float numberScale = 1f;
+
+    public Number(DnaAnimation animation, ENumberType numberType, float numberScale) {
+        this(animation, numberType);
+        this.numberScale = numberScale;
+    }
+
     public Number(DnaAnimation animation, ENumberType numberType) {
         this.animation = animation;
         this.numberType = (numberType == null) ? ENumberType.INTEGER : numberType;
@@ -69,6 +76,10 @@ public class Number {
         for (int i = 0; i < PRECISION; i++) {
             regions[i] = new TextureRegion(numberTexture);
         }
+    }
+
+    public void setNumberScale(float scale) {
+        numberScale = scale;
     }
 
     private void updateNumberGraphics() {
@@ -150,21 +161,25 @@ public class Number {
         float x = unitPosition.x;
         float y = unitPosition.y;
 
+        float scaledDigitWidth = digitWidth*numberScale;
+        float scaledDigitHeight = digitHeight*numberScale;
+        float scaledDecimalSeparatorWidth = decimalSeparatorWidth*numberScale;
+
         int unitIndex = (numberType == ENumberType.DECIMAL1) ? 1: 0;
 
         for (int i = unitIndex; i < currentDigits; i++) {
             if ((i>unitIndex) && ((i-unitIndex)%3 == 0)) {
-                x -= digitWidth/4;
+                x -= scaledDigitWidth/4;
             }
-            batch.draw(regions[i], x, y);
-            x -= digitWidth;
+            batch.draw(regions[i], x, y, scaledDigitWidth, scaledDigitHeight);
+            x -= scaledDigitWidth;
         }
 
         if (numberType == ENumberType.DECIMAL1) {
-            x = unitPosition.x + digitWidth;
-            batch.draw(decimalSeparatorRegion, x, y);
-            x += decimalSeparatorWidth;
-            batch.draw(regions[0], x, y);
+            x = unitPosition.x + scaledDigitWidth;
+            batch.draw(decimalSeparatorRegion, x, y, scaledDecimalSeparatorWidth, scaledDigitHeight);
+            x += scaledDecimalSeparatorWidth;
+            batch.draw(regions[0], x, y, scaledDigitWidth, scaledDigitHeight);
         }
     }
 
