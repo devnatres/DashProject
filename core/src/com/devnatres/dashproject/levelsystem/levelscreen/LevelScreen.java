@@ -424,21 +424,19 @@ public class LevelScreen implements Screen {
     private void renderHub() {
         set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
 
-        score.renderActionScore(set.mainBatch, set.mainFont);
-
-        set.mainFont.draw(set.mainBatch, variables.getTimeString(), set.screenWidth/2, set.screenHeight - 10);
+        score.renderActionScore(set.mainBatch);
 
         Number timeNumber = variables.getTimeNumber();
         if (timeNumber.getValue() < CRITICAL_TIME) {
-            Agent timeHalo = variables.getTimeHalo();
-            timeHalo.act(Time.FRAME);
-            timeHalo.draw(set.mainBatch);
+            if (timeNumber.getNumberScale() == 1) timeNumber.changeNumberScale(2f);
+        } else {
+            if (timeNumber.getNumberScale() != 1) timeNumber.restoreNumberScale();
         }
         timeNumber.render(set.mainBatch);
 
         lifeBar.paint(set.mainBatch, hero.getLife());
 
-        set.mainFont.draw(set.mainBatch, enemy.getCurrentHordeCountString(), 450, set.screenHeight - 10);
+        set.mainFont.draw(set.mainBatch, enemy.getCurrentHordeCountString(), 450, set.screenHeight - 20);
     }
 
     private void renderSprites() {

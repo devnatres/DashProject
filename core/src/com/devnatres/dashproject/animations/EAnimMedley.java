@@ -24,12 +24,6 @@ public enum EAnimMedley implements IAnimCreator {
         }
     },
 
-    TIME_HALO {
-        public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "time_halo.png", 3, 1, 10, Animation.PlayMode.LOOP_PINGPONG);
-        }
-    },
-
     NUMBERS_GOLD {
         public DnaAnimation create(HyperStore hyperStore) {
             return AnimTools.create(hyperStore, "numbers/numbers_gold.png", 1, 2, 10, Animation.PlayMode.LOOP_PINGPONG);

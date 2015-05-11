@@ -45,10 +45,12 @@ public class Number {
     private final Vector2 unitPosition;
 
     private float numberScale = 1f;
+    private float lastNumberScale = numberScale;
 
     public Number(DnaAnimation animation, ENumberType numberType, float numberScale) {
         this(animation, numberType);
         this.numberScale = numberScale;
+        this.lastNumberScale = numberScale;
     }
 
     public Number(DnaAnimation animation, ENumberType numberType) {
@@ -76,10 +78,6 @@ public class Number {
         for (int i = 0; i < PRECISION; i++) {
             regions[i] = new TextureRegion(numberTexture);
         }
-    }
-
-    public void setNumberScale(float scale) {
-        numberScale = scale;
     }
 
     private void updateNumberGraphics() {
@@ -116,6 +114,10 @@ public class Number {
         } while (n > 0);
     }
 
+    public float getNumberScale() {
+        return numberScale;
+    }
+
     public float getUnitX() {
         return unitPosition.x;
     }
@@ -126,6 +128,19 @@ public class Number {
 
     public void setUnitPosition(float x, float y) {
         unitPosition.set(x, y);
+    }
+
+    public void changeNumberScale(float scale) {
+        lastNumberScale = numberScale;
+        numberScale = scale;
+        unitPosition.x += (digitWidth * (1-numberScale));
+        unitPosition.y += (digitWidth * (1-numberScale));
+    }
+
+    public void restoreNumberScale() {
+        unitPosition.x -= (digitWidth * (1-numberScale));
+        unitPosition.y -= (digitWidth * (1-numberScale));
+        numberScale = lastNumberScale;
     }
 
     public void setValue(float numberValue) {

@@ -11,7 +11,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  */
 public class LifeBar {
     private static final int X_POSITION = 300;
-    private static final int Y_MARGIN = 30;
+    private static final int Y_MARGIN = 10;
     private static final int INTERNAL_MARGIN = 1;
 
     private final Sprite lifePointImage;
@@ -19,7 +19,8 @@ public class LifeBar {
 
     public LifeBar(HyperStore hyperStore) {
         lifePointImage = new Sprite(hyperStore.getTexture("life_point.png"));
-        position = new Vector2(X_POSITION, DashGame.getInstance().getScreenHeight() - Y_MARGIN);
+        position = new Vector2(X_POSITION,
+                DashGame.getInstance().getScreenHeight() - lifePointImage.getHeight() - Y_MARGIN);
     }
 
     public void paint(Batch batch, int life) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
 import com.devnatres.dashproject.nonagentgraphics.Number;
@@ -17,6 +18,8 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 10/01/2015.
  */
 public class Score {
+    private static final int Y_MARGIN = 10;
+    private static final int X_POSITION = 100;
     private static final int MAX_SCORE_COUNT_PHASE = 7;
     private static final int CHAIN_SCORE_DURATION = 90;
     private static final int SCORE_COUNT_PHASE_DURATION = 90;
@@ -68,7 +71,8 @@ public class Score {
         this.hordeGroup = levelScreen.getHordeGroup();
 
         actionScoreNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
-        actionScoreNumber.setUnitPosition(100, 700);
+        actionScoreNumber.setUnitPosition(X_POSITION,
+                DashGame.getInstance().getScreenHeight() - actionScoreNumber.getDigitHeight() - Y_MARGIN);
     }
 
     public void updateScore() {
@@ -88,10 +92,10 @@ public class Score {
         chainScoreDuration = CHAIN_SCORE_DURATION;
     }
 
-    public void renderActionScore(Batch preparedBatch, BitmapFont font) {
-        font.draw(preparedBatch, actionScoreHubString, 10, screenHeight - 10);
+    public void renderActionScore(Batch preparedBatch) {
+        //font.draw(preparedBatch, actionScoreHubString, 10, screenHeight - 10);
         if (chainScoreDuration > 0) {
-            font.draw(preparedBatch, chainScoreString, screenWidth/2, screenHeight - 100);
+            //font.draw(preparedBatch, chainScoreString, screenWidth/2, screenHeight - 100);
             chainScoreDuration--;
         }
 

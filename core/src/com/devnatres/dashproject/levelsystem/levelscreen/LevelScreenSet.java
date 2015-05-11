@@ -22,7 +22,7 @@ class LevelScreenSet {
     float screenHeight;
     final SpriteBatch mainBatch;
     final ShapeRenderer mainShape;
-    final BitmapFont mainFont;
+    final BitmapFont mainFont; //TODO: useful?
     final DnaCamera mainCamera;
     final DnaCamera fixedCamera;
     final HyperStore localHyperStore;
