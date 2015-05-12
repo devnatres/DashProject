@@ -40,7 +40,7 @@ public class LevelScreen implements Screen {
     private static final int MIN_FINAL_TIME = 120;
     private static final int MIN_READY_TIME = 15;
     private static final float TIME_BONUS = 3f;
-    private static final float CRITICAL_TIME = 2.5f;
+    private static final float CRITICAL_TIME = 3f;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -436,7 +436,7 @@ public class LevelScreen implements Screen {
 
         lifeBar.paint(set.mainBatch, hero.getLife());
 
-        set.mainFont.draw(set.mainBatch, enemy.getCurrentHordeCountString(), 450, set.screenHeight - 20);
+        enemy.getHordeCountNumber().render(set.mainBatch);
     }
 
     private void renderSprites() {

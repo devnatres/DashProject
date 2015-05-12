@@ -2,10 +2,13 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Foe;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.levelsystem.LevelMap;
+import com.devnatres.dashproject.nonagentgraphics.Number;
 
 /**
  * Auxiliary class that represents the management of the enemies. <br>
@@ -13,15 +16,18 @@ import com.devnatres.dashproject.levelsystem.LevelMap;
  * Created by DevNatres on 24/02/2015.
  */
 class LevelScreenEnemy {
+    private static final int Y_MARGIN = 10;
+    private static final int X_MARGIN = 10;
+
     private final HordeGroup hordeGroup;
     private int maxHordeCount;
     private int lastHordeCount;
-    private int currentHordeCount;
-    private String currentHordeCountString;
 
     private final Array<Foe> comboLivingFoes = new Array();
     private Foe firstComboFoe;
     private Foe lastDeadFoe;
+
+    private final Number hordeCountNumber;
 
     public LevelScreenEnemy(LevelScreen levelScreen, LevelScreenSet set, LevelScreenLevel level) {
         hordeGroup = new HordeGroup(levelScreen);
@@ -30,9 +36,14 @@ class LevelScreenEnemy {
         LevelId levelId = level.levelId;
         maxHordeCount = map.extractLevelScript(levelScreen, set.localHyperStore, levelId.getScriptName());
 
+        hordeCountNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(set.localHyperStore), Number.ENumberType.INTEGER);
+
+        int x = DashGame.getInstance().getScreenWidth() - hordeCountNumber.getDigitWidth() - X_MARGIN;
+        int y = DashGame.getInstance().getScreenHeight() - hordeCountNumber.getDigitHeight() - Y_MARGIN;
+        hordeCountNumber.setUnitPosition(x, y);
+
+        hordeCountNumber.setValueDirectly(maxHordeCount);
         lastHordeCount = maxHordeCount;
-        currentHordeCount = maxHordeCount;
-        currentHordeCountString = String.valueOf(currentHordeCount);
     }
 
     public void clearCombo() {
@@ -93,19 +104,18 @@ class LevelScreenEnemy {
     }
 
     public boolean isDeadHordeCountChanged() {
-        return (lastHordeCount > currentHordeCount) && (currentHordeCount > 0);
+        return (lastHordeCount > hordeCountNumber.getIntValue()) && (hordeCountNumber.getIntValue() > 0);
     }
 
     public void updateLastHordeCount() {
-        lastHordeCount = currentHordeCount;
+        lastHordeCount = hordeCountNumber.getIntValue();
     }
 
-    public String getCurrentHordeCountString() {
-        return currentHordeCountString;
+    public Number getHordeCountNumber() {
+        return hordeCountNumber;
     }
 
     public void subtractCurrentHordeCount(int removedHordes) {
-        currentHordeCount -= removedHordes;
-        currentHordeCountString = String.valueOf(currentHordeCount);
+        hordeCountNumber.sumValue(-removedHordes);
     }
 }

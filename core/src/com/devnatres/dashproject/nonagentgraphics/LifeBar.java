@@ -10,7 +10,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 01/05/2015.
  */
 public class LifeBar {
-    private static final int X_POSITION = 300;
+    private static final int X_POSITION = 290;
     private static final int Y_MARGIN = 10;
     private static final int INTERNAL_MARGIN = 1;
 
