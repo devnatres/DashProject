@@ -19,7 +19,10 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  */
 public class Score {
     private static final int Y_MARGIN = 10;
-    private static final int X_POSITION = 100;
+    private static final int X_ACTION_POSITION = 100;
+    private static final int X_LINE_POSITION = 50;
+    private static final int Y_LINE_POSITION = 600;
+    private static final int Y_LINE_ICR = -50;
     private static final int MAX_SCORE_COUNT_PHASE = 7;
     private static final int CHAIN_SCORE_DURATION = 90;
     private static final int SCORE_COUNT_PHASE_DURATION = 90;
@@ -71,7 +74,7 @@ public class Score {
         this.hordeGroup = levelScreen.getHordeGroup();
 
         actionScoreNumber = new Number(EAnimMedley.NUMBERS_GOLD.create(hyperStore), Number.ENumberType.INTEGER);
-        actionScoreNumber.setUnitPosition(X_POSITION,
+        actionScoreNumber.setUnitPosition(X_ACTION_POSITION,
                 DashGame.getInstance().getScreenHeight() - actionScoreNumber.getDigitHeight() - Y_MARGIN);
     }
 
@@ -111,6 +114,12 @@ public class Score {
                 (screenWidth - youWinMessage.getWidth())/2,
                 screenHeight - youWinMessage.getHeight()*2);
 
+        updatePhases();
+
+        drawLines(preparedBatch, font);
+    }
+
+    private void updatePhases() {
         if (scoreCountPhaseDuration > 0) {
             scoreCountPhaseDuration--;
         }
@@ -119,30 +128,46 @@ public class Score {
             scoreCountPhase++;
             scoreCountPhaseDuration = SCORE_COUNT_PHASE_DURATION;
         }
+    }
 
+    private void drawLines(Batch preparedBatch, BitmapFont font) {
+        int line = 0;
         if (scoreCountPhase > 1) {
-            font.draw(preparedBatch, actionScoreString, 50, 600);
+            font.draw(preparedBatch, actionScoreString, X_LINE_POSITION, yLine(line));
         }
-        if (scoreCountPhase > 2) {
-            font.draw(preparedBatch, timeScoreString, 50, 550);
 
+        line++;
+        if (scoreCountPhase > 2) {
+            font.draw(preparedBatch, timeScoreString, X_LINE_POSITION, yLine(line));
         }
+
+        line++;
         if (scoreCountPhase > 3) {
-            font.draw(preparedBatch, lifeScoreString, 50, 500);
+            font.draw(preparedBatch, lifeScoreString, X_LINE_POSITION, yLine(line));
         }
+
+        line++;
         if (scoreCountPhase > 4) {
-            font.draw(preparedBatch, maxChainScoreString, 50, 450);
+            font.draw(preparedBatch, maxChainScoreString, X_LINE_POSITION, yLine(line));
         }
+
+        line++;
         if (scoreCountPhase > 5) {
             if (fullChainScoreString != "") {
-                font.draw(preparedBatch, fullChainScoreString, 50, 400);
+                font.draw(preparedBatch, fullChainScoreString, X_LINE_POSITION, yLine(line));
             } else {
                 scoreCountPhaseDuration = 0;
             }
         }
+
+        line++;
         if (scoreCountPhase > 6) {
-            font.draw(preparedBatch, totalScoreString, 50, 350);
+            font.draw(preparedBatch, totalScoreString, X_LINE_POSITION, yLine(line));
         }
+    }
+
+    private int yLine(int line) {
+        return Y_LINE_POSITION + (line * Y_LINE_ICR);
     }
 
     public void calculateFinalCount() {
