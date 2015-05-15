@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.DnaShadowedFont;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -23,6 +24,7 @@ class LevelScreenSet {
     final SpriteBatch mainBatch;
     final ShapeRenderer mainShape;
     final BitmapFont mainFont; //TODO: useful?
+    final DnaShadowedFont mainShadowedFont;
     final DnaCamera mainCamera;
     final DnaCamera fixedCamera;
     final HyperStore localHyperStore;
@@ -36,7 +38,8 @@ class LevelScreenSet {
         mainBatch = game.getMainBatch();
         mainShape = game.getMainShape();
         mainShape.setColor(Color.WHITE);
-        mainFont = game.getMainFont();
+        mainFont = game.getMainWhiteFont();
+        mainShadowedFont = game.getMainShadowedFont();
         mainCamera = game.getMainCamera();
         mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
         mainInputTranslator = game.getClearedMainInputTranslator();

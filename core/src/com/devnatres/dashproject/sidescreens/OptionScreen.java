@@ -50,7 +50,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
     public OptionScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
-        mainFont = dashGame.getMainFont();
+        mainFont = dashGame.getMainWhiteFont();
         mainCamera = dashGame.getCenteredMainCamera();
         gameState = dashGame.getGameState();
 

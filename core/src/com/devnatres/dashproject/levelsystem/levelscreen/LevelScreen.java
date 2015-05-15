@@ -245,7 +245,7 @@ public class LevelScreen implements Screen {
 
         set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
         set.mainBatch.begin();
-        score.renderFinalCount(set.mainBatch, set.mainFont);
+        score.renderFinalCount(set.mainBatch, set.mainShadowedFont);
         set.mainBatch.end();
 
         if (variables.waitingTime == 0 && set.mainInputTranslator.isTouchDown()) {

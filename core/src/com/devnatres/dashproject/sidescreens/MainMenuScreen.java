@@ -43,7 +43,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
     public MainMenuScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
-        mainFont = dashGame.getMainFont();
+        mainFont = dashGame.getMainWhiteFont();
         mainCamera = dashGame.getCenteredMainCamera();
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
         mainHyperStore = dashGame.getHyperStore();

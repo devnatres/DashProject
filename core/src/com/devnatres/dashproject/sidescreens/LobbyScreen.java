@@ -59,7 +59,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     public LobbyScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
-        mainFont = dashGame.getMainFont();
+        mainFont = dashGame.getMainWhiteFont();
         mainCamera = dashGame.getCenteredMainCamera();
 
         localHyperStore = new HyperStore();
@@ -150,20 +150,20 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 + "  C: " + gameState.getTrophyCCount()
                 , 200, 650);
 
-        int levelDataX1 = 50;
-        int levelDataX2 = 150;
-        int levelDataX3 = 250;
+        int levelDataX1 = 20;
+        int levelDataX2 = 170;
+        int levelDataX3 = 270;
         String newLevel = "";
         if (gameState.getLevelIndex() == gameState.getCompletedLevels()) {
             newLevel = " (NEW!)";
         }
-        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName() + newLevel, levelDataX1, 550);
+        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName() + newLevel, levelDataX1, 565);
         mainFont.draw(mainBatch, "A: " + gameState.getCurrentLevelTrophyA()
                         + "  B: " + gameState.getCurrentLevelTrophyB()
                         + "  C: " + gameState.getCurrentLevelTrophyC()
-                , levelDataX1, 525);
+                , levelDataX1, 530);
 
-        int levelDataY = 480;
+        int levelDataY = 490;
         mainFont.draw(mainBatch, "Last", levelDataX2, levelDataY);
         mainFont.draw(mainBatch, "Records", levelDataX3, levelDataY);
 

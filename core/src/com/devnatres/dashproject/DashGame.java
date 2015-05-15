@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.devnatres.dashproject.debug.Debug;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.dnagdx.DnaShadowedFont;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
@@ -46,7 +47,8 @@ public class DashGame extends Game {
 
     private Application.ApplicationType appType;
     private SpriteBatch mainBatch;
-    private BitmapFont mainFont;
+    private BitmapFont mainWhiteFont;
+    private DnaShadowedFont mainShadowedFont;
     private ShapeRenderer mainShape;
     private DnaCamera mainCamera;
     private InputTranslator mainInputTranslator;
@@ -77,8 +79,12 @@ public class DashGame extends Game {
         return mainBatch;
     }
 
-    public BitmapFont getMainFont() {
-        return mainFont;
+    public BitmapFont getMainWhiteFont() {
+        return mainWhiteFont;
+    }
+
+    public DnaShadowedFont getMainShadowedFont() {
+        return mainShadowedFont;
     }
 
     public ShapeRenderer getMainShape() {
@@ -117,7 +123,10 @@ public class DashGame extends Game {
         appType = Gdx.app.getType();
 
         mainBatch = new SpriteBatch();
-        mainFont = new BitmapFont();
+
+        mainWhiteFont = new BitmapFont(Gdx.files.internal("fonts/white.fnt"), false);
+        mainShadowedFont = new DnaShadowedFont();
+
         mainShape = new ShapeRenderer();
 
         mainCamera = new DnaCamera();
@@ -180,7 +189,7 @@ public class DashGame extends Game {
         super.dispose(); // Call hide() for the current screen (there you should do "dispose()")
 
         mainBatch.dispose();
-        mainFont.dispose();
+        mainWhiteFont.dispose();
         mainShape.dispose();
 
         hyperStore.dispose();
