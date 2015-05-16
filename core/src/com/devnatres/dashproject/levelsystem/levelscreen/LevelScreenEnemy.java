@@ -56,7 +56,7 @@ class LevelScreenEnemy {
     }
 
     public Vector2 getLastDeadFoeCenter() {
-        return lastDeadFoe.getCenter();
+        return (lastDeadFoe != null) ? lastDeadFoe.getCenter() : null;
     }
 
     public void setLastDeadFoe(Foe foe) {

@@ -20,4 +20,8 @@ public class DnaShadowedFont {
         blackFont.draw(preparedBatch, string, x+2, y-2);
         whiteFont.draw(preparedBatch, string, x, y);
     }
+
+    public int getTextWidth(String string) {
+        return (int)whiteFont.getBounds(string).width;
+    }
 }

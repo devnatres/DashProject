@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.agentsystem.Hero;
 import com.devnatres.dashproject.agentsystem.HordeGroup;
 import com.devnatres.dashproject.animations.EAnimMedley;
@@ -52,6 +53,12 @@ public class Score {
                         Y_COUNTING_POSITION - texture.getHeight() + number.getDigitHeight()*1.35f);
 
                 number.render(preparedBatch);
+
+                Texture trophyShapeTexture = score.getTrophyShapeTexture();
+                int x = DashGame.getInstance().getScreenWidth()/2 + trophyShapeTexture.getWidth();
+                int y = Y_COUNTING_POSITION-4;
+
+                drawTrophyTexture(preparedBatch, score.getTrophyShapeTexture());
             }
         },
         ACTION {
@@ -116,16 +123,20 @@ public class Score {
         TROPHY {
             @Override
             void start(Score score) {
+                Texture texture = score.getTrophyShapeTexture();
+                int x = getTrophyX(texture.getWidth()) - texture.getWidth()/2 ;
+                int y = getTrophyY() - texture.getHeight()/2;
 
+                score.getTrophyLightingAgent().setPosition(x, y);
             }
 
             @Override
             void draw(int line, Score score, Batch preparedBatch, DnaShadowedFont shadowedFont) {
                 Texture trophyTexture = score.getTrophyTexture();
+
                 if (trophyTexture != null) {
-                    preparedBatch.draw(trophyTexture,
-                            DashGame.getInstance().getScreenWidth()/2 + trophyTexture.getWidth(),
-                            Y_COUNTING_POSITION-4);
+                    score.getTrophyLightingAgent().render(preparedBatch);
+                    drawTrophyTexture(preparedBatch, trophyTexture);
                 }
             }
         },
@@ -134,8 +145,25 @@ public class Score {
         abstract void draw(int line, Score score, Batch preparedBatch, DnaShadowedFont shadowedFont);
     }
     private static EPhase[] phases = EPhase.values();
+
     private static int yLine(int line) {
         return Y_LINE_POSITION + (line * Y_LINE_ICR);
+    }
+
+    private static void drawTrophyTexture(Batch preparedBatch, Texture texture) {
+        if (texture != null) {
+            int x = getTrophyX(texture.getWidth());
+            int y = getTrophyY();
+            preparedBatch.draw(texture, x, y);
+        }
+    }
+
+    private static int getTrophyX(int width) {
+        return DashGame.getInstance().getScreenWidth() / 2 + width;
+    }
+
+    private static int getTrophyY() {
+        return Y_COUNTING_POSITION - 4;
     }
 
     private final Texture youWinMessage;
@@ -150,7 +178,6 @@ public class Score {
     private final HordeGroup hordeGroup;
 
     private int lastActionScore;
-    private String actionScoreHubString = "0";
     private String chainScoreString;
     private int chainScoreDuration;
 
@@ -159,7 +186,6 @@ public class Score {
     private String lifeScoreString;
     private String timeScoreString;
     private String fullChainScoreString;
-    private String totalScoreString;
 
     private int timeScore;
     private int lifeScore;
@@ -176,6 +202,8 @@ public class Score {
     private final Texture trophy_a;
     private final Texture trophy_b;
     private final Texture trophy_c;
+    private final Texture trophy_shape;
+    private final Agent trophyLightingAgent;
 
     private final GameState gameState;
     private final LevelId levelId;
@@ -199,6 +227,8 @@ public class Score {
         trophy_a = hyperStore.getTexture("trophies/trophy_a.png");
         trophy_b = hyperStore.getTexture("trophies/trophy_b.png");
         trophy_c = hyperStore.getTexture("trophies/trophy_c.png");
+        trophy_shape = hyperStore.getTexture("trophies/trophy_shape.png");
+        trophyLightingAgent = new Agent(EAnimMedley.TROPHY_LIGHTNING.create(hyperStore));
 
         gameState = DashGame.getInstance().getGameState();
         levelId = gameState.getCurrentLevelId();
@@ -209,7 +239,6 @@ public class Score {
     public void updateScore() {
         if (lastActionScore != hubActionScoreNumber.getIntValue()) {
             lastActionScore = hubActionScoreNumber.getIntValue();
-            actionScoreHubString = String.valueOf(hubActionScoreNumber.getIntValue());
         }
     }
 
@@ -219,14 +248,15 @@ public class Score {
 
     public void sumChainScore(int chainScore) {
         hubActionScoreNumber.sumValue(chainScore);
-        chainScoreString = String.valueOf(chainScore);
+        chainScoreString = String.valueOf("Chain " + chainScore);
         chainScoreDuration = CHAIN_SCORE_DURATION;
     }
 
-    public void renderActionScore(Batch preparedBatch) {
-        //font.draw(preparedBatch, actionScoreHubString, 10, screenHeight - 10);
+    public void renderActionScore(Batch preparedBatch, DnaShadowedFont shadowedFont) {
         if (chainScoreDuration > 0) {
-            //font.draw(preparedBatch, chainScoreString, screenWidth/2, screenHeight - 100);
+            int x = screenWidth/2 - shadowedFont.getTextWidth(chainScoreString)/2;
+            int y = screenHeight/3;
+            shadowedFont.draw(preparedBatch, chainScoreString, x, y);
             chainScoreDuration--;
         }
 
@@ -240,7 +270,7 @@ public class Score {
 
         preparedBatch.draw(youWinMessage,
                 (screenWidth - youWinMessage.getWidth())/2,
-                screenHeight - youWinMessage.getHeight()*2);
+                screenHeight - youWinMessage.getHeight()*1.75f);
 
         updatePhases();
 
@@ -312,8 +342,6 @@ public class Score {
             fullChainScoreString = "Full Chain: Not achieved";
         }
 
-        totalScoreString = "TOTAL: " + String.valueOf(totalScore);
-
         isFinalCountCalculated = true;
     }
 
@@ -379,5 +407,13 @@ public class Score {
         } else {
             return null;
         }
+    }
+
+    Texture getTrophyShapeTexture() {
+        return trophy_shape;
+    }
+
+    Agent getTrophyLightingAgent() {
+        return trophyLightingAgent;
     }
 }

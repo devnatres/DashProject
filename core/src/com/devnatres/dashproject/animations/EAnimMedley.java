@@ -47,4 +47,10 @@ public enum EAnimMedley implements IAnimCreator {
             return AnimTools.create(hyperStore, "damage_hard_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
+
+    TROPHY_LIGHTNING {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return AnimTools.create(hyperStore, "trophies/trophy_lighting.png", 4, 1, 7, Animation.PlayMode.NORMAL);
+        }
+    },
 }

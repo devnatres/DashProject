@@ -424,7 +424,7 @@ public class LevelScreen implements Screen {
     private void renderHub() {
         set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
 
-        score.renderActionScore(set.mainBatch);
+        score.renderActionScore(set.mainBatch, set.mainShadowedFont);
 
         Number timeNumber = variables.getTimeNumber();
         if (timeNumber.getValue() < CRITICAL_TIME) {
