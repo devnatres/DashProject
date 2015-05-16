@@ -1,5 +1,6 @@
 package com.devnatres.dashproject.levelsystem.levelscreen;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
@@ -28,6 +29,7 @@ class LevelScreenEnemy {
     private Foe lastDeadFoe;
 
     private final Number hordeCountNumber;
+    private final Texture hordesClearTexture;
 
     public LevelScreenEnemy(LevelScreen levelScreen, LevelScreenSet set, LevelScreenLevel level) {
         hordeGroup = new HordeGroup(levelScreen);
@@ -44,6 +46,8 @@ class LevelScreenEnemy {
 
         hordeCountNumber.setValueDirectly(maxHordeCount);
         lastHordeCount = maxHordeCount;
+
+        hordesClearTexture = set.localHyperStore.getTexture("hordes_clear.png");
     }
 
     public void clearCombo() {
@@ -117,5 +121,9 @@ class LevelScreenEnemy {
 
     public void subtractCurrentHordeCount(int removedHordes) {
         hordeCountNumber.sumValue(-removedHordes);
+    }
+
+    public Texture getHordesClearTexture() {
+        return hordesClearTexture;
     }
 }

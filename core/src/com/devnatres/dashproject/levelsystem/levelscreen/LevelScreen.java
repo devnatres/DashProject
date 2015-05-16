@@ -3,6 +3,7 @@ package com.devnatres.dashproject.levelsystem.levelscreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -436,7 +437,14 @@ public class LevelScreen implements Screen {
 
         lifeBar.paint(set.mainBatch, hero.getLife());
 
-        enemy.getHordeCountNumber().render(set.mainBatch);
+        if (enemy.getHordeCountNumber().getValue() > 0) {
+            enemy.getHordeCountNumber().render(set.mainBatch);
+        } else {
+            Texture texture = enemy.getHordesClearTexture();
+            set.mainBatch.draw(texture,
+                    set.screenWidth-texture.getWidth()-5,
+                    set.screenHeight-texture.getHeight()-5);
+        }
     }
 
     private void renderSprites() {
