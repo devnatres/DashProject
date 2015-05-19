@@ -228,7 +228,7 @@ public class Score {
         trophy_b = hyperStore.getTexture("trophies/trophy_b.png");
         trophy_c = hyperStore.getTexture("trophies/trophy_c.png");
         trophy_shape = hyperStore.getTexture("trophies/trophy_shape.png");
-        trophyLightingAgent = new Agent(EAnimMedley.TROPHY_LIGHTNING.create(hyperStore));
+        trophyLightingAgent = new Agent(EAnimMedley.TROPHY_LIGHTING.create(hyperStore));
 
         gameState = DashGame.getInstance().getGameState();
         levelId = gameState.getCurrentLevelId();

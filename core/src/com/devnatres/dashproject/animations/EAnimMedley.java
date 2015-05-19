@@ -48,7 +48,7 @@ public enum EAnimMedley implements IAnimCreator {
         }
     },
 
-    TROPHY_LIGHTNING {
+    TROPHY_LIGHTING {
         public DnaAnimation create(HyperStore hyperStore) {
             return AnimTools.create(hyperStore, "trophies/trophy_lighting.png", 4, 1, 7, Animation.PlayMode.NORMAL);
         }

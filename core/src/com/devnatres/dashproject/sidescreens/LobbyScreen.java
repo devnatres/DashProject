@@ -22,6 +22,8 @@ import com.devnatres.dashproject.levelsystem.LevelCreator;
 import com.devnatres.dashproject.levelsystem.LevelId;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
+import java.util.HashMap;
+
 /**
  * Represents a game screen for the "lobby room",
  * where the player selects the level to play and can see other information. <br>
@@ -30,6 +32,17 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  */
 public class LobbyScreen implements Screen, IButtonExecutable {
     private static final int ARROW_BUTTON_X = 420;
+
+    private enum ETexts {
+        TOTAL_SCORE,
+        PROGRESS,
+        TROPHY_TOTAL_COUNT,
+        LEVEL_TROPHIES,
+        LEVEL_NAME,
+        LEVEL_RECORD,
+        LEVEL_LAST,
+        ;
+    }
 
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
@@ -55,6 +68,13 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private EExposition eExposition;
 
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
+    private final HashMap<ETexts, String> textMap = new HashMap<ETexts, String>();
+
+    private final Texture trophy_a;
+    private final Texture trophy_b;
+    private final Texture trophy_c;
+    private final Texture trophy_shape;
+    private final Texture trophy_light;
 
     public LobbyScreen(DashGame dashGame) {
         this.dashGame = dashGame;
@@ -120,6 +140,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
+        trophy_a = localHyperStore.getTexture("trophies/trophy_a.png");
+        trophy_b = localHyperStore.getTexture("trophies/trophy_b.png");
+        trophy_c = localHyperStore.getTexture("trophies/trophy_c.png");
+        trophy_shape = localHyperStore.getTexture("trophies/trophy_shape.png");
+        trophy_light = localHyperStore.getTexture("trophies/trophy_light.png");
     }
 
 
@@ -143,64 +168,27 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
 
-        mainFont.draw(mainBatch, "Total score: " + gameState.getTotalBestScore(), 200, 750);
-        mainFont.draw(mainBatch, "Progress: " + gameState.getCompletedLevels() + "/" + gameState.getMaxLevels(), 200, 700);
-        mainFont.draw(mainBatch, "A: " + gameState.getTrophyACount()
-                + "  B: " + gameState.getTrophyBCount()
-                + "  C: " + gameState.getTrophyCCount()
-                , 200, 650);
+        int headColumn1 = 120;
+        mainFont.draw(mainBatch, textMap.get(ETexts.TOTAL_SCORE), headColumn1, 750);
+        mainFont.draw(mainBatch, textMap.get(ETexts.PROGRESS), headColumn1, 700);
+        mainFont.draw(mainBatch, textMap.get(ETexts.TROPHY_TOTAL_COUNT), headColumn1, 650);
 
-        int levelDataX1 = 20;
-        int levelDataX2 = 170;
-        int levelDataX3 = 270;
-        String newLevel = "";
-        if (gameState.getLevelIndex() == gameState.getCompletedLevels()) {
-            newLevel = " (NEW!)";
-        }
-        mainFont.draw(mainBatch, "Select level: " + currentLevelId.getLevelName() + newLevel, levelDataX1, 565);
-        mainFont.draw(mainBatch, "A: " + gameState.getCurrentLevelTrophyA()
-                        + "  B: " + gameState.getCurrentLevelTrophyB()
-                        + "  C: " + gameState.getCurrentLevelTrophyC()
-                , levelDataX1, 530);
+        int bodyColumn1 = 50;
+        int bodyColumn2 = 190;
+        int bodyColumn3 = 270;
 
-        int levelDataY = 490;
-        mainFont.draw(mainBatch, "Last", levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "Records", levelDataX3, levelDataY);
+        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_NAME), bodyColumn1, 550);
+        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_TROPHIES), bodyColumn1, 500);
+
+        int levelDataY = 400;
+        mainFont.draw(mainBatch, "Record:", bodyColumn1, levelDataY);
+        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_RECORD), bodyColumn2, levelDataY);
+        paintTrophy(gameState.getCurrentLevelBestTotalScore(), bodyColumn3, levelDataY);
 
         levelDataY -= 50;
-        mainFont.draw(mainBatch, "Action: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastActionScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestActionScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Time: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTimeScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTimeScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Life: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastLifeScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestLifeScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Max.Chain: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastChainScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestChainScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Full Chain: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastFullChainScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestFullChainScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "TOTAL: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTotalScore(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTotalScore(), levelDataX3, levelDataY);
-
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Trophy: ", levelDataX1, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelLastTrophy(), levelDataX2, levelDataY);
-        mainFont.draw(mainBatch, "" + gameState.getCurrentLevelBestTrophy(), levelDataX3, levelDataY);
+        mainFont.draw(mainBatch, "Last:", bodyColumn1, levelDataY);
+        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_LAST), bodyColumn2, levelDataY);
+        paintTrophy(gameState.getCurrentLevelLastTotalScore(), bodyColumn3, levelDataY);
 
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);
@@ -210,6 +198,16 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         downButton.draw(mainBatch);
         down2Button.draw(mainBatch);
         mainBatch.end();
+    }
+
+    private void paintTrophy(int score, int refX, int refY) {
+        final int trophyIcr = 9;
+        final Texture trophyTexture = getTrophyTexture(score);
+        if (trophyTexture != trophy_shape) {
+            mainBatch.draw(trophy_light, refX - trophy_light.getWidth()/4,
+                    refY - trophyTexture.getHeight() + trophyIcr - trophy_light.getHeight()/4);
+        }
+        mainBatch.draw(trophyTexture, refX, refY - trophyTexture.getHeight() + trophyIcr);
     }
 
     @Override
@@ -271,5 +269,38 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private void updateCurrentLevel() {
         currentLevelId = gameState.getCurrentLevelId();
         eExposition = currentLevelId.getETutorial();
+
+        textMap.clear();
+        textMap.put(ETexts.TOTAL_SCORE, "Total score: " + String.format("%,d",gameState.getTotalBestScore()));
+        textMap.put(ETexts.PROGRESS, "Progress: " + gameState.getCompletedLevels() + "/" + gameState.getMaxLevels());
+
+        textMap.put(ETexts.TROPHY_TOTAL_COUNT,
+                "  " + String.format("%,d",gameState.getTrophyACount())
+                + "  " + String.format("%,d", gameState.getTrophyBCount())
+                + "  " + String.format("%,d", gameState.getTrophyCCount()));
+
+        String newLevel = (gameState.getLevelIndex() == gameState.getCompletedLevels()) ? " (NEW!)" : "";
+        textMap.put(ETexts.LEVEL_NAME, "" + currentLevelId.getLevelName() + newLevel);
+
+        textMap.put(ETexts.LEVEL_TROPHIES,
+                "  " + String.format("%,d",gameState.getCurrentLevelTrophyA())
+                        + "  " + String.format("%,d", gameState.getCurrentLevelTrophyB())
+                        + "  " + String.format("%,d", gameState.getCurrentLevelTrophyC()));
+
+        textMap.put(ETexts.LEVEL_RECORD, String.format("%,d", gameState.getCurrentLevelBestTotalScore()));
+
+        textMap.put(ETexts.LEVEL_LAST, String.format("%,d", gameState.getCurrentLevelLastTotalScore()));
+    }
+
+    Texture getTrophyTexture(int score) {
+        if (score >= gameState.getCurrentLevelTrophyA()) {
+            return trophy_a;
+        } else if (score >= gameState.getCurrentLevelTrophyB()) {
+            return trophy_b;
+        } else if (score >= gameState.getCurrentLevelTrophyC()) {
+            return trophy_c;
+        } else {
+            return trophy_shape;
+        }
     }
 }
