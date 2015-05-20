@@ -3,11 +3,12 @@ package com.devnatres.dashproject.dnagdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Created by DevNatres on 15/05/2015.
  */
-public class DnaShadowedFont {
+public class DnaShadowedFont implements Disposable {
     private final BitmapFont whiteFont;
     private final BitmapFont blackFont;
 
@@ -23,5 +24,11 @@ public class DnaShadowedFont {
 
     public int getTextWidth(String string) {
         return (int)whiteFont.getBounds(string).width;
+    }
+
+    @Override
+    public void dispose() {
+        whiteFont.dispose();
+        blackFont.dispose();
     }
 }

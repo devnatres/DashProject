@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
@@ -36,8 +37,12 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private enum ETexts {
         TOTAL_SCORE,
         PROGRESS,
-        TROPHY_TOTAL_COUNT,
-        LEVEL_TROPHIES,
+        TROPHY_COUNT_A,
+        TROPHY_COUNT_B,
+        TROPHY_COUNT_C,
+        LEVEL_TROPHY_A,
+        LEVEL_TROPHY_B,
+        LEVEL_TROPHY_C,
         LEVEL_NAME,
         LEVEL_RECORD,
         LEVEL_LAST,
@@ -46,7 +51,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
-    private final BitmapFont mainFont;
+    private final BitmapFont mainWhiteFont;
+    private final BitmapFont mainYellowFont;
     private final DnaCamera mainCamera;
 
     private final Texture heroTexture;
@@ -60,15 +66,15 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final Button backButton;
     private final Button tutorialButton;
     private final Button upButton;
-    private final Button up2Button;
+    private final Button upPlusButton;
     private final Button downButton;
-    private final Button down2Button;
+    private final Button downPlusButton;
 
     private LevelId currentLevelId;
     private EExposition eExposition;
 
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
-    private final HashMap<ETexts, String> textMap = new HashMap<ETexts, String>();
+    private final HashMap<ETexts, String> texts = new HashMap<ETexts, String>();
 
     private final Texture trophy_a;
     private final Texture trophy_b;
@@ -76,10 +82,13 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final Texture trophy_shape;
     private final Texture trophy_light;
 
+    private final Texture new_level;
+
     public LobbyScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
-        mainFont = dashGame.getMainWhiteFont();
+        mainWhiteFont = dashGame.getMainWhiteFont();
+        mainYellowFont = dashGame.getMainYellowFont();
         mainCamera = dashGame.getCenteredMainCamera();
 
         localHyperStore = new HyperStore();
@@ -112,7 +121,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        up2Button = new Button(ARROW_BUTTON_X, 510,
+        upPlusButton = new Button(ARROW_BUTTON_X, 510,
                 EAnimButton.BUTTON_ARROW_UP2.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
@@ -133,7 +142,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        down2Button = new Button(ARROW_BUTTON_X, 210,
+        downPlusButton = new Button(ARROW_BUTTON_X, 210,
                 EAnimButton.BUTTON_ARROW_DOWN2.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
@@ -145,6 +154,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         trophy_c = localHyperStore.getTexture("trophies/trophy_c.png");
         trophy_shape = localHyperStore.getTexture("trophies/trophy_shape.png");
         trophy_light = localHyperStore.getTexture("trophies/trophy_light.png");
+
+        new_level = localHyperStore.getTexture("new_level.png");
     }
 
 
@@ -160,54 +171,86 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         backButton.act(Time.FRAME, touchDownPointOnCamera);
         if (eExposition != EExposition.NONE) tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
         upButton.act(Time.FRAME, touchDownPointOnCamera);
-        up2Button.act(Time.FRAME, touchDownPointOnCamera);
+        upPlusButton.act(Time.FRAME, touchDownPointOnCamera);
         downButton.act(Time.FRAME, touchDownPointOnCamera);
-        down2Button.act(Time.FRAME, touchDownPointOnCamera);
+        downPlusButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
         mainBatch.draw(heroTexture, 50, 600);
 
-        int headColumn1 = 120;
-        mainFont.draw(mainBatch, textMap.get(ETexts.TOTAL_SCORE), headColumn1, 750);
-        mainFont.draw(mainBatch, textMap.get(ETexts.PROGRESS), headColumn1, 700);
-        mainFont.draw(mainBatch, textMap.get(ETexts.TROPHY_TOTAL_COUNT), headColumn1, 650);
+        int headX = 240;
+        mainWhiteFont.drawMultiLine(mainBatch, "Record Score", headX, 780, 0, HAlignment.CENTER);
+        mainWhiteFont.drawMultiLine(mainBatch, texts.get(ETexts.TOTAL_SCORE), headX, 750, 0, HAlignment.CENTER);
 
-        int bodyColumn1 = 50;
-        int bodyColumn2 = 190;
-        int bodyColumn3 = 270;
+        mainWhiteFont.drawMultiLine(mainBatch, "Levels", headX, 700, 0, HAlignment.CENTER);
+        mainWhiteFont.drawMultiLine(mainBatch, texts.get(ETexts.PROGRESS), headX, 670, 0, HAlignment.CENTER);
 
-        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_NAME), bodyColumn1, 550);
-        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_TROPHIES), bodyColumn1, 500);
+        final int trophyYIcr = 3;
+        int trophyWidth = trophy_shape.getWidth();
+        int trophyX = 240 - trophyWidth/2;
+        int trophyY = 620;
+        int trophyXTab = 110;
+        paintTrophy(gameState.getCurrentLevelTrophyA(), trophyX-trophyXTab, trophyY, false);
+        mainWhiteFont.draw(mainBatch, texts.get(ETexts.TROPHY_COUNT_A), trophyX - trophyXTab + trophyWidth, trophyY + trophyYIcr);
+        paintTrophy(gameState.getCurrentLevelTrophyB(), trophyX , trophyY, false);
+        mainWhiteFont.draw(mainBatch, texts.get(ETexts.TROPHY_COUNT_B), trophyX + trophyWidth, trophyY + trophyYIcr);
+        paintTrophy(gameState.getCurrentLevelTrophyC(), trophyX+trophyXTab, trophyY, false);
+        mainWhiteFont.draw(mainBatch, texts.get(ETexts.TROPHY_COUNT_C), trophyX + trophyXTab + trophyWidth, trophyY + trophyYIcr);
 
-        int levelDataY = 400;
-        mainFont.draw(mainBatch, "Record:", bodyColumn1, levelDataY);
-        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_RECORD), bodyColumn2, levelDataY);
-        paintTrophy(gameState.getCurrentLevelBestTotalScore(), bodyColumn3, levelDataY);
+        int titleX = 50;
+        int titleY = 550;
+        if (gameState.getLevelIndex() == gameState.getCompletedLevels()) {
+            mainBatch.draw(new_level, titleX - new_level.getWidth(), titleY - new_level.getHeight()/2);
+        }
+        mainYellowFont.draw(mainBatch, texts.get(ETexts.LEVEL_NAME), titleX, titleY);
 
-        levelDataY -= 50;
-        mainFont.draw(mainBatch, "Last:", bodyColumn1, levelDataY);
-        mainFont.draw(mainBatch, textMap.get(ETexts.LEVEL_LAST), bodyColumn2, levelDataY);
-        paintTrophy(gameState.getCurrentLevelLastTotalScore(), bodyColumn3, levelDataY);
+        int trophyXMargin = 20;
+        int levelX = 150;
+        int levelY = 500;
+        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_A), levelX, levelY);
+        paintTrophy(gameState.getCurrentLevelTrophyA(), levelX+trophyXMargin, levelY, false);
+        levelY -= 40;
+        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_B), levelX, levelY);
+        paintTrophy(gameState.getCurrentLevelTrophyB(), levelX+trophyXMargin, levelY, false);
+        levelY -= 40;
+        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_C), levelX, levelY);
+        paintTrophy(gameState.getCurrentLevelTrophyC(), levelX+trophyXMargin, levelY, false);
+
+        int scoreX1 = 50;
+        int scoreX2 = 250;
+        int scoreY = 300;
+        mainWhiteFont.draw(mainBatch, "Record:", scoreX1, scoreY);
+        drawTextRight(texts.get(ETexts.LEVEL_RECORD), scoreX2, scoreY);
+        paintTrophy(gameState.getCurrentLevelBestTotalScore(), scoreX2+trophyXMargin, scoreY, true);
+
+        scoreY -= 50;
+        mainWhiteFont.draw(mainBatch, "Last:", scoreX1, scoreY);
+        drawTextRight(texts.get(ETexts.LEVEL_LAST), scoreX2, scoreY);
+        paintTrophy(gameState.getCurrentLevelLastTotalScore(), scoreX2+trophyXMargin, scoreY, true);
 
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);
         if (eExposition != EExposition.NONE) tutorialButton.draw(mainBatch);
-        up2Button.draw(mainBatch);
+        upPlusButton.draw(mainBatch);
         upButton.draw(mainBatch);
         downButton.draw(mainBatch);
-        down2Button.draw(mainBatch);
+        downPlusButton.draw(mainBatch);
         mainBatch.end();
     }
 
-    private void paintTrophy(int score, int refX, int refY) {
-        final int trophyIcr = 9;
+    private void drawTextRight(String string, float x, float y) {
+        mainWhiteFont.drawMultiLine(mainBatch, string, x, y, 0, HAlignment.RIGHT);
+    }
+
+    private void paintTrophy(int score, int refX, int refY, boolean light) {
+        final int trophyYIcr = 9;
         final Texture trophyTexture = getTrophyTexture(score);
-        if (trophyTexture != trophy_shape) {
+        if (light && trophyTexture != trophy_shape) {
             mainBatch.draw(trophy_light, refX - trophy_light.getWidth()/4,
-                    refY - trophyTexture.getHeight() + trophyIcr - trophy_light.getHeight()/4);
+                    refY - trophyTexture.getHeight() + trophyYIcr - trophy_light.getHeight()/4);
         }
-        mainBatch.draw(trophyTexture, refX, refY - trophyTexture.getHeight() + trophyIcr);
+        mainBatch.draw(trophyTexture, refX, refY - trophyTexture.getHeight() + trophyYIcr);
     }
 
     @Override
@@ -248,7 +291,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
             }
         } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
-        } else if (button == up2Button) {
+        } else if (button == upPlusButton) {
             gameState.displaceCurrentLevel(2);
             updateCurrentLevel();
         } else if (button == upButton) {
@@ -257,7 +300,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         } else if (button == downButton) {
             gameState.displaceCurrentLevel(-1);
             updateCurrentLevel();
-        } else if (button == down2Button) {
+        } else if (button == downPlusButton) {
             gameState.displaceCurrentLevel(-2);
             updateCurrentLevel();
         } else if (button == tutorialButton) {
@@ -270,26 +313,27 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         currentLevelId = gameState.getCurrentLevelId();
         eExposition = currentLevelId.getETutorial();
 
-        textMap.clear();
-        textMap.put(ETexts.TOTAL_SCORE, "Total score: " + String.format("%,d",gameState.getTotalBestScore()));
-        textMap.put(ETexts.PROGRESS, "Progress: " + gameState.getCompletedLevels() + "/" + gameState.getMaxLevels());
+        texts.clear();
+        texts.put(ETexts.TOTAL_SCORE, format(gameState.getTotalBestScore()));
+        texts.put(ETexts.PROGRESS, gameState.getCompletedLevels() + "/" + gameState.getMaxLevels());
 
-        textMap.put(ETexts.TROPHY_TOTAL_COUNT,
-                "  " + String.format("%,d",gameState.getTrophyACount())
-                + "  " + String.format("%,d", gameState.getTrophyBCount())
-                + "  " + String.format("%,d", gameState.getTrophyCCount()));
+        texts.put(ETexts.TROPHY_COUNT_A, " x " + format(gameState.getTrophyACount()));
+        texts.put(ETexts.TROPHY_COUNT_B, " x " + format(gameState.getTrophyBCount()));
+        texts.put(ETexts.TROPHY_COUNT_C, " x " + format(gameState.getTrophyCCount()));
 
-        String newLevel = (gameState.getLevelIndex() == gameState.getCompletedLevels()) ? " (NEW!)" : "";
-        textMap.put(ETexts.LEVEL_NAME, "" + currentLevelId.getLevelName() + newLevel);
+        texts.put(ETexts.LEVEL_NAME, "" + currentLevelId.getLevelName());
 
-        textMap.put(ETexts.LEVEL_TROPHIES,
-                "  " + String.format("%,d",gameState.getCurrentLevelTrophyA())
-                        + "  " + String.format("%,d", gameState.getCurrentLevelTrophyB())
-                        + "  " + String.format("%,d", gameState.getCurrentLevelTrophyC()));
+        texts.put(ETexts.LEVEL_TROPHY_A, format(gameState.getCurrentLevelTrophyA()));
+        texts.put(ETexts.LEVEL_TROPHY_B, format(gameState.getCurrentLevelTrophyB()));
+        texts.put(ETexts.LEVEL_TROPHY_C, format(gameState.getCurrentLevelTrophyC()));
 
-        textMap.put(ETexts.LEVEL_RECORD, String.format("%,d", gameState.getCurrentLevelBestTotalScore()));
+        texts.put(ETexts.LEVEL_RECORD, format(gameState.getCurrentLevelBestTotalScore()));
 
-        textMap.put(ETexts.LEVEL_LAST, String.format("%,d", gameState.getCurrentLevelLastTotalScore()));
+        texts.put(ETexts.LEVEL_LAST, format(gameState.getCurrentLevelLastTotalScore()));
+    }
+
+    private String format(int score) {
+        return String.format("%,d", score);
     }
 
     Texture getTrophyTexture(int score) {
