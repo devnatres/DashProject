@@ -104,14 +104,14 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 EAnimButton.BUTTON_GO_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_GO_PUSHED.create(localHyperStore),
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
-                10,
+                15,
                 this);
 
         backButton = new Button(100, 64,
                 EAnimButton.BUTTON_BACK_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_BACK_PUSHED.create(localHyperStore),
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
-                10,
+                15,
                 this);
 
         tutorialButton = new Button(240, 64,
