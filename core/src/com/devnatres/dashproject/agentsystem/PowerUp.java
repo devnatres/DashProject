@@ -19,7 +19,7 @@ class PowerUp extends Agent {
     private static final float FLYING_SPEED = 15f;
     private static final int MESSAGE_DURATION = 45;
 
-    static final float EXTRA_TIME = 2.5f;
+    static final float EXTRA_TIME = 1.5f;
     static final int EXTRA_LIFE = 3;
     static final int IMMUNITY_DURATION = 300;
     static final int IMMUNITY_DURATION_SHORT = 100;

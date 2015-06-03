@@ -26,7 +26,7 @@ abstract public class Debug {
     private static final boolean DEBUG_RECTANGLES = DEBUG && false;
     private static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
-    public static final boolean IMMORTAL = true;
+    public static final boolean IMMORTAL = false;
 
     private static ArrayList<Vector2> points;
     private static ArrayList<Color> pointColors;

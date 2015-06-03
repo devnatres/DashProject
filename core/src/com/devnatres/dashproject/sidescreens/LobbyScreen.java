@@ -33,6 +33,7 @@ import java.util.HashMap;
  */
 public class LobbyScreen implements Screen, IButtonExecutable {
     private static final int ARROW_BUTTON_X = 420;
+    private static final int PLUS_DISPLACEMENT = 5;
 
     private enum ETexts {
         TOTAL_SCORE,
@@ -167,13 +168,6 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
         Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
-        goButton.act(Time.FRAME, touchDownPointOnCamera);
-        backButton.act(Time.FRAME, touchDownPointOnCamera);
-        if (eExposition != EExposition.NONE) tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
-        upButton.act(Time.FRAME, touchDownPointOnCamera);
-        upPlusButton.act(Time.FRAME, touchDownPointOnCamera);
-        downButton.act(Time.FRAME, touchDownPointOnCamera);
-        downPlusButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
@@ -229,13 +223,30 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         drawTextRight(texts.get(ETexts.LEVEL_LAST), scoreX2, scoreY);
         paintTrophy(gameState.getCurrentLevelLastTotalScore(), scoreX2+trophyXMargin, scoreY, true);
 
+        goButton.act(Time.FRAME, touchDownPointOnCamera);
+        backButton.act(Time.FRAME, touchDownPointOnCamera);
         goButton.draw(mainBatch);
         backButton.draw(mainBatch);
-        if (eExposition != EExposition.NONE) tutorialButton.draw(mainBatch);
-        upPlusButton.draw(mainBatch);
-        upButton.draw(mainBatch);
-        downButton.draw(mainBatch);
-        downPlusButton.draw(mainBatch);
+
+        if (eExposition != EExposition.NONE) {
+            tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
+            tutorialButton.draw(mainBatch);
+        }
+
+        if (!gameState.isLastAvailableLevel()) {
+            upButton.act(Time.FRAME, touchDownPointOnCamera);
+            upPlusButton.act(Time.FRAME, touchDownPointOnCamera);
+            upPlusButton.draw(mainBatch);
+            upButton.draw(mainBatch);
+        }
+
+        if (!gameState.isFirstAvailableLevel()) {
+            downButton.act(Time.FRAME, touchDownPointOnCamera);
+            downPlusButton.act(Time.FRAME, touchDownPointOnCamera);
+            downButton.draw(mainBatch);
+            downPlusButton.draw(mainBatch);
+        }
+
         mainBatch.end();
     }
 
@@ -292,7 +303,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
         } else if (button == upPlusButton) {
-            gameState.displaceCurrentLevel(2);
+            gameState.displaceCurrentLevel(PLUS_DISPLACEMENT);
             updateCurrentLevel();
         } else if (button == upButton) {
             gameState.displaceCurrentLevel(1);
@@ -301,7 +312,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
             gameState.displaceCurrentLevel(-1);
             updateCurrentLevel();
         } else if (button == downPlusButton) {
-            gameState.displaceCurrentLevel(-2);
+            gameState.displaceCurrentLevel(-PLUS_DISPLACEMENT);
             updateCurrentLevel();
         } else if (button == tutorialButton) {
             dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, null));

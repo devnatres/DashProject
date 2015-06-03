@@ -59,6 +59,7 @@ public class LevelScreen implements Screen {
     private GameMenu gameMenu;
     private Score score;
     private EPlayMode playMode;
+    private EPlayMode playMode_before_menu;
 
     private final DnaAnimation damageSoftFlashing;
     private final DnaAnimation damageHardFlashing;
@@ -175,6 +176,11 @@ public class LevelScreen implements Screen {
         if (variables.waitingTime == 0 && set.mainInputTranslator.isTouchDown()) {
             playMode = EPlayMode.GAME_PLAY;
         } else {
+            if (set.mainInputTranslator.isMenuRequested()) {
+                playMode_before_menu = EPlayMode.READY;
+                playMode = EPlayMode.MENU;
+            }
+
             set.mainInputTranslator.clear();
             if (variables.waitingTime > 0) {
                 variables.waitingTime--;
@@ -192,6 +198,7 @@ public class LevelScreen implements Screen {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
         } else if (set.mainInputTranslator.isMenuRequested()) {
+            playMode_before_menu = EPlayMode.GAME_PLAY;
             playMode = EPlayMode.MENU;
         } else {
             renderPlayMode_GamePlay_main();
@@ -279,7 +286,13 @@ public class LevelScreen implements Screen {
     }
 
     public void menuResume() {
-        playMode = EPlayMode.GAME_PLAY;
+        set.mainInputTranslator.clear();
+        if (playMode_before_menu != null) {
+            playMode = playMode_before_menu;
+            playMode_before_menu = null;
+        } else {
+            playMode = EPlayMode.GAME_PLAY;
+        }
     }
 
     public void menuMainMenu() {

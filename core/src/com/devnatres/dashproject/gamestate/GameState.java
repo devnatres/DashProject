@@ -215,6 +215,14 @@ public class GameState {
         return levelIndex;
     }
 
+    public boolean isLastAvailableLevel() {
+        return (levelIndex == completedLevels) || (levelIndex == maxLevelIndex);
+    }
+
+    public boolean isFirstAvailableLevel() {
+        return levelIndex == 0;
+    }
+
     public int getTrophyACount() {
         return trophyACount;
     }
@@ -285,9 +293,10 @@ public class GameState {
 
         updateGlobalStatistics();
 
-        if (levelIndex < maxLevelIndex) {
+        //TODO Remove this comment and its code
+        /*if (levelIndex < maxLevelIndex) {
             levelIndex++;
-        }
+        }*/
 
         preferences.flush();
     }
