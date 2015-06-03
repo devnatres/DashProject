@@ -54,10 +54,6 @@ public class Score {
 
                 number.render(preparedBatch);
 
-                Texture trophyShapeTexture = score.getTrophyShapeTexture();
-                int x = DashGame.getInstance().getScreenWidth()/2 + trophyShapeTexture.getWidth();
-                int y = Y_COUNTING_POSITION-4;
-
                 drawTrophyTexture(preparedBatch, score.getTrophyShapeTexture());
             }
         },
@@ -208,6 +204,8 @@ public class Score {
     private final GameState gameState;
     private final LevelId levelId;
 
+    private boolean runToFinish;
+
     public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
         youWinMessage = hyperStore.getTexture("message_youwin.png");
@@ -279,7 +277,11 @@ public class Score {
 
     private void updatePhases() {
         if (scoreCountPhaseDuration > 0) {
-            scoreCountPhaseDuration--;
+            if (runToFinish) {
+                scoreCountPhaseDuration = 0;
+            } else {
+                scoreCountPhaseDuration--;
+            }
         }
 
         if (scoreCountPhaseDuration == 0 && scoreCountPhase < phases.length-1) {
@@ -298,6 +300,14 @@ public class Score {
 
     void resetScoreCountPhaseDuration() {
         scoreCountPhaseDuration = 0;
+    }
+
+    public void runToFinish() {
+        runToFinish = true;
+    }
+
+    public boolean isFinished() {
+        return (scoreCountPhase == phases.length-1) && (scoreCountPhaseDuration == 0);
     }
 
     public void calculateFinalCount() {

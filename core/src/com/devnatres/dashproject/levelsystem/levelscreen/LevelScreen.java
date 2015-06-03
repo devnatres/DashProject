@@ -38,7 +38,7 @@ import static com.devnatres.dashproject.agentsystem.AgentRegistry.EAgentLayer;
 public class LevelScreen implements Screen {
     private static final int RESET_COUNT = 180;
     private static final float TIME_STEP = Time.FPS_TIME;
-    private static final int MIN_FINAL_TIME = 120;
+    private static final int MIN_FINAL_TIME = 60;
     private static final int MIN_READY_TIME = 15;
     private static final float TIME_BONUS = 3f;
     private static final float CRITICAL_TIME = 3f;
@@ -257,7 +257,11 @@ public class LevelScreen implements Screen {
         set.mainBatch.end();
 
         if (variables.waitingTime == 0 && set.mainInputTranslator.isTouchDown()) {
-            menuReset();
+            if (score.isFinished()) {
+                menuReset();
+            } else {
+                score.runToFinish();
+            }
         } else {
             set.mainInputTranslator.clear();
             if (variables.waitingTime > 0) variables.waitingTime--;

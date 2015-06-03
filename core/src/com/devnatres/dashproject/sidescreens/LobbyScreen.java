@@ -318,6 +318,12 @@ public class LobbyScreen implements Screen, IButtonExecutable {
             dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, null));
             gameState.setTutorialVisited(currentLevelId);
         }
+
+        // Synchronize blinking
+        upPlusButton.getAnimation().resetAnimation();
+        upButton.getAnimation().resetAnimation();
+        downButton.getAnimation().resetAnimation();
+        downPlusButton.getAnimation().resetAnimation();
     }
 
     private void updateCurrentLevel() {
