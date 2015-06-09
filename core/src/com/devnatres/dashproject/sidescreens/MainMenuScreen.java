@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -32,6 +33,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
 
     private final InputTranslator mainInputTranslator;
 
+    private final Texture background;
     private final Button playButton;
     private final Button optionsButton;
     private final Button creditsButton;
@@ -49,7 +51,9 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         mainHyperStore = dashGame.getHyperStore();
         localHyperStore = new HyperStore();
 
-        playButton = new Button(240, 500,
+        background = localHyperStore.getTexture("menu_background.png");
+
+        playButton = new Button(240, 450,
                 EAnimButton.BUTTON_PLAY_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_PLAY_PUSHED.create(localHyperStore),
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
@@ -94,7 +98,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         exitButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
-        mainFont.draw(mainBatch, "Dash Project", 50, 750);
+        mainBatch.draw(background, 0, 0);
         playButton.draw(mainBatch);
         optionsButton.draw(mainBatch);
         creditsButton.draw(mainBatch);

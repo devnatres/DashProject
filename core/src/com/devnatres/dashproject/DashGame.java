@@ -39,7 +39,7 @@ public class DashGame extends Game {
         return instance;
     }
 
-    public static final String TITLE = "Dash Project";
+    public static final String TITLE = "Nebular Dash";
     public static final int INITIAL_SCREEN_WIDTH = 480;
     public static final int INITIAL_SCREEN_HEIGHT = 800;
     public static final boolean USE_ACCELEROMETER = false;
