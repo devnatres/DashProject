@@ -42,6 +42,7 @@ public class LevelScreen implements Screen {
     private static final int MIN_READY_TIME = 15;
     private static final float TIME_BONUS = 3f;
     private static final float CRITICAL_TIME = 3f;
+    private static final int EXTRA_TIME_MESSAGE_DURATION = 90;
 
     private int resetCountDown = RESET_COUNT;
 
@@ -65,6 +66,10 @@ public class LevelScreen implements Screen {
     private final DnaAnimation damageHardFlashing;
     private int damageSoftFlashingDuration;
     private int damageHardFlashingDuration;
+
+    private String extraTimeString;
+    private float lastExtraTime;
+    private int extraTimeMessageDuration;
 
     public LevelScreen(DashGame game, LevelId levelId) {
         set = new LevelScreenSet(game);
@@ -214,7 +219,12 @@ public class LevelScreen implements Screen {
         }
         if (enemy.isDeadHordeCountChanged()) {
             enemy.updateLastHordeCount();
-            addTime(TIME_BONUS);
+
+            lastExtraTime = TIME_BONUS;
+            addTime(lastExtraTime);
+            extraTimeMessageDuration = EXTRA_TIME_MESSAGE_DURATION;
+            extraTimeString = String.valueOf("Time " + lastExtraTime);
+
             Vector2 powerUpBasePos = (enemy.thereIsLastDeadFoe()) ? enemy.getLastDeadFoeCenter() : hero.getCenter();
             PowerUpGenerator.generatePowerUpIfLucky(set.localHyperStore, this, powerUpBasePos);
         }
@@ -451,6 +461,12 @@ public class LevelScreen implements Screen {
             if (timeNumber.getNumberScale() != 1) timeNumber.restoreNumberScale();
         }
         timeNumber.render(set.mainBatch);
+        if (extraTimeMessageDuration > 0) {
+            int x = (int)set.screenWidth/2 - set.mainShadowedFont.getTextWidth(extraTimeString)/2;
+            int y = (int)set.screenHeight/3 - 35;
+            set.mainShadowedFont.draw(set.mainBatch, extraTimeString, x, y);
+            extraTimeMessageDuration--;
+        }
 
         lifeBar.paint(set.mainBatch, hero.getLife());
 

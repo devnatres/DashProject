@@ -27,6 +27,7 @@ class LevelScreenVariables {
 
     private final Number timeNumber;
 
+
     public LevelScreenVariables(HyperStore hyperStore) {
         timeNumber = new Number(EAnimMedley.NUMBERS_SILVER.create(hyperStore), ENumberType.DECIMAL1);
         timeNumber.setUnitPosition(DashGame.getInstance().getScreenWidth()/2 - timeNumber.getDigitWidth(),
