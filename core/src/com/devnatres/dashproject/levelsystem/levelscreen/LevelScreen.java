@@ -203,9 +203,11 @@ public class LevelScreen implements Screen {
             renderPlayMode_GamePlay_scoreCountTransition();
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
+            audio.globalAudio.playOnly(audio.dieMusic);
         } else if (!Debug.IMMORTAL && variables.getTime() == 0) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
+            audio.globalAudio.playOnly(audio.dieMusic);
         } else if (set.mainInputTranslator.isMenuRequested()) {
             playMode_before_menu = EPlayMode.GAME_PLAY;
             playMode = EPlayMode.MENU;

@@ -39,7 +39,7 @@ public class CreditScreen implements Screen, IButtonExecutable {
 
         localHyperStore = new HyperStore();
         background = localHyperStore.getTexture("credits.png");
-        backButton = new Button(240, 100,
+        backButton = new Button(240, 60,
                 EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
