@@ -3,6 +3,7 @@ package com.devnatres.dashproject;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -44,6 +45,7 @@ public class DashGame extends Game {
     public static final int INITIAL_SCREEN_HEIGHT = 800;
     public static final boolean USE_ACCELEROMETER = false;
     public static final boolean USE_COMPASS = false;
+    private static final int DOUBLE_BACK_KEY_LAPSE = (int)Time.FPS;
 
     private Application.ApplicationType appType;
     private SpriteBatch mainBatch;
@@ -52,7 +54,10 @@ public class DashGame extends Game {
     private DnaShadowedFont mainShadowedFont;
     private ShapeRenderer mainShape;
     private DnaCamera mainCamera;
+    private DnaCamera systemCamera;
     private InputTranslator mainInputTranslator;
+    private int doubleBackKeyLapse;
+    private Texture pressAgainTexture;
 
     private int screenWidth;
     private int screenHeight;
@@ -138,6 +143,11 @@ public class DashGame extends Game {
         mainCamera = new DnaCamera();
         mainCamera.setToOrtho(false, screenWidth, screenHeight);
 
+        systemCamera = new DnaCamera();
+        systemCamera.setToOrtho(false, screenWidth, screenHeight);
+
+        pressAgainTexture = new Texture(Gdx.files.internal("press_again.png"));
+
         mainInputTranslator = new InputTranslator();
 
         GlobalAudio.newInstance();
@@ -148,6 +158,8 @@ public class DashGame extends Game {
 
         initialFrameTime = System.nanoTime();
 
+        Gdx.input.setCatchBackKey(true);
+
         if (Debug.DEBUG) Debug.begin(mainCamera);
 	}
 
@@ -157,6 +169,8 @@ public class DashGame extends Game {
         //try {
             super.render(); // Render the Screen set in create()
             if (Debug.DEBUG) Debug.draw();
+
+            backKeyManagement();
 
             timing();
 
@@ -190,6 +204,29 @@ public class DashGame extends Game {
         deltaFrameTime = (currentFrameTime - initialFrameTime) / Time.NANO_TIME;
     }
 
+    private void backKeyManagement() {
+        if (doubleBackKeyLapse > 0) {
+            doubleBackKeyLapse--;
+            mainCamera.update();
+            mainBatch.setProjectionMatrix(systemCamera.combined);
+            mainBatch.begin();
+            mainBatch.draw(pressAgainTexture, screenWidth/2 - pressAgainTexture.getWidth()/2, 100);
+            mainBatch.end();
+        }
+
+        if (mainInputTranslator.isResetRequested()) {
+            resetPushed();
+        }
+    }
+
+    public void resetPushed() {
+        if (doubleBackKeyLapse > 0) {
+            Gdx.app.exit();
+        } else {
+            doubleBackKeyLapse = DOUBLE_BACK_KEY_LAPSE;
+        }
+    }
+
     @Override
     public void dispose() {
         super.dispose(); // Call hide() for the current screen (there you should do "dispose()")
@@ -199,6 +236,8 @@ public class DashGame extends Game {
         mainYellowFont.dispose();
         mainShadowedFont.dispose();
         mainShape.dispose();
+
+        pressAgainTexture.dispose();
 
         hyperStore.dispose();
 

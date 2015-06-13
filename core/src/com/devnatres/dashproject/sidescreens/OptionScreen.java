@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
@@ -28,7 +27,6 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
-    private final BitmapFont mainFont;
     private final DnaCamera mainCamera;
     private final HyperStore localHyperStore;
     private final GameState gameState;
@@ -36,12 +34,10 @@ public class OptionScreen implements Screen, IButtonExecutable {
     private final InputTranslator mainInputTranslator;
 
     private final Button soundButton;
-    private final Button cameraButton;
+    private final Button soundSymbolButton;
     private final Button tutorialsButton;
     private final Button backButton;
 
-    private final Agent soundSymbol;
-    private final Agent cameraSymbol;
     private final Agent offSymbol;
 
     private final Texture tutorialsResettingDone;
@@ -50,13 +46,14 @@ public class OptionScreen implements Screen, IButtonExecutable {
     public OptionScreen(DashGame dashGame) {
         this.dashGame = dashGame;
         mainBatch = dashGame.getMainBatch();
-        mainFont = dashGame.getMainWhiteFont();
         mainCamera = dashGame.getCenteredMainCamera();
         gameState = dashGame.getGameState();
 
         localHyperStore = new HyperStore();
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
+
+        offSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_off.png"));
 
         soundButton = new Button(240, 700,
                 EAnimButton.BUTTON_OPT_SOUND.create(localHyperStore),
@@ -65,15 +62,15 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
         soundButton.setAutomaticSoundOff();
-
-        cameraButton = new Button(240, 500,
-                EAnimButton.BUTTON_OPT_CAMERA.create(localHyperStore),
+        soundSymbolButton = new Button(240, soundButton.getY()-offSymbol.getHeight()/2,
+                EAnimButton.BUTTON_SYMBOL_SOUND.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
+        soundSymbolButton.setAutomaticSoundOff();
 
-        tutorialsButton = new Button(240, 300,
+        tutorialsButton = new Button(240, 400,
                 EAnimButton.BUTTON_OPT_TUTORIAL.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
@@ -87,12 +84,6 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        soundSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_sound.png"));
-        soundSymbol.setCenter(soundButton.getCenter().x, soundButton.getY()-soundSymbol.getHeight()/2);
-        cameraSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_camera.png"));
-        cameraSymbol.setCenter(cameraButton.getCenter().x, cameraButton.getY()-cameraSymbol.getHeight()/2);
-        offSymbol = new Agent(localHyperStore.getTexture("symbols/symbol_off.png"));
-
         tutorialsResettingDone = localHyperStore.getTexture("message_done.png");
     }
 
@@ -105,30 +96,24 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
         Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         soundButton.act(Time.FRAME, touchDownPointOnCamera);
-        cameraButton.act(Time.FRAME, touchDownPointOnCamera);
+        soundSymbolButton.act(Time.FRAME, touchDownPointOnCamera);
         tutorialsButton.act(Time.FRAME, touchDownPointOnCamera);
         backButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
-        mainFont.draw(mainBatch, "Options", 50, 750);
         soundButton.draw(mainBatch);
-        soundSymbol.draw(mainBatch);
+        soundSymbolButton.draw(mainBatch);
         if (!gameState.isSoundActivated()) {
-            offSymbol.setCenter(soundSymbol.getCenter());
+            offSymbol.setCenter(soundSymbolButton.getCenter());
             offSymbol.draw(mainBatch);
         }
-        cameraButton.draw(mainBatch);
-        cameraSymbol.draw(mainBatch);
-        if (!gameState.isCameraAssistantActivated()) {
-            offSymbol.setCenter(cameraSymbol.getCenter());
-            offSymbol.draw(mainBatch);
-        }
+
         tutorialsButton.draw(mainBatch);
         if (doneDuration > 0) {
             doneDuration--;
             mainBatch.draw(tutorialsResettingDone,
                     (dashGame.getScreenWidth()-tutorialsResettingDone.getWidth())/2,
-                    180);
+                    tutorialsButton.getY()-tutorialsButton.getHeight());
         }
         backButton.draw(mainBatch);
         mainBatch.end();
@@ -168,11 +153,9 @@ public class OptionScreen implements Screen, IButtonExecutable {
     public void execute(Button button) {
         if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
-        } else if (button == soundButton) {
+        } else if (button == soundButton || button == soundSymbolButton) {
             gameState.activateSound(!gameState.isSoundActivated());
             soundButton.playSound();
-        } else if (button == cameraButton) {
-            gameState.activateCameraAssistant(!gameState.isCameraAssistantActivated());
         } else if (button == tutorialsButton) {
             gameState.setAllTutorialsUnvisited();
             doneDuration = DONE_DURATION;

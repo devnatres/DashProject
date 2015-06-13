@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 
 /**
@@ -50,6 +51,10 @@ public class InputTranslator implements InputProcessor {
      * Clear all flags
      */
     public void clear() {
+        if (resetRequested) {
+            DashGame.getInstance().resetPushed();
+        }
+
         isDragged = false;
         touchDownPointPrepared = false;
         resetRequested = false;

@@ -5,8 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.animations.EAnimButton;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
+import com.devnatres.dashproject.gameconstants.Time;
+import com.devnatres.dashproject.gameinput.Button;
+import com.devnatres.dashproject.gameinput.IButtonExecutable;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -15,7 +20,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  *     <br>
  * Created by DevNatres on 20/01/2015.
  */
-public class CreditScreen implements Screen {
+public class CreditScreen implements Screen, IButtonExecutable {
     private final DashGame dashGame;
     private final SpriteBatch mainBatch;
     private final DnaCamera mainCamera;
@@ -25,6 +30,7 @@ public class CreditScreen implements Screen {
     private final HyperStore localHyperStore;
 
     private final Texture background;
+    private final Button backButton;
 
     public CreditScreen(DashGame dashGame) {
         this.dashGame = dashGame;
@@ -33,6 +39,12 @@ public class CreditScreen implements Screen {
 
         localHyperStore = new HyperStore();
         background = localHyperStore.getTexture("credits.png");
+        backButton = new Button(240, 100,
+                EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
+                null,
+                localHyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this);
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
     }
@@ -44,13 +56,13 @@ public class CreditScreen implements Screen {
         mainCamera.update();
         mainBatch.setProjectionMatrix(mainCamera.combined);
 
+        Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
+        backButton.act(Time.FRAME, touchDownPointOnCamera);
+
         mainBatch.begin();
         mainBatch.draw(background, 0, 0);
+        backButton.draw(mainBatch);
         mainBatch.end();
-
-        if (mainInputTranslator.isTouchDown()) {
-            dashGame.setScreen(new MainMenuScreen(dashGame));
-        }
     }
 
     @Override
@@ -83,4 +95,10 @@ public class CreditScreen implements Screen {
         localHyperStore.dispose();
     }
 
+    @Override
+    public void execute(Button button) {
+        if (button == backButton) {
+            dashGame.setScreen(new MainMenuScreen(dashGame));
+        }
+    }
 }

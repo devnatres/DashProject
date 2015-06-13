@@ -148,7 +148,11 @@ public class LevelScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (set.mainInputTranslator.isResetRequested() || resetCountDown == 0) {
+        /*if (set.mainInputTranslator.isResetRequested() || resetCountDown == 0) {
+            menuReset();
+            return;
+        }*/
+        if (resetCountDown == 0) {
             menuReset();
             return;
         }

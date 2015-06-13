@@ -19,17 +19,13 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 31/01/2015.
  */
 public class GameMenu implements IButtonExecutable {
-    //TODO Remove comments in this class. Remove assets and animations that are not used.
-
     private final Button yesButton;
     private final Button noButton;
 
     private final Button resumeButton;
     private final Button resetButton;
-    //private final Button menuButton;
-    //private final Button exitButton;
     private final Button soundButton;
-    private final Agent soundSymbol;
+    private final Button soundSymbolButton;
     private final Agent offSymbol;
 
     private final LevelScreen levelScreen;
@@ -40,6 +36,8 @@ public class GameMenu implements IButtonExecutable {
     public GameMenu(LevelScreen levelScreen, HyperStore hyperStore, GameState gameState) {
         this.levelScreen = levelScreen;
         this.gameState = gameState;
+
+        offSymbol = new Agent(hyperStore.getTexture("symbols/symbol_off.png"));
 
         yesButton = new Button(120, 100,
                 EAnimButton.BUTTON_MENU_YES.create(hyperStore),
@@ -69,20 +67,6 @@ public class GameMenu implements IButtonExecutable {
                 0,
                 this);
 
-        /*menuButton = new Button(240, 500,
-                EAnimButton.BUTTON_MENU_MENU.create(hyperStore),
-                null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
-                0,
-                this);*/
-
-        /*exitButton = new Button(240, 400,
-                EAnimButton.BUTTON_MENU_EXIT.create(hyperStore),
-                null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
-                0,
-                this);*/
-
         soundButton = new Button(240, 300,
                 EAnimButton.BUTTON_MENU_SOUND.create(hyperStore),
                 null,
@@ -90,10 +74,13 @@ public class GameMenu implements IButtonExecutable {
                 0,
                 this);
         soundButton.setAutomaticSoundOff();
-
-        soundSymbol = new Agent(hyperStore.getTexture("symbols/symbol_sound.png"));
-        soundSymbol.setCenter(240, 230);
-        offSymbol = new Agent(hyperStore.getTexture("symbols/symbol_off.png"));
+        soundSymbolButton = new Button(240, soundButton.getY()-offSymbol.getHeight()/2,
+                EAnimButton.BUTTON_SYMBOL_SOUND.create(hyperStore),
+                null,
+                hyperStore.getSound("sounds/fail_hit.ogg"),
+                0,
+                this);
+        soundSymbolButton.setAutomaticSoundOff();
     }
 
     public void check(InputTranslator inputTranslator, DnaCamera camera) {
@@ -102,9 +89,8 @@ public class GameMenu implements IButtonExecutable {
         if (confirmingButton == null) {
             resumeButton.act(Time.FRAME, touchDownPointOnCamera);
             resetButton.act(Time.FRAME, touchDownPointOnCamera);
-            //menuButton.act(Time.FRAME, touchDownPointOnCamera);
-            //exitButton.act(Time.FRAME, touchDownPointOnCamera);
             soundButton.act(Time.FRAME, touchDownPointOnCamera);
+            soundSymbolButton.act(Time.FRAME, touchDownPointOnCamera);
         } else {
             yesButton.act(Time.FRAME, touchDownPointOnCamera);
             noButton.act(Time.FRAME, touchDownPointOnCamera);
@@ -114,13 +100,11 @@ public class GameMenu implements IButtonExecutable {
     public void paint(Batch batch) {
         if (confirmingButton == null) resumeButton.draw(batch);
         if (confirmingButton == null || confirmingButton == resetButton) resetButton.draw(batch);
-        //if (confirmingButton == null || confirmingButton == menuButton) menuButton.draw(batch);
-        //if (confirmingButton == null || confirmingButton == exitButton) exitButton.draw(batch);
-        if (confirmingButton == null) soundButton.draw(batch);
         if (confirmingButton == null) {
-            soundSymbol.draw(batch);
+            soundButton.draw(batch);
+            soundSymbolButton.draw(batch);
             if (!gameState.isSoundActivated()) {
-                offSymbol.setCenter(soundSymbol.getCenter());
+                offSymbol.setCenter(soundSymbolButton.getCenter());
                 offSymbol.draw(batch);
             }
         }
@@ -135,24 +119,13 @@ public class GameMenu implements IButtonExecutable {
             levelScreen.menuResume();
         } else if (button == resetButton) {
             confirmingButton = resetButton;
-        /*} else if (button == menuButton) {
-            confirmingButton = menuButton;
-        } else if (button == exitButton) {
-            confirmingButton = exitButton;*/
-        } else if (button == soundButton) {
+        } else if (button == soundButton || button == soundSymbolButton) {
             gameState.activateSound(!gameState.isSoundActivated());
             soundButton.playSound();
         } else if (button == yesButton) {
             if (confirmingButton == resetButton) {
                 levelScreen.menuReset();
             }
-            /*if (confirmingButton == exitButton) {
-                Gdx.app.exit();
-            } else if (confirmingButton == resetButton) {
-                levelScreen.menuReset();
-            } else if (confirmingButton == menuButton) {
-                levelScreen.menuMainMenu();
-            }*/
         } else if (button == noButton) {
             confirmingButton = null;
         }

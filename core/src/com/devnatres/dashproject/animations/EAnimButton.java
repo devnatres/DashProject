@@ -80,14 +80,15 @@ public enum EAnimButton implements IAnimCreator {
         }
     },
 
+    BUTTON_SYMBOL_SOUND {
+        public DnaAnimation create(HyperStore hyperStore) {
+            return AnimTools.create(hyperStore, "symbols/symbol_sound.png", 1, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
+        }
+    },
+
     BUTTON_OPT_SOUND {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_opt_sound.png");
-        }
-    },
-    BUTTON_OPT_CAMERA {
-        public DnaAnimation create(HyperStore hyperStore) {
-            return createButtonAnimation(hyperStore, "buttons/button_opt_camera.png");
         }
     },
     BUTTON_OPT_TUTORIAL {
@@ -109,16 +110,6 @@ public enum EAnimButton implements IAnimCreator {
     BUTTON_MENU_RESET {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_menu_reset.png");
-        }
-    },
-    BUTTON_MENU_MENU {
-        public DnaAnimation create(HyperStore hyperStore) {
-            return createButtonAnimation(hyperStore, "buttons/button_menu_menu.png");
-        }
-    },
-    BUTTON_MENU_EXIT {
-        public DnaAnimation create(HyperStore hyperStore) {
-            return createButtonAnimation(hyperStore, "buttons/button_menu_exit.png");
         }
     },
     BUTTON_MENU_SOUND {
