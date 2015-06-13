@@ -2,6 +2,7 @@ package com.devnatres.dashproject.sidescreens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -59,6 +60,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final Texture heroTexture;
     private final Texture background;
     private final HyperStore localHyperStore;
+    private final HyperStore mainHyperStore;
+    private final Music music;
 
     private final InputTranslator mainInputTranslator;
     private final GameState gameState;
@@ -91,6 +94,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainWhiteFont = dashGame.getMainWhiteFont();
         mainYellowFont = dashGame.getMainYellowFont();
         mainCamera = dashGame.getCenteredMainCamera();
+        mainHyperStore = dashGame.getHyperStore();
 
         localHyperStore = new HyperStore();
         heroTexture = localHyperStore.getTexture("mark.png");
@@ -157,6 +161,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         trophy_light = localHyperStore.getTexture("trophies/trophy_light.png");
 
         new_level = localHyperStore.getTexture("new_level.png");
+
+        music = mainHyperStore.getMusic("music/surfing_menus.ogg");
     }
 
 
@@ -270,7 +276,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     @Override
     public void show() {
-        globalAudio.stopMusic();
+        //globalAudio.stopMusic();
+        if (!music.isPlaying()) {
+            music.setLooping(true);
+            globalAudio.playOnly(music);
+        }
     }
 
     @Override

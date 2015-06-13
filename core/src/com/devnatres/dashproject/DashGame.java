@@ -210,7 +210,7 @@ public class DashGame extends Game {
             mainCamera.update();
             mainBatch.setProjectionMatrix(systemCamera.combined);
             mainBatch.begin();
-            mainBatch.draw(pressAgainTexture, screenWidth/2 - pressAgainTexture.getWidth()/2, 100);
+            mainBatch.draw(pressAgainTexture, screenWidth/2 - pressAgainTexture.getWidth()/2, 120);
             mainBatch.end();
         }
 

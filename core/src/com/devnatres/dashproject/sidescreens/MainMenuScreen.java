@@ -81,7 +81,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
                 10,
                 this);
 
-        music = mainHyperStore.getMusic("music/menu.ogg");
+        music = mainHyperStore.getMusic("music/surfing_menus.ogg");
     }
 
     @Override
