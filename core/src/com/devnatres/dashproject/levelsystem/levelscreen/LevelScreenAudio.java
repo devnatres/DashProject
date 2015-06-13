@@ -20,8 +20,8 @@ class LevelScreenAudio {
         badassMusic.setLooping(true);
 
         endOkMusic = set.localHyperStore.getMusic("music/final.ogg");
+        endOkMusic.setLooping(true);
 
         dieMusic = set.localHyperStore.getMusic("music/die.ogg");
-        dieMusic.setLooping(true);
     }
 }
