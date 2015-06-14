@@ -148,10 +148,6 @@ public class LevelScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        /*if (set.mainInputTranslator.isResetRequested() || resetCountDown == 0) {
-            menuReset();
-            return;
-        }*/
         if (resetCountDown == 0) {
             menuReset();
             return;
@@ -203,11 +199,11 @@ public class LevelScreen implements Screen {
             renderPlayMode_GamePlay_scoreCountTransition();
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
-            audio.globalAudio.playOnly(audio.dieMusic);
+            audio.globalAudio.playAlone(audio.dieMusic);
         } else if (!Debug.IMMORTAL && variables.getTime() == 0) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
-            audio.globalAudio.playOnly(audio.dieMusic);
+            audio.globalAudio.playAlone(audio.dieMusic);
         } else if (set.mainInputTranslator.isMenuRequested()) {
             playMode_before_menu = EPlayMode.GAME_PLAY;
             playMode = EPlayMode.MENU;
@@ -246,7 +242,7 @@ public class LevelScreen implements Screen {
         playMode = EPlayMode.SCORE_COUNT;
         score.calculateFinalCount();
         gameState.updateCurrentLevelScore(score);
-        audio.globalAudio.playOnly(audio.endOkMusic);
+        audio.globalAudio.playAlone(audio.scoreMusic);
         variables.waitingTime = MIN_FINAL_TIME;
     }
 
@@ -602,7 +598,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void show() {
-        audio.globalAudio.playOnly(audio.badassMusic);
+        audio.globalAudio.playAlone(audio.gameMusic);
     }
 
     @Override

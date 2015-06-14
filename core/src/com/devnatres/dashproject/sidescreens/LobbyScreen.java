@@ -276,10 +276,9 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     @Override
     public void show() {
-        //globalAudio.stopMusic();
         if (!music.isPlaying()) {
             music.setLooping(true);
-            globalAudio.playOnly(music);
+            globalAudio.playAlone(music);
         }
     }
 

@@ -80,7 +80,7 @@ public class GlobalAudio {
         }
     }
 
-    public void playOnly(Music music) {
+    public void playAlone(Music music) {
         stopMusic();
         music.play();
     }

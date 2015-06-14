@@ -10,17 +10,17 @@ import com.devnatres.dashproject.dnagdx.GlobalAudio;
  */
 class LevelScreenAudio {
     final GlobalAudio globalAudio = GlobalAudio.getInstance();
-    final Music badassMusic;
-    final Music endOkMusic;
+    final Music gameMusic;
+    final Music scoreMusic;
     final Music dieMusic;
 
     public LevelScreenAudio(LevelScreenSet set) {
         //TODO: less music duration?
-        badassMusic = set.localHyperStore.getMusic("music/action.ogg");
-        badassMusic.setLooping(true);
+        gameMusic = set.localHyperStore.getMusic("music/action.ogg");
+        gameMusic.setLooping(true);
 
-        endOkMusic = set.localHyperStore.getMusic("music/final.ogg");
-        endOkMusic.setLooping(true);
+        scoreMusic = set.localHyperStore.getMusic("music/final.ogg");
+        scoreMusic.setLooping(true);
 
         dieMusic = set.localHyperStore.getMusic("music/die.ogg");
     }
