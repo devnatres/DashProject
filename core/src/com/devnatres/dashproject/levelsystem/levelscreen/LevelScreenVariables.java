@@ -17,7 +17,6 @@ class LevelScreenVariables {
     private static final int Y_MARGIN = 10;
 
     float bulletTime;
-    private String timeString;
     int waitingTime;
     boolean comboCameraChasing;
     final Vector3 cameraTarget;
@@ -39,6 +38,10 @@ class LevelScreenVariables {
         cameraMovementDone = new Vector2();
     }
 
+    public boolean isTimeOut() {
+        return (int)(timeNumber.getValue()*10) == 0;
+    }
+
     public float getTime() {
         return timeNumber.getValue();
     }
@@ -49,10 +52,6 @@ class LevelScreenVariables {
 
     public void setTime(float time) {
         timeNumber.setValueDirectly(time);
-        timeString = String.valueOf(((int)(time *10))/10f);
     }
 
-    public String getTimeString() {
-        return timeString;
-    }
 }

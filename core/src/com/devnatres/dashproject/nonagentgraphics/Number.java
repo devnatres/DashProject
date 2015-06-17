@@ -147,6 +147,7 @@ public class Number {
         if (numberValue > maxValue) numberValue = maxValue;
 
         increment = (numberValue - incrementingValue) / INCREMENT_DURATION;
+
         value = numberValue;
     }
 
@@ -206,7 +207,4 @@ public class Number {
         return digitWidth;
     }
 
-    public int getDecimalSeparatorWidth() {
-        return decimalSeparatorWidth;
-    }
 }

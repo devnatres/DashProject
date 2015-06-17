@@ -200,7 +200,7 @@ public class LevelScreen implements Screen {
         } else if (!hero.isVisible()) {
             playMode = EPlayMode.HERO_DEAD;
             audio.globalAudio.playAlone(audio.dieMusic);
-        } else if (!Debug.IMMORTAL && variables.getTime() == 0) {
+        } else if (!Debug.IMMORTAL && variables.isTimeOut()) {
             hero.die();
             playMode = EPlayMode.TIME_OUT;
             audio.globalAudio.playAlone(audio.dieMusic);

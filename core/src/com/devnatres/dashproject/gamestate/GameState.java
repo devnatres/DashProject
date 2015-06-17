@@ -33,6 +33,7 @@ public class GameState {
     private static final String SOUND_KEY = "sound";
     private static final String COMPLETED_LEVELS_KEY = "completed_levels";
     private static final String TUTORIAL_VISITED_SUBKEY = "_tutorial_visited";
+    private static final String LAST_LEVEL_PLAYED_KEY = "last_level_played";
 
     private static String keyLast(LevelId levelId, String scoreString) {
         return levelId.getLevelKey() + "_last" + scoreString;
@@ -105,7 +106,9 @@ public class GameState {
         }
 
         completedLevels = preferences.getInteger(COMPLETED_LEVELS_KEY, 0);
-        levelIndex = Tools.limitInteger(completedLevels, 0, maxLevelIndex);
+        levelIndex = preferences.getInteger(LAST_LEVEL_PLAYED_KEY, 0);
+        //levelIndex = Tools.limitInteger(completedLevels, 0, maxLevelIndex);
+
         updateGlobalStatistics();
     }
 
@@ -293,10 +296,7 @@ public class GameState {
 
         updateGlobalStatistics();
 
-        //TODO Remove this comment and its code
-        /*if (levelIndex < maxLevelIndex) {
-            levelIndex++;
-        }*/
+        preferences.putInteger(LAST_LEVEL_PLAYED_KEY, levelIndex);
 
         preferences.flush();
     }

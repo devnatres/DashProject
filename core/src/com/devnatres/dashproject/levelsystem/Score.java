@@ -30,7 +30,7 @@ public class Score {
     private static final int Y_LINE_POSITION = 600;
     private static final int Y_LINE_ICR = -50;
     private static final int CHAIN_SCORE_DURATION = 90;
-    private static final int SCORE_COUNT_PHASE_DURATION = 90;
+    private static final int SCORE_COUNT_PHASE_DURATION = 78;
     private static final int MAX_CHAIN_SCORE_FACTOR = 500;
     private static final int LIFE_SCORE_FACTOR = 200;
     private static final int TIME_SCORE_FACTOR = 250;
@@ -130,7 +130,9 @@ public class Score {
             void draw(int line, Score score, Batch preparedBatch, DnaShadowedFont shadowedFont) {
                 Texture trophyTexture = score.getTrophyTexture();
 
-                if (trophyTexture != null) {
+                if (trophyTexture == null) {
+                    drawTrophyTexture(preparedBatch, score.getTrophyNoTexture());
+                } else {
                     score.getTrophyLightingAgent().render(preparedBatch);
                     drawTrophyTexture(preparedBatch, trophyTexture);
                 }
@@ -199,6 +201,7 @@ public class Score {
     private final Texture trophy_b;
     private final Texture trophy_c;
     private final Texture trophy_shape;
+    private final Texture trophy_no;
     private final Agent trophyLightingAgent;
 
     private final GameState gameState;
@@ -226,6 +229,7 @@ public class Score {
         trophy_b = hyperStore.getTexture("trophies/trophy_b.png");
         trophy_c = hyperStore.getTexture("trophies/trophy_c.png");
         trophy_shape = hyperStore.getTexture("trophies/trophy_shape.png");
+        trophy_no = hyperStore.getTexture("trophies/trophy_no.png");
         trophyLightingAgent = new Agent(EAnimMedley.TROPHY_LIGHTING.create(hyperStore));
 
         gameState = DashGame.getInstance().getGameState();
@@ -421,6 +425,10 @@ public class Score {
 
     Texture getTrophyShapeTexture() {
         return trophy_shape;
+    }
+
+    Texture getTrophyNoTexture() {
+        return trophy_no;
     }
 
     Agent getTrophyLightingAgent() {
