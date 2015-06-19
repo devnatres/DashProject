@@ -15,7 +15,7 @@ import com.devnatres.dashproject.gameconstants.Time;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.resourcestore.HyperStore;
-import com.devnatres.dashproject.sidescreens.MainMenuScreen;
+import com.devnatres.dashproject.sidescreens.SplashScreen;
 import com.devnatres.dashproject.tools.VectorPool;
 
 /**
@@ -154,11 +154,12 @@ public class DashGame extends Game {
 
         hyperStore = new HyperStore();
         gameState = new GameState(); // It must be created before any Screen
-        this.setScreen(new MainMenuScreen(this));
-
-        initialFrameTime = System.nanoTime();
 
         Gdx.input.setCatchBackKey(true);
+
+        this.setScreen(new SplashScreen(this));
+
+        initialFrameTime = System.nanoTime();
 
         if (Debug.DEBUG) Debug.begin(mainCamera);
 	}
