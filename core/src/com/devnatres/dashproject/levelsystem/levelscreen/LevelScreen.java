@@ -163,10 +163,10 @@ public class LevelScreen implements Screen {
         set.mainCamera.update();
         set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
         set.mainBatch.begin();
-        renderBackground();
+        renderBackgroundScroll();
         renderMap();
         renderSprites();
-        renderForeground();
+        renderForegroundScroll();
         renderFoeRadar();
         renderDamageFlashing();
         renderHub();
@@ -420,11 +420,11 @@ public class LevelScreen implements Screen {
         }
     }
 
-    private void renderBackground() {
+    private void renderBackgroundScroll() {
         if (level.backScroll != null) level.backScroll.render(set.mainBatch, variables.cameraMovementDone);
     }
 
-    private void renderForeground() {
+    private void renderForegroundScroll() {
         if (level.foreScroll != null) level.foreScroll.render(set.mainBatch, variables.cameraMovementDone);
     }
 

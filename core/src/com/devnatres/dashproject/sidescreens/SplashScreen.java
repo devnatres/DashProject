@@ -13,12 +13,23 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
+ * Splash screen. Phases: <br>
+ *     1: Fade in <br>
+ *     2: Logo <br>
+ *     3: Fade out <br>
+ *     4: Final black <br>
+ *     <br>
  * Created by DevNatres on 19/06/2015.
  */
 public class SplashScreen implements Screen {
     private static final int FADE_DURATION = (int)Time.FPS;
-    private static final int SPLASH_DURATION = (int)Time.FPS * 3 + FADE_DURATION * 2;
+    private static final int FINAL_BLACK_DURATION = (int)(Time.FPS/3f);
+    private static final int TOTAL_DURATION = (int)(Time.FPS*2f + FADE_DURATION*2 + FINAL_BLACK_DURATION);
     private static final float FADE_ICR = 1f/FADE_DURATION;
+
+    private static final int PHASE1_FADE_IN = FADE_DURATION;
+    private static final int PHASE2_LOGO = TOTAL_DURATION - FADE_DURATION - FINAL_BLACK_DURATION;
+    private static final int PHASE3_FADE_OUT = TOTAL_DURATION - FINAL_BLACK_DURATION;
 
     private final DashGame dashGame;
     private final HyperStore localHyperStore;
@@ -27,7 +38,7 @@ public class SplashScreen implements Screen {
     private final InputTranslator mainInputTranslator;
     private final Texture background;
 
-    private int splashDuration = SPLASH_DURATION;
+    private int splashDuration;
     private float fadeValue;
 
     public SplashScreen(DashGame dashGame) {
@@ -48,29 +59,29 @@ public class SplashScreen implements Screen {
 
         mainBatch.begin();
 
-        if (splashDuration > (SPLASH_DURATION - FADE_DURATION)) {
+        if (splashDuration < PHASE1_FADE_IN) {
             mainBatch.setColor(1f, 1f, 1f, fadeValue);
             fadeValue = Tools.limitFloat(fadeValue + FADE_ICR, 0f, 1f);
-        } else if (splashDuration < FADE_DURATION) {
+        } else if (splashDuration < PHASE2_LOGO) {
+            mainBatch.setColor(1f, 1f, 1f, 1f);
+        } else if (splashDuration < PHASE3_FADE_OUT){
             mainBatch.setColor(1f, 1f, 1f, fadeValue);
             fadeValue = Tools.limitFloat(fadeValue - FADE_ICR, 0f, 1f);
-        } else {
-            mainBatch.setColor(1f, 1f, 1f, 1f);
+        } else { // Last phase: final black
+            mainBatch.setColor(1f, 1f, 1f, 0f);
         }
 
-        if (fadeValue > FADE_ICR) {
-            mainBatch.draw(background, 0, 0);
-        }
+        mainBatch.draw(background, 0, 0);
 
         mainBatch.end();
 
         if (mainInputTranslator.isTouchDown()) {
-            splashDuration = 0;
-        } else if (splashDuration > 0) {
-            splashDuration--;
+            splashDuration = TOTAL_DURATION;
+        } else if (splashDuration < TOTAL_DURATION) {
+            splashDuration++;
         }
 
-        if (splashDuration == 0) {
+        if (splashDuration == TOTAL_DURATION) {
             mainBatch.setColor(1f, 1f, 1f, 1f);
             dashGame.setScreen(new MainMenuScreen(dashGame));
         }
