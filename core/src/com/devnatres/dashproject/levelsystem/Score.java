@@ -136,6 +136,12 @@ public class Score {
                     score.getTrophyLightingAgent().render(preparedBatch);
                     drawTrophyTexture(preparedBatch, trophyTexture);
                 }
+
+                if (score.isRecordScore()) {
+                    preparedBatch.draw(score.getRecordTexture(),
+                            getTrophyX(score.getTrophyNoTexture().getWidth()*2),
+                            getTrophyY());
+                }
             }
         },
         ;
@@ -203,11 +209,14 @@ public class Score {
     private final Texture trophy_shape;
     private final Texture trophy_no;
     private final Agent trophyLightingAgent;
+    private final Texture recordTexture;
 
     private final GameState gameState;
     private final LevelId levelId;
 
     private boolean runToFinish;
+
+    private final int lastRecordScore;
 
     public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
@@ -231,9 +240,11 @@ public class Score {
         trophy_shape = hyperStore.getTexture("trophies/trophy_shape.png");
         trophy_no = hyperStore.getTexture("trophies/trophy_no.png");
         trophyLightingAgent = new Agent(EAnimMedley.TROPHY_LIGHTING.create(hyperStore));
+        recordTexture = hyperStore.getTexture("symbols/record.png");
 
         gameState = DashGame.getInstance().getGameState();
         levelId = gameState.getCurrentLevelId();
+        lastRecordScore = gameState.getCurrentLevelBestTotalScore();
 
         scoreCountPhase = -1;
     }
@@ -403,6 +414,10 @@ public class Score {
         return totalScore;
     }
 
+    public boolean isRecordScore() {
+        return totalScore > lastRecordScore;
+    }
+
     Number getTotalScoreCountingNumber() {
         return totalScoreCountingNumber;
     }
@@ -433,5 +448,9 @@ public class Score {
 
     Agent getTrophyLightingAgent() {
         return trophyLightingAgent;
+    }
+
+    Texture getRecordTexture() {
+        return recordTexture;
     }
 }

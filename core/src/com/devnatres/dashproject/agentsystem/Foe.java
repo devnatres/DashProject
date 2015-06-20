@@ -41,7 +41,7 @@ public class Foe extends Agent {
                 EAnimFoe.FOE_TANK_DYING,
                 "fx/pum.png",
                 2,
-                2,
+                1,
                 75,
                 150);
     }

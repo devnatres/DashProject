@@ -74,9 +74,9 @@ public enum EAnimButton implements IAnimCreator {
         }
     },
 
-    BUTTON_TUTORIAL_STANDBY {
+    BUTTON_HELP_STANDBY {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createButtonAnimation(hyperStore, "buttons/button_tutorial_standby.png");
+            return createButtonAnimation(hyperStore, "buttons/button_help_standby.png");
         }
     },
 
@@ -91,7 +91,7 @@ public enum EAnimButton implements IAnimCreator {
             return createButtonAnimation(hyperStore, "buttons/button_opt_sound.png");
         }
     },
-    BUTTON_OPT_TUTORIAL {
+    BUTTON_OPT_HELP {
         public DnaAnimation create(HyperStore hyperStore) {
             return createButtonAnimation(hyperStore, "buttons/button_opt_help.png");
         }

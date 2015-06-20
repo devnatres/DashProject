@@ -32,7 +32,7 @@ public class GameState {
     private static final String CAMERA_ASSISTANT_KEY = "camera_assistant";
     private static final String SOUND_KEY = "sound";
     private static final String COMPLETED_LEVELS_KEY = "completed_levels";
-    private static final String TUTORIAL_VISITED_SUBKEY = "_tutorial_visited";
+    private static final String HELP_VISITED_SUBKEY = "_help_visited";
     private static final String LAST_LEVEL_PLAYED_KEY = "last_level_played";
 
     private static String keyLast(LevelId levelId, String scoreString) {
@@ -356,21 +356,21 @@ public class GameState {
         return isCameraAssistantActivated;
     }
 
-    public void setTutorialVisited(LevelId levelId) {
-        final String tutorialVisitedKey = levelId.getLevelKey() + TUTORIAL_VISITED_SUBKEY;
-        preferences.putBoolean(tutorialVisitedKey, true);
+    public void setHelpVisited(LevelId levelId) {
+        final String helpVisitedKey = levelId.getLevelKey() + HELP_VISITED_SUBKEY;
+        preferences.putBoolean(helpVisitedKey, true);
         preferences.flush();
     }
 
-    public boolean isTutorialVisited(LevelId levelId) {
-        final String tutorialVisitedKey = levelId.getLevelKey() + TUTORIAL_VISITED_SUBKEY;
-        return preferences.getBoolean(tutorialVisitedKey, false);
+    public boolean isHelpVisited(LevelId levelId) {
+        final String helpVisitedKey = levelId.getLevelKey() + HELP_VISITED_SUBKEY;
+        return preferences.getBoolean(helpVisitedKey, false);
     }
 
-    public void setAllTutorialsUnvisited() {
+    public void setAllHelpUnvisited() {
         for (int i = 0; i <= maxLevelIndex; i++) {
-            final String tutorialVisitedKey = levelIds.get(i).getLevelKey() + TUTORIAL_VISITED_SUBKEY;
-            preferences.putBoolean(tutorialVisitedKey, false);
+            final String helpVisitedKey = levelIds.get(i).getLevelKey() + HELP_VISITED_SUBKEY;
+            preferences.putBoolean(helpVisitedKey, false);
         }
         preferences.flush();
     }

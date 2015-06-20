@@ -271,11 +271,14 @@ public class Hero extends Agent {
         if (!dying && immunityPowerUpExistence.getRemainingDuration() == 0) {
             damageImageDuration = DAMAGE_DURATION;
             globalAudio.play(failDashSound);
-            if (damage > 1) {
+            levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);
+
+            // TODO: if soft-damage is not used, remove DAMAGE_SOFT_FLASHING anim, asset and related objects.
+            /*if (damage > 1) {
                 levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);
             } else {
                 levelScreen.setDamageSoftFlashingDuration(DAMAGE_FLASHING_DURATION);
-            }
+            }*/
 
             if (life > 0) {
                 life -= damage;

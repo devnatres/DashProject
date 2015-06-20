@@ -68,7 +68,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private final Button goButton;
     private final Button backButton;
-    private final Button tutorialButton;
+    private final Button helpButton;
     private final Button upButton;
     private final Button upPlusButton;
     private final Button downButton;
@@ -119,8 +119,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 15,
                 this);
 
-        tutorialButton = new Button(240, 64,
-                EAnimButton.BUTTON_TUTORIAL_STANDBY.create(localHyperStore),
+        helpButton = new Button(240, 64,
+                EAnimButton.BUTTON_HELP_STANDBY.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
@@ -235,8 +235,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         backButton.draw(mainBatch);
 
         if (eExposition != EExposition.NONE) {
-            tutorialButton.act(Time.FRAME, touchDownPointOnCamera);
-            tutorialButton.draw(mainBatch);
+            helpButton.act(Time.FRAME, touchDownPointOnCamera);
+            helpButton.draw(mainBatch);
         }
 
         if (!gameState.isLastAvailableLevel()) {
@@ -303,11 +303,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     @Override
     public void execute(Button button) {
         if (button == goButton) {
-            if (eExposition == EExposition.NONE || gameState.isTutorialVisited(currentLevelId)) {
+            if (eExposition == EExposition.NONE || gameState.isHelpVisited(currentLevelId)) {
                 dashGame.setScreen(LevelCreator.createLevel(dashGame, currentLevelId));
             } else {
                 dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, currentLevelId));
-                gameState.setTutorialVisited(currentLevelId);
+                gameState.setHelpVisited(currentLevelId);
             }
         } else if (button == backButton) {
             dashGame.setScreen(new MainMenuScreen(dashGame));
@@ -323,9 +323,9 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         } else if (button == downPlusButton) {
             gameState.displaceCurrentLevel(-PLUS_DISPLACEMENT);
             updateCurrentLevel();
-        } else if (button == tutorialButton) {
+        } else if (button == helpButton) {
             dashGame.setScreen(new ExpositionScreen(dashGame, eExposition, null));
-            gameState.setTutorialVisited(currentLevelId);
+            gameState.setHelpVisited(currentLevelId);
         }
 
         // Synchronize blinking
@@ -337,7 +337,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private void updateCurrentLevel() {
         currentLevelId = gameState.getCurrentLevelId();
-        eExposition = currentLevelId.getETutorial();
+        eExposition = currentLevelId.getEHelp();
 
         texts.clear();
         texts.put(ETexts.TOTAL_SCORE, format(gameState.getTotalBestScore()));

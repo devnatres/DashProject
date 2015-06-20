@@ -13,7 +13,7 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 14/02/2015.
  */
 public class Mine extends Agent {
-    private static final int DAMAGE = 3;
+    private static final int DAMAGE = 2;
 
     private final LevelScreen levelScreen;
     private final TransientAgent explosion;

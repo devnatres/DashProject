@@ -35,12 +35,12 @@ public class OptionScreen implements Screen, IButtonExecutable {
 
     private final Button soundButton;
     private final Button soundSymbolButton;
-    private final Button tutorialsButton;
+    private final Button helpButton;
     private final Button backButton;
 
     private final Agent offSymbol;
 
-    private final Texture tutorialsResettingDone;
+    private final Texture helpResettingDone;
     private int doneDuration;
 
     public OptionScreen(DashGame dashGame) {
@@ -70,8 +70,8 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 this);
         soundSymbolButton.setAutomaticSoundOff();
 
-        tutorialsButton = new Button(240, 400,
-                EAnimButton.BUTTON_OPT_TUTORIAL.create(localHyperStore),
+        helpButton = new Button(240, 400,
+                EAnimButton.BUTTON_OPT_HELP.create(localHyperStore),
                 null,
                 localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
@@ -84,7 +84,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        tutorialsResettingDone = localHyperStore.getTexture("messages/message_done.png");
+        helpResettingDone = localHyperStore.getTexture("messages/message_done.png");
     }
 
     @Override
@@ -97,7 +97,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
         Vector2 touchDownPointOnCamera = mainInputTranslator.getTouchDownPointOnCamera(mainCamera);
         soundButton.act(Time.FRAME, touchDownPointOnCamera);
         soundSymbolButton.act(Time.FRAME, touchDownPointOnCamera);
-        tutorialsButton.act(Time.FRAME, touchDownPointOnCamera);
+        helpButton.act(Time.FRAME, touchDownPointOnCamera);
         backButton.act(Time.FRAME, touchDownPointOnCamera);
 
         mainBatch.begin();
@@ -108,12 +108,12 @@ public class OptionScreen implements Screen, IButtonExecutable {
             offSymbol.draw(mainBatch);
         }
 
-        tutorialsButton.draw(mainBatch);
+        helpButton.draw(mainBatch);
         if (doneDuration > 0) {
             doneDuration--;
-            mainBatch.draw(tutorialsResettingDone,
-                    (dashGame.getScreenWidth()-tutorialsResettingDone.getWidth())/2,
-                    tutorialsButton.getY()+tutorialsButton.getHeight());
+            mainBatch.draw(helpResettingDone,
+                    (dashGame.getScreenWidth()- helpResettingDone.getWidth())/2,
+                    helpButton.getY()+ helpButton.getHeight());
         }
         backButton.draw(mainBatch);
         mainBatch.end();
@@ -156,8 +156,8 @@ public class OptionScreen implements Screen, IButtonExecutable {
         } else if (button == soundButton || button == soundSymbolButton) {
             gameState.activateSound(!gameState.isSoundActivated());
             soundButton.playSound();
-        } else if (button == tutorialsButton) {
-            gameState.setAllTutorialsUnvisited();
+        } else if (button == helpButton) {
+            gameState.setAllHelpUnvisited();
             doneDuration = DONE_DURATION;
         }
     }

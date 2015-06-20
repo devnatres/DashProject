@@ -15,7 +15,7 @@ public class LevelId {
     private static final int TROPHY_B_INDEX = 4;
     private static final int TROPHY_C_INDEX = 5;
     private static final int NAME_INDEX = 6;
-    private static final int TUTORIAL_INDEX = 7;
+    private static final int HELP_INDEX = 7;
 
     private final String mapName;
     private final String scriptName;
@@ -25,7 +25,7 @@ public class LevelId {
     private final int trophyB;
     private final int trophyC;
     private final String name;
-    private final String tutorialName;
+    private final String helpName;
     private final String key;
 
     public LevelId(String levelString) {
@@ -42,7 +42,7 @@ public class LevelId {
         trophyB = Integer.parseInt(fragments[TROPHY_B_INDEX]);
         trophyC = Integer.parseInt(fragments[TROPHY_C_INDEX]);
         name = fragments[NAME_INDEX];
-        tutorialName = fragments[TUTORIAL_INDEX];
+        helpName = fragments[HELP_INDEX];
     }
 
     public String getMapName() {
@@ -78,10 +78,10 @@ public class LevelId {
         return initialTime;
     }
 
-    public EExposition getETutorial() {
+    public EExposition getEHelp() {
         EExposition eExposition = EExposition.NONE;
         try {
-            eExposition = EExposition.valueOf(tutorialName);
+            eExposition = EExposition.valueOf(helpName);
         } catch (Exception e) {
         }
         return eExposition;
