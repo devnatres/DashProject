@@ -170,7 +170,11 @@ public class LevelScreen implements Screen {
 
         renderMap();
         renderSprites();
+
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
         renderForegroundScroll();
+        set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
+
         renderFoeRadar();
         renderDamageFlashing();
 

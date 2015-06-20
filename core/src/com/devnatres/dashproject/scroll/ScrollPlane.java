@@ -29,7 +29,7 @@ public class ScrollPlane {
      * @param texture The texture will be set to a TextureWrap.Repeat wrap.
      * @param position The position of the texture. It never changes.
      * @param speed The constant displacement of the texture if we want to simulate automatic movement.
-     * @param deepFactor Between -1 and 1. Negative is  foreground, positive is background. The closer to 0, the slower.
+     * @param deepFactor Between 0 and 1. The closer to 0, the slower.
      */
     public ScrollPlane(Texture texture, Vector2 position, Vector2 speed, float deepFactor) {
         texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
@@ -39,7 +39,7 @@ public class ScrollPlane {
 
         this.position = position;
         this.speed = speed;
-        this.deepFactor = Tools.limitFloat(deepFactor, -1, 1);
+        this.deepFactor = Tools.limitFloat(deepFactor, 0, 1);
         this.effectiveVelocity = new Vector2();
     }
 

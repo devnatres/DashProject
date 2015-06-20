@@ -33,6 +33,35 @@ public enum EScroll {
             return new Scroll(groundScroll, cloudScroll);
         }
     },
+    SC02 {
+        @Override
+        public Scroll create(HyperStore hyperStore) {
+            ScrollPlane groundScroll = new ScrollPlane(hyperStore.getTexture("backgrounds/bg_ground_a.png"),
+                    new Vector2(0f, 0f),
+                    new Vector2(0f, -0.001f),
+                    .1f);
+
+            /*ScrollPlane cloudScroll = new ScrollPlane(hyperStore.getTexture("backgrounds/bg_ground_b.png"),
+                    new Vector2(0f, 0f),
+                    new Vector2(0f, -0.002f),
+                    .8f);
+
+            return new Scroll(groundScroll, cloudScroll);*/
+
+            return new Scroll(groundScroll);
+        }
+    },
+    SC03 {
+        @Override
+        public Scroll create(HyperStore hyperStore) {
+            ScrollPlane cloudScroll = new ScrollPlane(hyperStore.getTexture("backgrounds/bg_ground_b.png"),
+                    new Vector2(0f, 0f),
+                    new Vector2(0f, -0.002f),
+                    .8f);
+
+            return new Scroll(cloudScroll);
+        }
+    },
     ;
     abstract public Scroll create(HyperStore hyperStore);
 }
