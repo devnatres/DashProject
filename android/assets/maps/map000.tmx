@@ -8,7 +8,7 @@
  </tileset>
  <layer name="ground" width="32" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2XUQ+AIAiEqc3+/0+uF18aTDPhEGFrtx7ax4nerBDR9TzFkZ5O+vjS1+Ggv9Rxzfmtcw5nzfWvP6ms/HnhS+/a80TwLfz37kupUOcNzd9VI+S0Zk5YfBd5Xqv1m7qfRru/R/MzUzOP4mgt1H6vhfa/On90fu+yPt8cX4vH+bLko/338KV+tPKhl4/2j+JztTufnPO/5KcGH+2fUyk/Rgq9/2b4bvHR+a+d+xLfyndk/sj9Lf93dda1pTdyZMSfACAAAA==
+   H4sIAAAAAAAAC+2Y2wqAMAxDVdD//2QFGQyxc9ekrQvI0JezrC52Lsut/boOwhgUP9/IfGlMzWsF8Nn+PfNr6+fFf+n7bsV/qq5bI18Syr8WvnQ/gh/Xk8FH+M/dd5JY+4/N15g/CH5LTnvw/5UTJXxEHxDXy8L6j+wDLPiffP18b+cv1HlEq//U2DOPLPr3yJ/nb9v81vyN58H4/4eow5svJJ/tP4cvzWdUPuTy2f5Z/KeOn/P/Lvb61/Kl/EDxWf6/clMSO/9H577W758Hfkn/FjT7/77rmjueF5FX7gAgAAA=
   </data>
  </layer>
  <layer name="lowblocks" width="32" height="64">

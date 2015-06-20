@@ -84,7 +84,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        tutorialsResettingDone = localHyperStore.getTexture("message_done.png");
+        tutorialsResettingDone = localHyperStore.getTexture("messages/message_done.png");
     }
 
     @Override
@@ -113,7 +113,7 @@ public class OptionScreen implements Screen, IButtonExecutable {
             doneDuration--;
             mainBatch.draw(tutorialsResettingDone,
                     (dashGame.getScreenWidth()-tutorialsResettingDone.getWidth())/2,
-                    tutorialsButton.getY()-tutorialsButton.getHeight());
+                    tutorialsButton.getY()+tutorialsButton.getHeight());
         }
         backButton.draw(mainBatch);
         mainBatch.end();

@@ -99,7 +99,7 @@ public class Hero extends Agent {
         scopeRadio = dashRadio + ATTACK_RADIO;
         scopeRadio2 = scopeRadio * scopeRadio;
 
-        damageImage = new Sprite(hyperStore.getTexture("shoot_damage.png"));
+        damageImage = new Sprite(hyperStore.getTexture("fx/shoot_damage.png"));
 
         centerAccessories();
 

@@ -20,15 +20,15 @@ public enum EScroll {
     SC01 {
         @Override
         public Scroll create(HyperStore hyperStore) {
-            ScrollPlane groundScroll = new ScrollPlane(hyperStore.getTexture("bg_land.png"),
+            ScrollPlane groundScroll = new ScrollPlane(hyperStore.getTexture("backgrounds/bg_galaxy_a.png"),
                     new Vector2(0f, 0f),
                     new Vector2(0f, -0.001f),
                     .1f);
 
-            ScrollPlane cloudScroll = new ScrollPlane(hyperStore.getTexture("bg_clouds.png"),
+            ScrollPlane cloudScroll = new ScrollPlane(hyperStore.getTexture("backgrounds/bg_galaxy_b.png"),
                     new Vector2(0f, 0f),
-                    new Vector2(0f, -0.005f),
-                    .3f);
+                    new Vector2(0f, -0.002f),
+                    .8f);
 
             return new Scroll(groundScroll, cloudScroll);
         }

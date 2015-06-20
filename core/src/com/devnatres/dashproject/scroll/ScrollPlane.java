@@ -8,9 +8,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
- * Represents a plane scroll. <br>
- * To be used with Scroll.
+ * Represents a plane scroll to be used with Scroll class.
  *     <br>
+ * WARNING: The parallax scrolling may be not well calculated. It's just an approximation.
+ * (No time for more, man.)
+ * <br>
  * Created by DevNatres on 06/03/2015.
  */
 public class ScrollPlane {
@@ -27,7 +29,7 @@ public class ScrollPlane {
      * @param texture The texture will be set to a TextureWrap.Repeat wrap.
      * @param position The position of the texture. It never changes.
      * @param speed The constant displacement of the texture if we want to simulate automatic movement.
-     * @param deepFactor Between -1 (foreground) and 1 (background). The closer to 0, the farther.
+     * @param deepFactor Between -1 and 1. Negative is  foreground, positive is background. The closer to 0, the slower.
      */
     public ScrollPlane(Texture texture, Vector2 position, Vector2 speed, float deepFactor) {
         texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
@@ -42,9 +44,9 @@ public class ScrollPlane {
     }
 
     public void render(Batch batch, Vector2 cameraDisplacement) {
-        batch.draw(textureRegion, position.x, position.y);
         effectiveVelocity.set(speed);
         effectiveVelocity.add(cameraDisplacement.x/width * deepFactor, -cameraDisplacement.y/height * deepFactor);
         textureRegion.scroll(effectiveVelocity.x, effectiveVelocity.y);
+        batch.draw(textureRegion, position.x, position.y);
     }
 }

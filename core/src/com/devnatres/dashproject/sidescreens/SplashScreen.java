@@ -22,9 +22,9 @@ import com.devnatres.dashproject.tools.Tools;
  * Created by DevNatres on 19/06/2015.
  */
 public class SplashScreen implements Screen {
-    private static final int FADE_DURATION = (int)Time.FPS;
-    private static final int FINAL_BLACK_DURATION = (int)(Time.FPS/3f);
-    private static final int TOTAL_DURATION = (int)(Time.FPS*2f + FADE_DURATION*2 + FINAL_BLACK_DURATION);
+    private static final int FADE_DURATION = Time.getIntFPS();
+    private static final int FINAL_BLACK_DURATION = Time.getIntFPS(3f);
+    private static final int TOTAL_DURATION = Time.getIntFPS(2f) + FADE_DURATION*2 + FINAL_BLACK_DURATION;
     private static final float FADE_ICR = 1f/FADE_DURATION;
 
     private static final int PHASE1_FADE_IN = FADE_DURATION;
@@ -47,7 +47,7 @@ public class SplashScreen implements Screen {
         mainBatch = dashGame.getMainBatch();
         mainCamera = dashGame.getCenteredMainCamera();
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
-        background = localHyperStore.getTexture("splash.png");
+        background = localHyperStore.getTexture("screens/splash.png");
     }
 
     @Override

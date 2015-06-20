@@ -211,7 +211,7 @@ public class Score {
 
     public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
-        youWinMessage = hyperStore.getTexture("message_youwin.png");
+        youWinMessage = hyperStore.getTexture("messages/message_youwin.png");
         screenWidth = Gdx.graphics.getWidth();
         screenHeight = Gdx.graphics.getHeight();
         this.hero = levelScreen.getHero();
@@ -224,7 +224,7 @@ public class Score {
         DnaAnimation numberAnimation = EAnimMedley.NUMBERS_GOLD.create(hyperStore);
         totalScoreCountingNumber = new Number(numberAnimation, ENumberType.INTEGER);
 
-        bg_texture = hyperStore.getTexture("bg_scoring.png");
+        bg_texture = hyperStore.getTexture("backgrounds/bg_scoring.png");
         trophy_a = hyperStore.getTexture("trophies/trophy_a.png");
         trophy_b = hyperStore.getTexture("trophies/trophy_b.png");
         trophy_c = hyperStore.getTexture("trophies/trophy_c.png");

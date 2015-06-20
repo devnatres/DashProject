@@ -10,17 +10,17 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
 public enum EAnimMedley implements IAnimCreator {
     RADAR_RIGHT {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "radar_right.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "hub/radar_right.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
     RADAR_UP {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "radar_up.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "hub/radar_up.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
     RADAR_RIGHT_UP {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "radar_rightup.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "hub/radar_rightup.png", 1, 1, 8, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
 
@@ -38,13 +38,13 @@ public enum EAnimMedley implements IAnimCreator {
 
     DAMAGE_SOFT_FLASHING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "damage_soft_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "fx/damage_soft_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
 
     DAMAGE_HARD_FLASHING {
         public DnaAnimation create(HyperStore hyperStore) {
-            return AnimTools.create(hyperStore, "damage_hard_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
+            return AnimTools.create(hyperStore, "fx/damage_hard_flashing.png", 2, 1, 5, Animation.PlayMode.LOOP_PINGPONG);
         }
     },
 

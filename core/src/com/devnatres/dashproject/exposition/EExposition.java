@@ -23,9 +23,9 @@ public enum EExposition {
     BASICS1 {
         @Override
         public Exposition createExposition(DashGame dashgame, HyperStore hyperStore) {
-            Exposition exposition = new Exposition(dashgame, hyperStore.getTexture("message_movement.png"));
+            Exposition exposition = new Exposition(dashgame, hyperStore.getTexture("messages/message_movement.png"));
 
-            Figure figure1 = new Figure(hyperStore.getTexture("message_basics1a.png"));
+            Figure figure1 = new Figure(hyperStore.getTexture("messages/message_basics1a.png"));
 
             Agent hero = new Agent(EAnimHero.HERO_WALKING.create(hyperStore));
             hero.setPosition(10, 300);
@@ -39,7 +39,7 @@ public enum EExposition {
 
             exposition.add(figure1);
 
-            Figure figure2 = new Figure(hyperStore.getTexture("message_basics1b.png"));
+            Figure figure2 = new Figure(hyperStore.getTexture("messages/message_basics1b.png"));
 
             Agent hero2 = new Agent(EAnimHero.HERO_WALKING.create(hyperStore));
             hero2.setPosition(100, 300);
@@ -47,7 +47,7 @@ public enum EExposition {
 
             figure2.add(robot);
 
-            Agent block = new Agent(hyperStore.getTexture("pum.png"));
+            Agent block = new Agent(hyperStore.getTexture("fx/pum.png"));
             block.setPosition(200, 300);
             figure2.add(block);
 

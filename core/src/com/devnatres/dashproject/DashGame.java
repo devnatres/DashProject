@@ -45,7 +45,7 @@ public class DashGame extends Game {
     public static final int INITIAL_SCREEN_HEIGHT = 800;
     public static final boolean USE_ACCELEROMETER = false;
     public static final boolean USE_COMPASS = false;
-    private static final int DOUBLE_BACK_KEY_LAPSE = (int)Time.FPS;
+    private static final int DOUBLE_BACK_KEY_LAPSE = Time.getIntFPS(1.25f);
 
     private Application.ApplicationType appType;
     private SpriteBatch mainBatch;
@@ -146,7 +146,7 @@ public class DashGame extends Game {
         systemCamera = new DnaCamera();
         systemCamera.setToOrtho(false, screenWidth, screenHeight);
 
-        pressAgainTexture = new Texture(Gdx.files.internal("press_again.png"));
+        pressAgainTexture = new Texture(Gdx.files.internal("messages/press_again.png"));
 
         mainInputTranslator = new InputTranslator();
 

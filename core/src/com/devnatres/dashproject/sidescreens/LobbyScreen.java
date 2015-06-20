@@ -97,8 +97,8 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainHyperStore = dashGame.getHyperStore();
 
         localHyperStore = new HyperStore();
-        heroTexture = localHyperStore.getTexture("mark.png");
-        background = localHyperStore.getTexture("lobby_background.png");
+        heroTexture = localHyperStore.getTexture("mark/mark.png");
+        background = localHyperStore.getTexture("backgrounds/lobby_background.png");
 
         gameState = dashGame.getGameState();
         updateCurrentLevel();
@@ -160,7 +160,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         trophy_shape = localHyperStore.getTexture("trophies/trophy_shape.png");
         trophy_light = localHyperStore.getTexture("trophies/trophy_light.png");
 
-        new_level = localHyperStore.getTexture("new_level.png");
+        new_level = localHyperStore.getTexture("symbols/new_level.png");
 
         music = mainHyperStore.getMusic("music/surfing_menus.ogg");
     }

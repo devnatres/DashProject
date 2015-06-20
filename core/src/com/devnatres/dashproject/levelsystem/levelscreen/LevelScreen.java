@@ -160,16 +160,23 @@ public class LevelScreen implements Screen {
     }
 
     private void renderStandardComponents() {
-        set.mainCamera.update();
-        set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
         set.mainBatch.begin();
+
+        set.mainCamera.update();
+
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
         renderBackgroundScroll();
+        set.mainBatch.setProjectionMatrix(set.mainCamera.combined);
+
         renderMap();
         renderSprites();
         renderForegroundScroll();
         renderFoeRadar();
         renderDamageFlashing();
+
+        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
         renderHub();
+
         set.mainBatch.end();
     }
 
@@ -452,8 +459,6 @@ public class LevelScreen implements Screen {
     }
 
     private void renderHub() {
-        set.mainBatch.setProjectionMatrix(set.fixedCamera.combined);
-
         score.renderActionScore(set.mainBatch, set.mainShadowedFont);
 
         Number timeNumber = variables.getTimeNumber();

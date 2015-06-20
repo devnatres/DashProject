@@ -29,8 +29,8 @@ public class Exposition implements Disposable {
         this.title = title;
 
         localHyperStore = new HyperStore();
-        tapToNext = localHyperStore.getTexture("message_taptonext.png");
-        tapToFinish = localHyperStore.getTexture("message_taptofinish.png");
+        tapToNext = localHyperStore.getTexture("messages/message_taptonext.png");
+        tapToFinish = localHyperStore.getTexture("messages/message_taptofinish.png");
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
     }

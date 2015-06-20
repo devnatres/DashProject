@@ -38,7 +38,7 @@ public class CreditScreen implements Screen, IButtonExecutable {
         mainCamera = dashGame.getCenteredMainCamera();
 
         localHyperStore = new HyperStore();
-        background = localHyperStore.getTexture("credits.png");
+        background = localHyperStore.getTexture("screens/credits.png");
         backButton = new Button(240, 60,
                 EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
                 null,

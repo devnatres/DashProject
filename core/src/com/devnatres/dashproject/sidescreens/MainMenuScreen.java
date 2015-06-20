@@ -51,7 +51,7 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         mainHyperStore = dashGame.getHyperStore();
         localHyperStore = new HyperStore();
 
-        background = localHyperStore.getTexture("menu_background.png");
+        background = localHyperStore.getTexture("backgrounds/menu_background.png");
 
         playButton = new Button(240, 450,
                 EAnimButton.BUTTON_PLAY_STANDBY.create(localHyperStore),

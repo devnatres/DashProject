@@ -18,7 +18,7 @@ public class LifeBar {
     private final Vector2 position;
 
     public LifeBar(HyperStore hyperStore) {
-        lifePointImage = new Sprite(hyperStore.getTexture("life_point.png"));
+        lifePointImage = new Sprite(hyperStore.getTexture("hub/life_point.png"));
         position = new Vector2(X_POSITION,
                 DashGame.getInstance().getScreenHeight() - lifePointImage.getHeight() - Y_MARGIN);
     }

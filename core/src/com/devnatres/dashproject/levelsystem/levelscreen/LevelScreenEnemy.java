@@ -47,7 +47,7 @@ class LevelScreenEnemy {
         hordeCountNumber.setValueDirectly(maxHordeCount);
         lastHordeCount = maxHordeCount;
 
-        hordesClearTexture = set.localHyperStore.getTexture("hordes_clear.png");
+        hordesClearTexture = set.localHyperStore.getTexture("hub/hordes_clear.png");
     }
 
     public void clearCombo() {

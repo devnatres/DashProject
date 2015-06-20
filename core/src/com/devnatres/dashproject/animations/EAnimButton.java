@@ -93,7 +93,7 @@ public enum EAnimButton implements IAnimCreator {
     },
     BUTTON_OPT_TUTORIAL {
         public DnaAnimation create(HyperStore hyperStore) {
-            return createButtonAnimation(hyperStore, "buttons/button_opt_tutorial.png");
+            return createButtonAnimation(hyperStore, "buttons/button_opt_help.png");
         }
     },
     BUTTON_OPT_BACK {
