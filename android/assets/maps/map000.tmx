@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="64" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
-  <image source="tileset_basic.png" width="128" height="128"/>
+  <image source="tileset_basic.png" width="128" height="224"/>
  </tileset>
- <tileset firstgid="17" name="tileset_foes" tilewidth="32" tileheight="64">
+ <tileset firstgid="29" name="tileset_foes" tilewidth="32" tileheight="64">
   <image source="tileset_foes.png" width="32" height="64"/>
  </tileset>
  <layer name="ground" width="32" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2Y2wqAMAxDVdD//2QFGQyxc9ekrQvI0JezrC52Lsut/boOwhgUP9/IfGlMzWsF8Nn+PfNr6+fFf+n7bsV/qq5bI18Syr8WvnQ/gh/Xk8FH+M/dd5JY+4/N15g/CH5LTnvw/5UTJXxEHxDXy8L6j+wDLPiffP18b+cv1HlEq//U2DOPLPr3yJ/nb9v81vyN58H4/4eow5svJJ/tP4cvzWdUPuTy2f5Z/KeOn/P/Lvb61/Kl/EDxWf6/clMSO/9H577W758Hfkn/FjT7/77rmjueF5FX7gAgAAA=
+   H4sIAAAAAAAAC+3Z6wqDMAwF4DpwMGGFidv0/V90Ka5MthZm1RwlJxDyz0/TYrw4N8ZV8ixZK1bvPlFJPiTvivVEnz79w/qN5CVRNfynZJfJ3pgfZocH+tX7WCj/JtkCfcT6hzqd5wPAz52Plfsfffr06dOnT58+ffqlfniHaYA+og/0fyPug/g9RdvX7McR/C3X4x9/y36U+N/9WFLbAt96rPmfyLv5gd5/VvzcOmvdfzTmYMqP1211/qN8zb6n/L08f68x1+bMvxenrXS+ACAAAA==
   </data>
  </layer>
  <layer name="lowblocks" width="32" height="64">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+3VwQkAIAwEwXztv2E7EAThIpmBvPcVropfrcNN6APvpH93en+y9Hbc9NN7l+4DAAAAANDfBghCkAgAIAAA
+   H4sIAAAAAAAAC+3VwQkAIAwEwfRg/73agSAIF8kM5L2vcFX8ah1uQh94J/270/uTpbfjpp/eu3QfAAAAAID+Norqdf8AIAAA
   </data>
  </layer>
  <layer name="blocks" width="32" height="64">
@@ -22,7 +22,7 @@
   </data>
  </layer>
  <objectgroup name="horde0">
-  <object name="foe1" type="robot" gid="17" x="320" y="1856">
+  <object name="foe1" type="robot" gid="29" x="320" y="1856">
    <properties>
     <property name="step0" value="move,17,57"/>
     <property name="step1" value="move,17,59"/>
@@ -30,11 +30,11 @@
     <property name="step3" value="move,origin"/>
    </properties>
   </object>
-  <object gid="17" x="224" y="1920"/>
+  <object gid="29" x="224" y="1920"/>
  </objectgroup>
  <objectgroup name="horde1">
-  <object type="robot" gid="17" x="352" y="416"/>
-  <object type="robot" gid="17" x="288" y="320">
+  <object type="robot" gid="29" x="352" y="416"/>
+  <object type="robot" gid="29" x="288" y="320">
    <properties>
     <property name="step0" value="move,15,9"/>
     <property name="step1" value="move,origin"/>
