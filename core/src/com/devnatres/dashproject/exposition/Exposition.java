@@ -25,12 +25,18 @@ public class Exposition implements Disposable {
     private final Texture tapToFinish;
     private final HyperStore localHyperStore;
 
+    private final int screenWidth;
+    private final int screenHeight;
+
     public Exposition(DashGame dashGame, Texture title) {
         this.title = title;
 
         localHyperStore = new HyperStore();
-        tapToNext = localHyperStore.getTexture("messages/message_taptonext.png");
-        tapToFinish = localHyperStore.getTexture("messages/message_taptofinish.png");
+        tapToNext = localHyperStore.getTexture("help/help_taptonext.png");
+        tapToFinish = localHyperStore.getTexture("help/help_taptofinish.png");
+
+        screenWidth = dashGame.getScreenWidth();
+        screenHeight = dashGame.getScreenHeight();
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
     }
@@ -49,16 +55,12 @@ public class Exposition implements Disposable {
         currentFigure.act();
         currentFigure.draw(batch);
 
-        if (title != null)  batch.draw(title, 0, 700);
+        if (title != null)  batch.draw(title, 0, screenHeight-title.getHeight());
 
         if (index == figures.size()-1) {
-            batch.draw(tapToFinish,
-                    (DashGame.getInstance().getScreenWidth()-tapToFinish.getWidth())/2,
-                    0);
+            batch.draw(tapToFinish, 0, 0);
         } else {
-            batch.draw(tapToNext,
-                    (DashGame.getInstance().getScreenWidth()-tapToNext.getWidth())/2,
-                    0);
+            batch.draw(tapToNext, 0, 0);
         }
 
         if (mainInputTranslator.isTouchDown()) {
