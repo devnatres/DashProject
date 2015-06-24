@@ -36,6 +36,7 @@ public class Agent extends Actor {
     private final Volume volume;
     private DnaAnimation animation;
     private float speed;
+    private boolean displayable = true;
 
     public Agent(DnaAnimation animation) {
         TextureRegion textureRegion = animation.getKeyFrame(0);
@@ -96,7 +97,7 @@ public class Agent extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (isVisible()) {
+        if (isVisible() && displayable) {
             batch.draw(animation.getCurrentKeyFrame(), getX(), getY());
         }
     }
@@ -148,6 +149,10 @@ public class Agent extends Actor {
 
     public Rectangle getVolumeRectangle() {
         return volume.getRectangle();
+    }
+
+    public void setDisplayable(boolean displayable) {
+        this.displayable = displayable;
     }
 
 }
