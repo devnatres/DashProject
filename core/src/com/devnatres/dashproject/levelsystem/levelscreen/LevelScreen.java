@@ -432,11 +432,23 @@ public class LevelScreen implements Screen {
     }
 
     private void renderBackgroundScroll() {
-        if (level.backScroll != null) level.backScroll.render(set.mainBatch, variables.cameraMovementDone);
+        if (level.backScroll != null) {
+            if (playMode == EPlayMode.GAME_PLAY) {
+                level.backScroll.render(set.mainBatch, variables.cameraMovementDone);
+            } else {
+                level.backScroll.render(set.mainBatch);
+            }
+        }
     }
 
     private void renderForegroundScroll() {
-        if (level.foreScroll != null) level.foreScroll.render(set.mainBatch, variables.cameraMovementDone);
+        if (level.foreScroll != null) {
+            if (playMode == EPlayMode.GAME_PLAY) {
+                level.foreScroll.render(set.mainBatch, variables.cameraMovementDone);
+            } else {
+                level.foreScroll.render(set.mainBatch);
+            }
+        }
     }
 
     private void renderMap() {

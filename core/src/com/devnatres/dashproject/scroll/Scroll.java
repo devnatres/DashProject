@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Scroll {
     private final ScrollPlane[] scrollPlanes;
+    private final Vector2 zeroVector = new Vector2(0,0);
 
     /**
      * The planes order specifies the order they will be painted.
@@ -22,5 +23,9 @@ public class Scroll {
         for (int i = 0; i < scrollPlanes.length; i++) {
             scrollPlanes[i].render(batch, cameraDisplacement);
         }
+    }
+
+    public void render(Batch batch) {
+        render(batch, zeroVector);
     }
 }
