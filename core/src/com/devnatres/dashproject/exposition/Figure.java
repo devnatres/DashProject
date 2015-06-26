@@ -16,9 +16,12 @@ import java.util.ArrayList;
 public class Figure {
     private final ArrayList<Agent> agents = new ArrayList<Agent>();
     private final Texture description;
+    private int count;
+    private final int finalCount;
 
-    public Figure(Texture description) {
+    public Figure(Texture description, int finalCount) {
         this.description = description;
+        this.finalCount = finalCount;
     }
 
     public void add(Agent agent) {
@@ -29,6 +32,16 @@ public class Figure {
         for (int i = 0; i < agents.size(); i++) {
             Agent agent = agents.get(i);
             agent.act(Time.FRAME);
+
+            if (agent.getActions().size > 0 && count == finalCount) {
+                agent.getActions().first().restart();
+            }
+        }
+
+        if (count == finalCount) {
+            count = 0;
+        } else {
+            count++;
         }
     }
 

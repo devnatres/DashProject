@@ -1,7 +1,6 @@
 package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.animations.EAnimHero;
@@ -31,19 +30,18 @@ public class ExpoHero extends ExpoAgent {
         hero.setCenter(center);
     }
 
+    @Override
     public void assignToFigure(Figure figure) {
-        dash.addAction(createRepeatAction(sequenceDashAction));
-        hero.addAction(createRepeatAction(sequenceHeroAction));
-
-        figure.add(dash);
-        figure.add(hero);
+        addAgentToFigure(dash, sequenceDashAction, figure);
+        addAgentToFigure(hero, sequenceHeroAction, figure);
     }
 
-    public void addMoveToCenterAndWaitAction(Vector2 center, float time) {
-        sequenceDashAction.addAction(createMoveToCenterAction(dash, center));
-        sequenceDashAction.addAction(new DelayAction(time));
+    public void addMoveToCenterAction(Vector2 center, float time) {
+        addMoveToCenterAndWaitAction(dash, sequenceDashAction, center, time);
+        addMoveToCenterAndWaitAction(hero, sequenceHeroAction, center, time);
+    }
 
-        sequenceHeroAction.addAction(createMoveToCenterAction(hero, center));
-        sequenceHeroAction.addAction(new DelayAction(time));
+    public void addMoveToCenterAction(Vector2 center) {
+        addMoveToCenterAction(center, 0);
     }
 }

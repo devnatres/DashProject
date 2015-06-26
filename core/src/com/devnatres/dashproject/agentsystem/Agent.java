@@ -36,6 +36,11 @@ public class Agent extends Actor {
     private final Volume volume;
     private DnaAnimation animation;
     private float speed;
+
+    /**
+     * "visible" means "visible by the system", i.e., for act() and draw() methods.
+     * "displayable" is considered only by the draw() method.
+     */
     private boolean displayable = true;
 
     public Agent(DnaAnimation animation) {

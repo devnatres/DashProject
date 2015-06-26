@@ -1,10 +1,8 @@
 package com.devnatres.dashproject.exposition;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.devnatres.dashproject.agentsystem.Agent;
-import com.devnatres.dashproject.dnagdx.DnaDisplayAction;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
@@ -23,31 +21,20 @@ public class ExpoFinger extends ExpoAgent {
         finger.setCenter(center);
     }
 
+    @Override
     public void assignToFigure(Figure figure) {
-        finger.addAction(createRepeatAction(sequenceFingerAction));
-        figure.add(finger);
+        addAgentToFigure(finger, sequenceFingerAction, figure);
     }
 
-    public void addMoveToCenterAndWaitAction(Vector2 center, float time) {
-        sequenceFingerAction.addAction(createMoveToCenterAction(finger, center));
-        sequenceFingerAction.addAction(new DelayAction(time));
+    public void addDisplayAction(float time) {
+        addDisplayAndWaitAction(finger, sequenceFingerAction, time);
     }
 
-    public void addDisplayAndWaitAction(float time) {
-        DnaDisplayAction dnaDisplayAction = new DnaDisplayAction(finger);
-        dnaDisplayAction.setDisplayable(true);
-        sequenceFingerAction.addAction(dnaDisplayAction);
-        sequenceFingerAction.addAction(new DelayAction(time));
+    public void addDisplayAction() {
+        addDisplayAction(0);
     }
 
-    public void addDelayAction(float time) {
-        sequenceFingerAction.addAction(new DelayAction(time));
-    }
-
-    public void addHideAndWaitAction(float time) {
-        DnaDisplayAction dnaDisplayAction = new DnaDisplayAction(finger);
-        dnaDisplayAction.setDisplayable(false);
-        sequenceFingerAction.addAction(dnaDisplayAction);
-        sequenceFingerAction.addAction(new DelayAction(time));
+    public void addHideAction(float time) {
+        addHideAndWaitAction(finger, sequenceFingerAction, time);
     }
 }

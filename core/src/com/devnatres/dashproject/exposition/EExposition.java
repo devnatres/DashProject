@@ -25,16 +25,16 @@ public enum EExposition {
             final Vector2 position2 = new Vector2(200, 300);
 
             // Figure 1
-            Figure figure1 = new Figure(hyperStore.getTexture("help/help_basics1a.png"));
+            Figure figure1 = new Figure(hyperStore.getTexture("help/help_basics1a.png"), 180);
 
             ExpoHero expoHero = new ExpoHero(hyperStore, position1);
-            expoHero.addMoveToCenterAndWaitAction(position1, 60f);
-            expoHero.addMoveToCenterAndWaitAction(position2, 120f);
+            expoHero.addMoveToCenterAction(position1, 60f);
+            expoHero.addMoveToCenterAction(position2);
             expoHero.assignToFigure(figure1);
 
             ExpoFinger expoFinger = new ExpoFinger(hyperStore, position2);
-            expoFinger.addHideAndWaitAction(30f);
-            expoFinger.addDisplayAndWaitAction(150f);
+            expoFinger.addHideAction(30f);
+            expoFinger.addDisplayAction();
             expoFinger.assignToFigure(figure1);
 
             exposition.add(figure1);
