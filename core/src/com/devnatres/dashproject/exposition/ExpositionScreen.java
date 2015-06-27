@@ -86,7 +86,7 @@ public class ExpositionScreen implements Screen {
 
     @Override
     public void dispose() {
-        exposition.dispose();
+        if (exposition != null) exposition.dispose();
         localHyperStore.dispose();
     }
 }
