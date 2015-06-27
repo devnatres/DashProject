@@ -3,6 +3,7 @@ package com.devnatres.dashproject.exposition;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.devnatres.dashproject.agentsystem.Agent;
+import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
@@ -11,14 +12,17 @@ import com.devnatres.dashproject.resourcestore.HyperStore;
  * Created by DevNatres on 24/06/2015.
  */
 public class ExpoFinger extends ExpoAgent {
-    private final SequenceAction sequenceFingerAction;
+    static private final int X_DISPLACEMENT = 28;
+    static private final int Y_DISPLACEMENT = -22;
+
+    private SequenceAction sequenceFingerAction;
     private final Agent finger;
 
     public ExpoFinger(HyperStore hyperStore, Vector2 center) {
         sequenceFingerAction = new SequenceAction();
 
-        finger = new Agent(hyperStore.getTexture("help/help_finger.png"));
-        finger.setCenter(center);
+        finger = new Agent(EAnimMedley.HELP_FINGER.create(hyperStore));
+        finger.setCenter(center.x + X_DISPLACEMENT, center.y + Y_DISPLACEMENT);
     }
 
     @Override
@@ -32,6 +36,10 @@ public class ExpoFinger extends ExpoAgent {
 
     public void addDisplayAction() {
         addDisplayAction(0);
+    }
+
+    public void addDisplayAndHideAnimAction() {
+        addDisplayAndHideAnimAction(finger, sequenceFingerAction);
     }
 
     public void addHideAction(float time) {

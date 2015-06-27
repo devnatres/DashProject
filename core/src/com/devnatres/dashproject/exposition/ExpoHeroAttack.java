@@ -7,61 +7,63 @@ import com.devnatres.dashproject.animations.EAnimHero;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 /**
- * Helper class that represents a hero and a dash-radio in an exposition. <br>
+ * Helper class that represents a hero attack and a dash-radio in an exposition. <br>
  *     <br>
  * Created by DevNatres on 24/06/2015.
  */
-public class ExpoHero extends ExpoAgent {
+public class ExpoHeroAttack extends ExpoAgent {
 
     private SequenceAction sequenceDashAction;
-    private SequenceAction sequenceHeroAction;
+    private SequenceAction sequenceHeroAttackAction;
 
     private final Agent dash;
-    private final Agent hero;
+    private final Agent heroAttack;
 
-    public ExpoHero(HyperStore hyperStore, Vector2 center) {
+    public ExpoHeroAttack(HyperStore hyperStore, Vector2 center) {
         sequenceDashAction = new SequenceAction();
-        sequenceHeroAction = new SequenceAction();
+        sequenceHeroAttackAction = new SequenceAction();
 
         dash = new Agent(EAnimHero.DASH_HALO_NORMAL.create(hyperStore));
-        hero = new Agent(EAnimHero.HERO_WALKING.create(hyperStore));
+        heroAttack = new Agent(EAnimHero.HERO_ATTACKING.create(hyperStore));
 
         dash.setCenter(center);
-        hero.setCenter(center);
+        heroAttack.setCenter(center);
     }
 
     @Override
     public void assignToFigure(Figure figure) {
         addAgentToFigure(dash, sequenceDashAction, figure);
-        addAgentToFigure(hero, sequenceHeroAction, figure);
+        addAgentToFigure(heroAttack, sequenceHeroAttackAction, figure);
     }
 
     public void addMoveToCenterAction(Vector2 center, float time) {
         addMoveToCenterAndWaitAction(dash, sequenceDashAction, center, time);
-        addMoveToCenterAndWaitAction(hero, sequenceHeroAction, center, time);
+        addMoveToCenterAndWaitAction(heroAttack, sequenceHeroAttackAction, center, time);
     }
 
     public void addMoveToCenterAction(Vector2 center) {
         addMoveToCenterAction(center, 0);
     }
 
-    public void addHideAction() {
-        addHideAndWaitAction(dash, sequenceDashAction, 0);
-        addHideAndWaitAction(hero, sequenceHeroAction, 0);
-    }
-
     public void addHideAction(float time) {
         addHideAndWaitAction(dash, sequenceDashAction, time);
-        addHideAndWaitAction(hero, sequenceHeroAction, time);
+        addHideAndWaitAction(heroAttack, sequenceHeroAttackAction, time);
     }
 
     public void addDisplayAction() {
         addDisplayAndWaitAction(dash, sequenceDashAction, 0);
-        addDisplayAndWaitAction(hero, sequenceHeroAction, 0);
+        addDisplayAndWaitAction(heroAttack, sequenceHeroAttackAction, 0);
     }
 
-    public void addHideAndDisplayAction(float time) {
-        addHideAndDisplayAction(dash, sequenceDashAction, time);
-        addHideAndDisplayAction(hero, sequenceHeroAction, time);
+    public void addDisplayAction(float time) {
+        addDisplayAndWaitAction(dash, sequenceDashAction, time);
+        addDisplayAndWaitAction(heroAttack, sequenceHeroAttackAction, time);
     }
+
+    public void addDisplayAndHideAction(float time) {
+        addDisplayAndHideAction(dash, sequenceDashAction, time);
+        addDisplayAndHideAction(heroAttack, sequenceHeroAttackAction, time);
+    }
+
+
 }

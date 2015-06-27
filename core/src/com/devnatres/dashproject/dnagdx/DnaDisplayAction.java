@@ -23,7 +23,11 @@ public class DnaDisplayAction extends Action {
     }
 
     public boolean act(float delta) {
-        ((Agent)actor).setDisplayable(displayable);
+        Agent agent = (Agent)actor;
+
+        agent.setDisplayable(displayable);
+        agent.getAnimation().resetAnimation();
+
         return true;
     }
 
