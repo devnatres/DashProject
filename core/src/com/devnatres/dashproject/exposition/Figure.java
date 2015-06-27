@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class Figure {
     private final ArrayList<Agent> agents = new ArrayList<Agent>();
-    private final Texture description;
+    private Texture description;
     private int count;
     private final int finalCount;
 
@@ -51,5 +51,9 @@ public class Figure {
             agent.draw(batch);
         }
         if (description != null) batch.draw(description, 0, 100);
+    }
+
+    public void setDescription(Texture description) {
+        this.description = description;
     }
 }

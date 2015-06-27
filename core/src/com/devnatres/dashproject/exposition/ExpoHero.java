@@ -20,11 +20,20 @@ public class ExpoHero extends ExpoAgent {
     private final Agent hero;
 
     public ExpoHero(HyperStore hyperStore, Vector2 center) {
+        this(hyperStore, center, false);
+    }
+
+    public ExpoHero(HyperStore hyperStore, Vector2 center, boolean crouched) {
         sequenceDashAction = new SequenceAction();
         sequenceHeroAction = new SequenceAction();
 
         dash = new Agent(EAnimHero.DASH_HALO_NORMAL.create(hyperStore));
-        hero = new Agent(EAnimHero.HERO_WALKING.create(hyperStore));
+
+        if (crouched) {
+            hero = new Agent(EAnimHero.HERO_CROUCHING.create(hyperStore));
+        } else {
+            hero = new Agent(EAnimHero.HERO_WALKING.create(hyperStore));
+        }
 
         dash.setCenter(center);
         hero.setCenter(center);
@@ -64,4 +73,10 @@ public class ExpoHero extends ExpoAgent {
         addHideAndDisplayAction(dash, sequenceDashAction, time);
         addHideAndDisplayAction(hero, sequenceHeroAction, time);
     }
+
+    public void addDisplayAction(float time) {
+        addDisplayAndWaitAction(dash, sequenceDashAction, time);
+        addDisplayAndWaitAction(hero, sequenceHeroAction, time);
+    }
+
 }

@@ -19,9 +19,18 @@ public class ExpoFinger extends ExpoAgent {
     private final Agent finger;
 
     public ExpoFinger(HyperStore hyperStore, Vector2 center) {
+        this(hyperStore, center, false);
+    }
+
+    public ExpoFinger(HyperStore hyperStore, Vector2 center, boolean fast) {
         sequenceFingerAction = new SequenceAction();
 
-        finger = new Agent(EAnimMedley.HELP_FINGER.create(hyperStore));
+        if (fast) {
+            finger = new Agent(EAnimMedley.HELP_FAST_FINGER.create(hyperStore));
+        } else {
+            finger = new Agent(EAnimMedley.HELP_FINGER.create(hyperStore));
+        }
+
         finger.setCenter(center.x + X_DISPLACEMENT, center.y + Y_DISPLACEMENT);
     }
 

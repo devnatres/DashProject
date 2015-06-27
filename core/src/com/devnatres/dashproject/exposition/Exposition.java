@@ -8,6 +8,7 @@ import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents an exposition <br>
@@ -28,6 +29,8 @@ public class Exposition implements Disposable {
     private final int screenWidth;
     private final int screenHeight;
 
+    private final HashMap<Figure, Texture> alternativeDescriptions = new HashMap<Figure, Texture>();
+
     public Exposition(DashGame dashGame, Texture title) {
         this.title = title;
 
@@ -47,6 +50,11 @@ public class Exposition implements Disposable {
             if (isFinished) isFinished = false;
             if (currentFigure == null) currentFigure = figure;
         }
+    }
+
+    public void add(Figure figure, Texture texture) {
+        add(figure);
+        alternativeDescriptions.put(figure, texture);
     }
 
     public void render(Batch batch) {
@@ -72,6 +80,8 @@ public class Exposition implements Disposable {
         if (index < figures.size()-1) {
             index++;
             currentFigure = figures.get(index);
+            Texture alternativeDescription = alternativeDescriptions.get(currentFigure);
+            if (alternativeDescription != null) currentFigure.setDescription(alternativeDescription);
         } else {
             isFinished = true;
         }
