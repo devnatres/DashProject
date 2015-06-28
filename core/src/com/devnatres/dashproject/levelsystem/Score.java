@@ -121,7 +121,7 @@ public class Score {
             void start(Score score) {
                 Texture texture = score.getTrophyShapeTexture();
                 int x = getTrophyX(texture.getWidth()) - texture.getWidth()/2 ;
-                int y = getTrophyY() - texture.getHeight()/2;
+                int y = getTrophyY() - texture.getHeight()/2 - 4;
 
                 score.getTrophyLightingAgent().setPosition(x, y);
             }
