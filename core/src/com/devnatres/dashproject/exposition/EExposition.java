@@ -127,7 +127,7 @@ public enum EExposition {
 
             final Vector2 positionWall = new Vector2(240, 425);
             final Vector2 positionOrigin2 = new Vector2(100, positionWall.y);
-            final Vector2 positionMid2 = new Vector2(240, 350);
+            final Vector2 positionMid2 = new Vector2(240, 325);
             final Vector2 positionFinal2 = new Vector2(320, 500);
             final Vector2 positionFoe2 = new Vector2(350, 500);
 
