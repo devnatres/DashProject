@@ -1,6 +1,5 @@
 package com.devnatres.dashproject.levelsystem;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.devnatres.dashproject.DashGame;
@@ -221,8 +220,8 @@ public class Score {
     public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
         youWinMessage = hyperStore.getTexture("messages/message_youwin.png");
-        screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
+        screenWidth = DashGame.getInstance().getScreenWidth();
+        screenHeight = DashGame.getInstance().getScreenHeight();
         this.hero = levelScreen.getHero();
         this.hordeGroup = levelScreen.getHordeGroup();
 

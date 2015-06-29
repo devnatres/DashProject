@@ -41,16 +41,15 @@ class LevelScreenSet {
         mainFont = game.getMainWhiteFont();
         mainShadowedFont = game.getMainShadowedFont();
         mainCamera = game.getMainCamera();
-        mainCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
         mainInputTranslator = game.getClearedMainInputTranslator();
         mainInputTranslator.clear();
         fixedCamera = new DnaCamera();
-        fixedCamera.setToOrtho(false, game.getScreenWidth(), game.getScreenHeight());
 
         localHyperStore = new HyperStore();
     }
 
     public void drawCentered(Texture texture) {
+        fixedCamera.update();
         mainBatch.setProjectionMatrix(fixedCamera.combined);
         mainBatch.begin();
         mainBatch.draw(texture,

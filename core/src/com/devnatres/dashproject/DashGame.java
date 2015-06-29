@@ -41,8 +41,8 @@ public class DashGame extends Game {
     }
 
     public static final String TITLE = "Nebular Dash";
-    public static final int INITIAL_SCREEN_WIDTH = 480;
-    public static final int INITIAL_SCREEN_HEIGHT = 800;
+    public static final int SCREEN_WIDTH = 480;
+    public static final int SCREEN_HEIGHT = 800;
     public static final boolean USE_ACCELEROMETER = false;
     public static final boolean USE_COMPASS = false;
     private static final int DOUBLE_BACK_KEY_LAPSE = Time.getIntFPS(1.25f);
@@ -59,9 +59,6 @@ public class DashGame extends Game {
     private int doubleBackKeyLapse;
     private Texture pressAgainTexture;
 
-    private int screenWidth;
-    private int screenHeight;
-
     private HyperStore hyperStore;
 
     private long initialFrameTime = System.nanoTime();
@@ -74,11 +71,11 @@ public class DashGame extends Game {
     }
 
     public int getScreenWidth() {
-        return screenWidth;
+        return SCREEN_WIDTH;
     }
 
     public int getScreenHeight() {
-        return screenHeight;
+        return SCREEN_HEIGHT;
     }
 
     public SpriteBatch getMainBatch() {
@@ -111,7 +108,7 @@ public class DashGame extends Game {
     }
 
     public DnaCamera getCenteredMainCamera() {
-        mainCamera.setToOrtho(false, screenWidth, screenHeight);
+        mainCamera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
         return mainCamera;
     }
 
@@ -127,9 +124,6 @@ public class DashGame extends Game {
 	public void create() {
         VectorPool.initialize();
 
-        screenWidth = Gdx.graphics.getWidth();
-        screenHeight = Gdx.graphics.getHeight();
-
         appType = Gdx.app.getType();
 
         mainBatch = new SpriteBatch();
@@ -141,10 +135,7 @@ public class DashGame extends Game {
         mainShape = new ShapeRenderer();
 
         mainCamera = new DnaCamera();
-        mainCamera.setToOrtho(false, screenWidth, screenHeight);
-
         systemCamera = new DnaCamera();
-        systemCamera.setToOrtho(false, screenWidth, screenHeight);
 
         pressAgainTexture = new Texture(Gdx.files.internal("messages/press_again.png"));
 
@@ -208,10 +199,10 @@ public class DashGame extends Game {
     private void backKeyManagement() {
         if (doubleBackKeyLapse > 0) {
             doubleBackKeyLapse--;
-            mainCamera.update();
+            systemCamera.update();
             mainBatch.setProjectionMatrix(systemCamera.combined);
             mainBatch.begin();
-            mainBatch.draw(pressAgainTexture, screenWidth/2 - pressAgainTexture.getWidth()/2, 120);
+            mainBatch.draw(pressAgainTexture, SCREEN_WIDTH/2 - pressAgainTexture.getWidth()/2, 120);
             mainBatch.end();
         }
 

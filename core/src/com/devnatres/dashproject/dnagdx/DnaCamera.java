@@ -1,7 +1,9 @@
 package com.devnatres.dashproject.dnagdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.space.DirectionSelector;
 
@@ -17,23 +19,19 @@ public class DnaCamera extends OrthographicCamera {
     private final DirectionSelector auxOutDirectionSelector = new DirectionSelector();
 
     public DnaCamera() {
-        super();
-    }
-
-    public DnaCamera(float viewportWidth, float viewportHeight) {
-        super(viewportWidth, viewportHeight);
-        updateViewPortCalculus();
+        super(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        setToOrtho(false, DashGame.SCREEN_WIDTH, DashGame.SCREEN_HEIGHT);
     }
 
     @Override
-    public void setToOrtho (boolean yDown, float viewportWidth, float viewportHeight) {
+    public void setToOrtho(boolean yDown, float viewportWidth, float viewportHeight) {
         updateViewPortCalculus();
         super.setToOrtho(yDown, viewportWidth, viewportHeight);
     }
 
     private void updateViewPortCalculus() {
-        halfCameraWidth = viewportWidth/2f;
-        halfCameraHeight = viewportHeight/2f;
+        halfCameraWidth = DashGame.SCREEN_WIDTH/2f;
+        halfCameraHeight = DashGame.SCREEN_HEIGHT/2f;
     }
 
     public float getUp() {

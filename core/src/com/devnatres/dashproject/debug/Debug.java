@@ -2,7 +2,6 @@ package com.devnatres.dashproject.debug;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.dnagdx.DnaCamera;
 
 import java.util.ArrayList;
 
@@ -36,8 +36,8 @@ abstract public class Debug {
 
     private static ShapeRenderer shape;
     private static Batch batch;
-    private static Camera gameCamera;
-    private static OrthographicCamera debugCamera;
+    private static DnaCamera gameCamera;
+    private static DnaCamera debugCamera;
     private static boolean initialized;
     private static BitmapFont font;
 
@@ -45,7 +45,7 @@ abstract public class Debug {
 
     private static int count;
 
-    public static void begin(Camera gameCamera) {
+    public static void begin(DnaCamera gameCamera) {
         if (!DEBUG) return;
 
         points = new ArrayList<Vector2>();
@@ -59,9 +59,8 @@ abstract public class Debug {
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
 
-        debugCamera = new OrthographicCamera();
         DashGame dashGame = DashGame.getInstance();
-        debugCamera.setToOrtho(false, dashGame.getScreenWidth(), dashGame.getScreenHeight());
+        debugCamera = new DnaCamera();
 
         font = new BitmapFont();
         font.setColor(Color.GREEN);
@@ -86,6 +85,9 @@ abstract public class Debug {
         if (!DEBUG_FRAMES) return;
 
         DebugFPS.update();
+
+        debugCamera.update();
+        batch.setProjectionMatrix(debugCamera.combined);
 
         batch.begin();
         font.draw(batch,"FPS: " + DebugFPS.measuredFPS

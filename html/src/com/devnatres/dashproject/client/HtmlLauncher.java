@@ -9,7 +9,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public GwtApplicationConfiguration getConfig () {
-                return new GwtApplicationConfiguration(DashGame.INITIAL_SCREEN_WIDTH, DashGame.INITIAL_SCREEN_HEIGHT);
+                return new GwtApplicationConfiguration(DashGame.SCREEN_WIDTH, DashGame.SCREEN_HEIGHT);
         }
 
         @Override

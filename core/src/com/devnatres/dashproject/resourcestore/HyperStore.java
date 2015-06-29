@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.resourcestore.Store.EGlobalResourceType;
@@ -43,7 +44,9 @@ public class HyperStore implements Disposable {
         textureStore = new Store<Texture>(new Store.Generable<Texture>() {
             @Override
             public Texture generate(String resourceFileName) {
-                return new Texture(Gdx.files.internal(resourceFileName));
+                Texture texture = new Texture(Gdx.files.internal(resourceFileName));
+                texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+                return texture;
             }
         });
 
