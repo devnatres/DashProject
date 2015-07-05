@@ -58,14 +58,12 @@ public class OptionScreen implements Screen, IButtonExecutable {
         soundButton = new Button(240, 700,
                 EAnimButton.BUTTON_OPT_SOUND.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
         soundButton.setAutomaticSoundOff();
         soundSymbolButton = new Button(240, soundButton.getY()-offSymbol.getHeight()/2,
                 EAnimButton.BUTTON_SYMBOL_SOUND.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
         soundSymbolButton.setAutomaticSoundOff();
@@ -73,14 +71,12 @@ public class OptionScreen implements Screen, IButtonExecutable {
         helpButton = new Button(240, 400,
                 EAnimButton.BUTTON_OPT_HELP.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         backButton = new Button(240, 100,
                 EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 

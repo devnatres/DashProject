@@ -33,7 +33,10 @@ class PowerUp extends Agent {
     private boolean flying;
 
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
-    private final Sound captureSound;
+    private final Sound catchSound;
+    private final Sound jumpSound;
+
+    private boolean jumped;
 
     PowerUp(LevelScreen levelScreen,
                     HyperStore hyperStore,
@@ -48,7 +51,8 @@ class PowerUp extends Agent {
         this.levelScreen = levelScreen;
 
         hero = levelScreen.getHero();
-        captureSound = hyperStore.getSound("sounds/power_up.ogg");
+        catchSound = hyperStore.getSound("sounds/power_up_catch.ogg");
+        jumpSound = hyperStore.getSound("sounds/power_up_jump.ogg");
 
         messageAgent = new Agent(type.getMessage(hyperStore));
         flying = true;
@@ -67,12 +71,17 @@ class PowerUp extends Agent {
                 flying = false;
             }
         } else {
+            if (!jumped) {
+                jumped = true;
+                globalAudio.play(jumpSound);
+            }
+
             float distance2 = hero.getCenter().dst2(getCenter());
             if (distance2 <= POWER_UP_RADIO2) {
                 type.activateEffect(levelScreen);
                 levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
 
-                globalAudio.play(captureSound, .1f);
+                globalAudio.play(catchSound);
                 setVisible(false);
             }
         }

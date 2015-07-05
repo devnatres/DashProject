@@ -42,42 +42,36 @@ public class GameMenu implements IButtonExecutable {
         yesButton = new Button(120, 100,
                 EAnimButton.BUTTON_MENU_YES.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         noButton = new Button(360, 100,
                 EAnimButton.BUTTON_MENU_NO.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         resumeButton = new Button(240, 700,
                 EAnimButton.BUTTON_MENU_RESUME.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         resetButton = new Button(240, 500,
                 EAnimButton.BUTTON_MENU_RESET.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         soundButton = new Button(240, 300,
                 EAnimButton.BUTTON_MENU_SOUND.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
         soundButton.setAutomaticSoundOff();
         soundSymbolButton = new Button(240, soundButton.getY()-offSymbol.getHeight()/2,
                 EAnimButton.BUTTON_SYMBOL_SOUND.create(hyperStore),
                 null,
-                hyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
         soundSymbolButton.setAutomaticSoundOff();

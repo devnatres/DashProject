@@ -28,7 +28,7 @@ public class Mine extends Agent {
         this.levelScreen = levelScreen;
         hero = levelScreen.getHero();
         explosion = new TransientAgent(EAnimFoe.MINE_EXPLOSION.create(hyperStore));
-        explosionSound = hyperStore.getSound("sounds/hit.ogg");
+        explosionSound = hyperStore.getSound("sounds/mine.ogg");
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Mine extends Agent {
             explosion.setCenter(getCenter());
             levelScreen.register(explosion, EAgentLayer.FLOOR);
 
-            globalAudio.play(explosionSound, .1f);
+            globalAudio.play(explosionSound);
             setVisible(false);
         }
     }

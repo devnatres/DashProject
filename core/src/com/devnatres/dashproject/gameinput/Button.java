@@ -2,6 +2,7 @@ package com.devnatres.dashproject.gameinput;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.agentsystem.Agent;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
@@ -27,11 +28,33 @@ public class Button extends Agent {
      * @param centerY center y coordinate
      * @param standbyAnimation mandatory standby animation
      * @param pushAnimation optional push animation, can be null
-     * @param sound sound to be played when pushed
      * @param elapsedTime time to wait after pushed (push animation will be displayed if any)
      * @param executable callback. The execute(actionId) method will be called when pushed and after elapsed time
      */
     public Button(float centerX, float centerY,
+                  DnaAnimation standbyAnimation,
+                  DnaAnimation pushAnimation,
+                  int elapsedTime,
+                  IButtonExecutable executable) {
+
+        this(centerX, centerY,
+                standbyAnimation, pushAnimation,
+                DashGame.getInstance().getHyperStore().getSound("sounds/button.ogg"),
+                elapsedTime,
+                executable);
+    }
+
+    /**
+     * Button constructor's.
+     * @param centerX center x coordinate
+     * @param centerY center y coordinate
+     * @param standbyAnimation mandatory standby animation
+     * @param pushAnimation optional push animation, can be null
+     * @param sound sound to be played when pushed
+     * @param elapsedTime time to wait after pushed (push animation will be displayed if any)
+     * @param executable callback. The execute(actionId) method will be called when pushed and after elapsed time
+     */
+    private Button(float centerX, float centerY,
                   DnaAnimation standbyAnimation,
                   DnaAnimation pushAnimation,
                   Sound sound,

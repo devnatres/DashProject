@@ -1,5 +1,6 @@
 package com.devnatres.dashproject.levelsystem;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.devnatres.dashproject.DashGame;
@@ -9,6 +10,7 @@ import com.devnatres.dashproject.agentsystem.HordeGroup;
 import com.devnatres.dashproject.animations.EAnimMedley;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.DnaShadowedFont;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gamestate.GameState;
 import com.devnatres.dashproject.levelsystem.levelscreen.LevelScreen;
 import com.devnatres.dashproject.nonagentgraphics.Number;
@@ -123,6 +125,14 @@ public class Score {
                 int y = getTrophyY() - texture.getHeight()/2 - 4;
 
                 score.getTrophyLightingAgent().setPosition(x, y);
+
+                if (score.isRecordScore()) {
+                    score.playRecordSound();
+                } else if (score.getTrophyTexture() != null) {
+                    score.playTrophySound();
+                } else {
+                    score.playNothingSound();
+                }
             }
 
             @Override
@@ -217,6 +227,10 @@ public class Score {
 
     private final int lastRecordScore;
 
+    private final Sound trophySound;
+    private final Sound recordSound;
+    private final Sound nothingSound;
+
     public Score(LevelScreen levelScreen, HyperStore hyperStore) {
         this.levelScreen = levelScreen;
         youWinMessage = hyperStore.getTexture("messages/message_youwin.png");
@@ -231,6 +245,7 @@ public class Score {
 
         DnaAnimation numberAnimation = EAnimMedley.NUMBERS_GOLD.create(hyperStore);
         totalScoreCountingNumber = new Number(numberAnimation, ENumberType.INTEGER);
+        totalScoreCountingNumber.setCountSound(true);
 
         bg_texture = hyperStore.getTexture("backgrounds/bg_scoring.png");
         trophy_a = hyperStore.getTexture("trophies/trophy_a.png");
@@ -246,6 +261,10 @@ public class Score {
         lastRecordScore = gameState.getCurrentLevelBestTotalScore();
 
         scoreCountPhase = -1;
+
+        trophySound = DashGame.getInstance().getHyperStore().getSound("sounds/power_up_jump.ogg");
+        recordSound = DashGame.getInstance().getHyperStore().getSound("sounds/power_up_catch.ogg");
+        nothingSound = DashGame.getInstance().getHyperStore().getSound("sounds/dash_null.ogg");
     }
 
     public void updateScore() {
@@ -451,5 +470,17 @@ public class Score {
 
     Texture getRecordTexture() {
         return recordTexture;
+    }
+
+    void playTrophySound() {
+        GlobalAudio.getInstance().play(trophySound);
+    }
+
+    void playRecordSound() {
+        GlobalAudio.getInstance().play(recordSound);
+    }
+
+    void playNothingSound() {
+        GlobalAudio.getInstance().play(nothingSound);
     }
 }

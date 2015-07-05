@@ -42,7 +42,6 @@ public class CreditScreen implements Screen, IButtonExecutable {
         backButton = new Button(240, 60,
                 EAnimButton.BUTTON_OPT_BACK.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 

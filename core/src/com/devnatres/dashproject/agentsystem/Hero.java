@@ -51,7 +51,9 @@ public class Hero extends Agent {
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
     private final Sound dashSound;
     private final Sound failDashSound;
-    private final Sound hitSound;
+    private final Sound damageSound;
+    private final Sound slashSound;
+    private final Sound slashComboSound;
     private final Sound deadSound;
     private Agent currentDashHalo;
     private final Agent dashHalo_normal;
@@ -84,9 +86,11 @@ public class Hero extends Agent {
         deadAnimation = EAnimHero.HERO_DYING.create(hyperStore);
 
         dashSound = hyperStore.getSound("sounds/dash.ogg");
-        failDashSound = hyperStore.getSound("sounds/fail_hit.ogg");
-        hitSound = hyperStore.getSound("sounds/hit.ogg");
-        deadSound = hyperStore.getSound("sounds/hit.ogg");
+        failDashSound = hyperStore.getSound("sounds/dash_null.ogg");
+        damageSound = hyperStore.getSound("sounds/foe_shot.ogg");
+        slashSound = hyperStore.getSound("sounds/slash.ogg");
+        slashComboSound = hyperStore.getSound("sounds/slash_combo.ogg");
+        deadSound = hyperStore.getSound("sounds/mark_die.ogg");
 
         coverDirection = new DirectionSelector();
         lowCoverDirection = new DirectionSelector();
@@ -155,7 +159,7 @@ public class Hero extends Agent {
             nextVolumeRect.setPosition(limitPositionX(nextVolumeRect.x), limitPositionY(nextVolumeRect.y));
             setCenter(nextVolumeRect.x + nextVolumeRect.width / 2, nextVolumeRect.y + nextVolumeRect.height / 2);
 
-            globalAudio.play(dashSound, .1f);
+            globalAudio.play(dashSound);
         } else {
             globalAudio.play(failDashSound);
         }
@@ -235,9 +239,13 @@ public class Hero extends Agent {
             if (!foe.isDying() && isFoeOnAttackRadio(foe) && isFoeInSight(foe)) {
                 setAnimation(attackingAnimation);
                 attackingTime = attackingAnimation.getAnimationDuration();
-                foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
 
-                globalAudio.play(hitSound, .1f);
+                boolean comboAttack = foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
+                if (comboAttack) {
+                    globalAudio.play(slashComboSound);
+                } else {
+                    globalAudio.play(slashSound);
+                }
 
                 attackedFoes.add(foe);
             }
@@ -270,7 +278,7 @@ public class Hero extends Agent {
     public void receiveDamage(int damage) {
         if (!dying && immunityPowerUpExistence.getRemainingDuration() == 0) {
             damageImageDuration = DAMAGE_DURATION;
-            globalAudio.play(failDashSound);
+            globalAudio.play(damageSound);
             levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);
 
             // TODO: if soft-damage is not used, remove DAMAGE_SOFT_FLASHING anim, asset and related objects.

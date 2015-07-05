@@ -1,9 +1,11 @@
 package com.devnatres.dashproject.exposition;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.DashGame;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.gameinput.InputTranslator;
 import com.devnatres.dashproject.resourcestore.HyperStore;
 
@@ -25,6 +27,7 @@ public class Exposition implements Disposable {
     private final Texture tapToNext;
     private final Texture tapToFinish;
     private final HyperStore localHyperStore;
+    private final Sound buttonSound;
 
     private final int screenWidth;
     private final int screenHeight;
@@ -42,6 +45,8 @@ public class Exposition implements Disposable {
         screenHeight = dashGame.getScreenHeight();
 
         mainInputTranslator = dashGame.getClearedMainInputTranslator();
+
+        buttonSound = dashGame.getHyperStore().getSound("sounds/button.ogg");
     }
 
     public void add(Figure figure) {
@@ -72,6 +77,7 @@ public class Exposition implements Disposable {
         }
 
         if (mainInputTranslator.isTouchDown()) {
+            GlobalAudio.getInstance().play(buttonSound);
             nextFigure();
         }
     }

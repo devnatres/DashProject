@@ -32,7 +32,7 @@ class PowerUpExistence {
                 show = false;
                 return false;
             } else if (duration == durationShort) {
-                globalAudio.play(powerUpEndingSound, 1f);
+                globalAudio.play(powerUpEndingSound, .5f);
             } else if ((duration < durationShort) && ((duration%FLICK_DURATION) == 0)) {
                 show = !show;
             }

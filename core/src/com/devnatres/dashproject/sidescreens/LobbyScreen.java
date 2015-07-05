@@ -108,49 +108,42 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         goButton = new Button(380, 64,
                 EAnimButton.BUTTON_GO_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_GO_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 15,
                 this);
 
         backButton = new Button(100, 64,
                 EAnimButton.BUTTON_BACK_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_BACK_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 15,
                 this);
 
         helpButton = new Button(240, 64,
                 EAnimButton.BUTTON_HELP_STANDBY.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         upPlusButton = new Button(ARROW_BUTTON_X, 510,
                 EAnimButton.BUTTON_ARROW_UP2.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         upButton = new Button(ARROW_BUTTON_X, 430,
                 EAnimButton.BUTTON_ARROW_UP.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         downButton = new Button(ARROW_BUTTON_X, 300,
                 EAnimButton.BUTTON_ARROW_DOWN.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 
         downPlusButton = new Button(ARROW_BUTTON_X, 210,
                 EAnimButton.BUTTON_ARROW_DOWN2.create(localHyperStore),
                 null,
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 0,
                 this);
 

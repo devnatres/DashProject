@@ -1,10 +1,13 @@
 package com.devnatres.dashproject.nonagentgraphics;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.dnagdx.DnaAnimation;
+import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.tools.Tools;
 
 /**
@@ -47,6 +50,10 @@ public class Number {
     private float numberScale = 1f;
     private float lastNumberScale = numberScale;
 
+    private final Sound countSound;
+
+    private boolean enabledCountSound;
+
     public Number(DnaAnimation animation, ENumberType numberType, float numberScale) {
         this(animation, numberType);
         this.numberScale = numberScale;
@@ -78,12 +85,21 @@ public class Number {
         for (int i = 0; i < PRECISION; i++) {
             regions[i] = new TextureRegion(numberTexture);
         }
+
+        countSound = DashGame.getInstance().getHyperStore().getSound("sounds/count.ogg");
+    }
+
+    public void setCountSound(boolean enabled) {
+        enabledCountSound = enabled;
     }
 
     private void updateNumberGraphics() {
         if ((increment > 0 && incrementingValue+increment < value)
                 || (increment < 0 && incrementingValue+increment > value)) {
             incrementingValue += increment;
+            if (enabledCountSound) {
+                GlobalAudio.getInstance().play(countSound, .2f);
+            }
         } else {
             incrementingValue = value;
         }

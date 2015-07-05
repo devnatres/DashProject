@@ -81,7 +81,7 @@ public class Foe extends Agent {
     private final int comboScore;
 
     private final GlobalAudio globalAudio = GlobalAudio.getInstance();
-    private final Sound dieSound;
+    private final Sound countSound;
 
     public Foe(LevelScreen levelScreen,
                HyperStore hyperStore,
@@ -127,7 +127,7 @@ public class Foe extends Agent {
 
         foeDamageResult = new FoeDamageResult();
 
-        dieSound = hyperStore.getSound("sounds/dead_foe.ogg");
+        countSound = hyperStore.getSound("sounds/count.ogg");
     }
 
 
@@ -204,14 +204,14 @@ public class Foe extends Agent {
         return dying;
     }
 
-    public void receiveDamage(int damagePoints) {
-        if (dying) return;
+    public boolean receiveDamage(int damagePoints) {
+        if (dying) return false;
 
         foeDamageResult.clear();
         if (life > 0) life -= damagePoints;
 
         if (life <= 0) {
-            globalAudio.play(dieSound, .2f);
+            globalAudio.play(countSound);
 
             if (horde != null) horde.countKilledFoe();
 
@@ -225,16 +225,14 @@ public class Foe extends Agent {
 
         levelScreen.addComboFoe(this);
         levelScreen.activateBulletTime();
+
+        return isComboAttack();
     }
 
     private void receiveDamage_score() {
-        boolean comboAttack = levelScreen.isBulletTime()
-                && levelScreen.thereAreComboLivingFoesThatContains(this)
-                && !levelScreen.isFirstComboFoe(this);
-
         int score;
         Agent scoreAgent;
-        if (comboAttack) {
+        if (isComboAttack()) {
             score = comboScore;
             scoreAgent = comboScoreAgent;
             foeDamageResult.setDeadInCombo(true);
@@ -249,6 +247,12 @@ public class Foe extends Agent {
 
         scoreAgent.setCenter(getCenter());
         levelScreen.register(scoreAgent, AgentRegistry.EAgentLayer.SCORE);
+    }
+
+    private boolean isComboAttack() {
+        return levelScreen.isBulletTime()
+                && levelScreen.thereAreComboLivingFoesThatContains(this)
+                && !levelScreen.isFirstComboFoe(this);
     }
 
     public void recoverLife() {

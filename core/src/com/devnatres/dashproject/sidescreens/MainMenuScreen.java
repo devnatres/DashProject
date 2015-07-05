@@ -56,28 +56,24 @@ public class MainMenuScreen implements Screen, IButtonExecutable {
         playButton = new Button(240, 450,
                 EAnimButton.BUTTON_PLAY_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_PLAY_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         optionsButton = new Button(240, 300,
                 EAnimButton.BUTTON_OPTIONS_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_OPTIONS_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         creditsButton = new Button(240, 200,
                 EAnimButton.BUTTON_CREDITS_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_CREDITS_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
         exitButton = new Button(240, 100,
                 EAnimButton.BUTTON_EXIT_STANDBY.create(localHyperStore),
                 EAnimButton.BUTTON_EXIT_PUSHED.create(localHyperStore),
-                localHyperStore.getSound("sounds/fail_hit.ogg"),
                 10,
                 this);
 
