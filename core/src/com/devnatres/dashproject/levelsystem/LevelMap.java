@@ -266,7 +266,7 @@ public class LevelMap implements Disposable {
             MapProperties properties = object.getProperties();
             Mine mine = new Mine(levelScreen, hyperStore);
             Vector2 position = new Vector2(properties.get("x", Float.class), properties.get("y", Float.class));
-            mine.setPosition(position.x - mine.getWidth()/2f, position.y - mine.getHeight()/2f);
+            mine.setPosition(position.x, position.y);
             levelScreen.register(mine, EAgentLayer.FLOOR);
         }
     }

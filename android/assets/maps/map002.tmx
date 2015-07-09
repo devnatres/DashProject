@@ -6,28 +6,32 @@
  <tileset firstgid="29" name="tileset_foes" tilewidth="32" tileheight="64">
   <image source="tileset_foes.png" width="32" height="64"/>
  </tileset>
+ <tileset firstgid="30" name="tileset_mines" tilewidth="64" tileheight="64">
+  <image source="tileset_mines.png" width="64" height="64"/>
+ </tileset>
  <layer name="ground" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+NlYGBgA2JWGtGSQMwIxGJALEojWnzUjlE7Ru0YtWPUjlE7Ru0YtWMQ2SEIxFxAzEkjWhqIAXEpSYPECQAA
+   H4sIAAAAAAAAC2NgwA94gZgNiFmx0HxE6JMkYD4IMAKxGBCLYqGZiNAnPmoH3A5s4mIk2iEIxFxAzAmlcZmJiybGDlL8NWoHbjuoFeeE7CCkbtQO0uzAV65io8kpS0hNi6N2jNoxagd17UCvS0mhhfDYATNXGogBLlxDUMQJAAA=
   </data>
  </layer>
  <layer name="blocks" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgwA64gZgHhxy1AD8QC9DYDlL9QY6/SfUHOf7G5S5qxhMud1ESTzD3odPUBDD3odPEAA4gZseCOajsRmqCkZo38ZmByyxq+INQuhrI+KBmviIUhtQMS1qC0fxBvFnU9MdgzB/UBIPVHwCIl86PxAkAAA==
+   H4sIAAAAAAAAC2NgGHmAG4h5aGwHPxAL0NgObIADiNnRMMcAuGMU0A+MhDhnoYMdzMPEDnqE1UAAWLmNXn7jEicHwMpt9PIbl/goGAUDDQDDq+6cxAkAAA==
   </data>
  </layer>
  <objectgroup name="horde0">
-  <object type="robot" gid="29" x="736" y="224">
+  <object type="robot" gid="29" x="736" y="736">
    <properties>
-    <property name="step0" value="move,19,6"/>
+    <property name="step0" value="move,23,16"/>
     <property name="step1" value="move,origin"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="levelscript0">
   <properties>
-   <property name="step0" value="heroposition,7,17"/>
-   <property name="step1" value="createhorde,0"/>
+   <property name="step0" value="heroposition,1,22"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,0"/>
   </properties>
  </objectgroup>
 </map>

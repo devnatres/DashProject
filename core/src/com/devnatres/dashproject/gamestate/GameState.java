@@ -106,8 +106,7 @@ public class GameState {
         }
 
         completedLevels = preferences.getInteger(COMPLETED_LEVELS_KEY, 0);
-        levelIndex = preferences.getInteger(LAST_LEVEL_PLAYED_KEY, 0);
-        //levelIndex = Tools.limitInteger(completedLevels, 0, maxLevelIndex);
+        levelIndex = Tools.limitInteger(preferences.getInteger(LAST_LEVEL_PLAYED_KEY, 0), 0, maxLevelIndex);
 
         updateGlobalStatistics();
     }
