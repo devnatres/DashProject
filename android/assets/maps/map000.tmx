@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="25" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
-  <image source="tileset_basic.png" width="128" height="224"/>
+  <image source="tileset_basic.png" width="160" height="224"/>
  </tileset>
- <tileset firstgid="29" name="tileset_foes" tilewidth="32" tileheight="64">
+ <tileset firstgid="36" name="tileset_foes" tilewidth="32" tileheight="64">
   <image source="tileset_foes.png" width="32" height="64"/>
  </tileset>
  <layer name="ground" width="15" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+NlYGBgA2JWEmlJIGYEYjEgFiWRZhrVO6p3VO+o3lG9BPUKAjEXEHOSSEsDMQDBPmam3AUAAA==
+   H4sIAAAAAAAACxNgYGBgB2I2Eml5IGYEYmkgliKRZhrVO6p3VO+o3lG9BPWKAjEPEHOTSCsCMQDNc/mu3AUAAA==
   </data>
  </layer>
  <layer name="blocks" width="15" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgIA5wAzEPHnkOIGaH0uiAH4gFCJiPSz8he/EBbPbCzCOVRjaPVHo4ABYK9DKP6h30eimJX2oBWBmAC2MrW0YBbgAAOSnikNwFAAA=
+   H4sIAAAAAAAAC2NgIA7wAjEfkWrRgRAQC5Opl5C9nEDMAaXJsReXfmr7F2YeqTSyeaTSgwWwUKCXeVQvXfRSEkfUBLD8iA1jy+OjADcAANrYnD3cBQAA
   </data>
  </layer>
  <objectgroup name="horde0">
-  <object type="robot" gid="29" x="256" y="128"/>
+  <object type="robot" gid="36" x="256" y="192"/>
  </objectgroup>
  <objectgroup name="levelscript0">
   <properties>

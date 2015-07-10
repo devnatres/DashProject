@@ -123,25 +123,25 @@ public class LobbyScreen implements Screen, IButtonExecutable {
                 0,
                 this);
 
-        upPlusButton = new Button(ARROW_BUTTON_X, 510,
+        upPlusButton = new Button(ARROW_BUTTON_X, 480,
                 EAnimButton.BUTTON_ARROW_UP2.create(localHyperStore),
                 null,
                 0,
                 this);
 
-        upButton = new Button(ARROW_BUTTON_X, 430,
+        upButton = new Button(ARROW_BUTTON_X, 400,
                 EAnimButton.BUTTON_ARROW_UP.create(localHyperStore),
                 null,
                 0,
                 this);
 
-        downButton = new Button(ARROW_BUTTON_X, 300,
+        downButton = new Button(ARROW_BUTTON_X, 270,
                 EAnimButton.BUTTON_ARROW_DOWN.create(localHyperStore),
                 null,
                 0,
                 this);
 
-        downPlusButton = new Button(ARROW_BUTTON_X, 210,
+        downPlusButton = new Button(ARROW_BUTTON_X, 190,
                 EAnimButton.BUTTON_ARROW_DOWN2.create(localHyperStore),
                 null,
                 0,

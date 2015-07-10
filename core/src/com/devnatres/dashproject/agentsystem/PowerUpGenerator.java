@@ -54,16 +54,18 @@ public class PowerUpGenerator {
         final int centerColumn = levelMap.getColumn(referencePosition.x);
         final int centerRow = levelMap.getRow(referencePosition.y);
 
-        final int iniColumn = Tools.limitInteger(centerColumn - ZONE_MARGIN, 0, levelMap.getMapWidth()-1);
-        final int endColumn = Tools.limitInteger(centerColumn + ZONE_MARGIN, 0, levelMap.getMapWidth()-1);
+        final int iniColumn = Tools.limitInteger(centerColumn - ZONE_MARGIN, 0, levelMap.getMapWidth() - 1);
+        final int endColumn = Tools.limitInteger(centerColumn + ZONE_MARGIN, 0, levelMap.getMapWidth() - 1);
         final int iniRow = Tools.limitInteger(centerRow - ZONE_MARGIN, 0, levelMap.getMapHeight()-1);
         final int endRow = Tools.limitInteger(centerRow + ZONE_MARGIN, 0, levelMap.getMapHeight()-1);
 
         Vector2 center = new Vector2();
         boolean isLookingForAPosition = true;
         boolean thereIsTargetPosition = false;
-        int column = Tools.randomInt(iniColumn, endColumn);
-        int row = Tools.randomInt(iniRow, endRow);
+        int startColumn = Tools.randomInt(iniColumn, endColumn);
+        int startRow = Tools.randomInt(iniRow, endRow);
+        int column = startColumn;
+        int row = startRow;
         while (isLookingForAPosition) {
             levelMap.setThisCellCenter(column, row, center);
             float distance2 = hero.getCenter().dst2(center);
@@ -77,11 +79,11 @@ public class PowerUpGenerator {
                     row++;
                     if (row > endRow) row = iniRow;
 
-                    if (column == iniColumn && row == iniRow) isLookingForAPosition = false;
+                    if (column == startColumn && row == startRow) isLookingForAPosition = false;
                 }
             }
         }
-        return thereIsTargetPosition ? new CoordinateInt(column, row) : null;
+        return thereIsTargetPosition ? new CoordinateInt(column, row) : new CoordinateInt(centerColumn, centerRow);
     }
 
     private static void generatePowerUpInRandomPosition(HyperStore hyperStore,
