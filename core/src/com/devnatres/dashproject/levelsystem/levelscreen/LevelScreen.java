@@ -388,6 +388,7 @@ public class LevelScreen implements Screen {
         } else {
             variables.comboCameraChasing = false;
         }
+
         variables.cameraMovementDone.set(set.mainCamera.position.x, set.mainCamera.position.y);
         variables.cameraMovementDone.sub(variables.savedCameraPosition);
     }
@@ -413,6 +414,10 @@ public class LevelScreen implements Screen {
         return Math.round(Tools.limitFloat(y, minY, maxY));
     }
 
+    private boolean isCameraStoppedWhileBulletTime() {
+        return isBulletTime() && !variables.comboCameraChasing;
+    }
+
     private void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -433,7 +438,7 @@ public class LevelScreen implements Screen {
 
     private void renderBackgroundScroll() {
         if (level.backScroll != null) {
-            if (playMode == EPlayMode.GAME_PLAY) {
+            if (playMode == EPlayMode.GAME_PLAY && !isCameraStoppedWhileBulletTime()) {
                 level.backScroll.render(set.mainBatch, variables.cameraMovementDone);
             } else {
                 level.backScroll.render(set.mainBatch);
@@ -443,7 +448,7 @@ public class LevelScreen implements Screen {
 
     private void renderForegroundScroll() {
         if (level.foreScroll != null) {
-            if (playMode == EPlayMode.GAME_PLAY) {
+            if (playMode == EPlayMode.GAME_PLAY && !isCameraStoppedWhileBulletTime()) {
                 level.foreScroll.render(set.mainBatch, variables.cameraMovementDone);
             } else {
                 level.foreScroll.render(set.mainBatch);
