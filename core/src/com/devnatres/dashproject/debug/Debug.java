@@ -26,7 +26,7 @@ abstract public class Debug {
     private static final boolean DEBUG_RECTANGLES = DEBUG && false;
     private static final boolean DEBUG_COLLISIONS = DEBUG && false;
 
-    public static final boolean IMMORTAL = true;
+    public static final boolean IMMORTAL = false;
 
     private static ArrayList<Vector2> points;
     private static ArrayList<Color> pointColors;
@@ -90,7 +90,7 @@ abstract public class Debug {
         batch.setProjectionMatrix(debugCamera.combined);
 
         batch.begin();
-        font.draw(batch,"FPS: " + DebugFPS.measuredFPS
+        font.draw(batch,"ALPHA v0.8 - FPS: " + DebugFPS.measuredFPS
                 + "   AVG(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.avgFps
                 + "   MIN(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.minFps
                 + "   MAX(" + DebugFPS.measuredFpsList.length + "s): " + DebugFPS.maxFps
