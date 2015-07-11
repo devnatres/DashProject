@@ -151,7 +151,7 @@ public class Hero extends Agent {
         float y = targetCenterY - getVolumeHeight()/2;
         nextVolumeRect.set(x, y, getVolumeWidth(), getVolumeHeight());
 
-        if (map.slide(nextVolumeRect)) {
+        if (map.slide(nextVolumeRect) && !isTooFar(nextVolumeRect)) {
             Agent dashShadow = new TransientAgent(EAnimHero.HERO_DASHING.create(hyperStore));
             dashShadow.setCenter(getCenterX(), getCenterY());
             levelScreen.register(dashShadow, EAgentLayer.TRUNK);
@@ -159,13 +159,30 @@ public class Hero extends Agent {
             nextVolumeRect.setPosition(limitPositionX(nextVolumeRect.x), limitPositionY(nextVolumeRect.y));
             setCenter(nextVolumeRect.x + nextVolumeRect.width / 2, nextVolumeRect.y + nextVolumeRect.height / 2);
 
-            globalAudio.play(dashSound);
+            globalAudio.play(dashSound, .5f);
         } else {
-            globalAudio.play(failDashSound);
+            globalAudio.play(failDashSound, .5f);
         }
 
         VectorPool.recycle(vTarget);
         return true;
+    }
+
+    private boolean isTooFar(Rectangle futurePositionRect) {
+        float futureCenterX = futurePositionRect.x + futurePositionRect.width/2;
+        float futureCenterY = futurePositionRect.y + futurePositionRect.height/2;
+
+        float horizontalJump = Math.abs(futureCenterX - getCenterX());
+        float verticalJump = Math.abs(futureCenterY - getCenterY());
+
+        boolean isTooFar;
+        if (horizontalJump > verticalJump) {
+            isTooFar = (horizontalJump - dashRadio) > getWidth()/2;
+        } else {
+            isTooFar = (verticalJump - dashRadio) > getHeight()/2;
+        }
+
+        return isTooFar;
     }
 
     private float limitPositionX(float x) {
@@ -242,9 +259,9 @@ public class Hero extends Agent {
 
                 boolean comboAttack = foe.receiveDamage(STANDARD_ATTACK_DAMAGE);
                 if (comboAttack) {
-                    globalAudio.play(slashComboSound);
+                    globalAudio.play(slashComboSound, .5f);
                 } else {
-                    globalAudio.play(slashSound);
+                    globalAudio.play(slashSound, .5f);
                 }
 
                 attackedFoes.add(foe);
@@ -278,7 +295,7 @@ public class Hero extends Agent {
     public void receiveDamage(int damage) {
         if (!dying && immunityPowerUpExistence.getRemainingDuration() == 0) {
             damageImageDuration = DAMAGE_DURATION;
-            globalAudio.play(damageSound);
+            globalAudio.play(damageSound, .5f);
             levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);
 
             // TODO: if soft-damage is not used, remove DAMAGE_SOFT_FLASHING anim, asset and related objects.
@@ -301,7 +318,7 @@ public class Hero extends Agent {
 
     public void die() {
         if (!dying) {
-            globalAudio.play(deadSound);
+            globalAudio.play(deadSound, .5f);
             dying = true;
             setAnimation(deadAnimation);
         }

@@ -473,14 +473,14 @@ public class Score {
     }
 
     void playTrophySound() {
-        GlobalAudio.getInstance().play(trophySound);
+        GlobalAudio.getInstance().play(trophySound, .5f);
     }
 
     void playRecordSound() {
-        GlobalAudio.getInstance().play(recordSound);
+        GlobalAudio.getInstance().play(recordSound, .5f);
     }
 
     void playNothingSound() {
-        GlobalAudio.getInstance().play(nothingSound);
+        GlobalAudio.getInstance().play(nothingSound, .5f);
     }
 }

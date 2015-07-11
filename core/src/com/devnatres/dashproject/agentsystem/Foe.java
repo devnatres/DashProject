@@ -211,7 +211,7 @@ public class Foe extends Agent {
         if (life > 0) life -= damagePoints;
 
         if (life <= 0) {
-            globalAudio.play(countSound);
+            globalAudio.play(countSound, .5f);
 
             if (horde != null) horde.countKilledFoe();
 

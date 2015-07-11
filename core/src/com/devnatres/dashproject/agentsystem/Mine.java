@@ -40,7 +40,7 @@ public class Mine extends Agent {
             explosion.setCenter(getCenter());
             levelScreen.register(explosion, EAgentLayer.FLOOR);
 
-            globalAudio.play(explosionSound);
+            globalAudio.play(explosionSound, .5f);
             setVisible(false);
         }
     }

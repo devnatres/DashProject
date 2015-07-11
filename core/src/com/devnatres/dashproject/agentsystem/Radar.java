@@ -119,7 +119,7 @@ public class Radar extends Agent {
             if (currentAlpha > MAX_ALPHA) {
                 currentAlpha = MAX_ALPHA;
                 alphaDelta *= -1;
-                globalAudio.play(radarSound);
+                globalAudio.play(radarSound, .8f);
             } else if (currentAlpha < MIN_ALPHA) {
                 currentAlpha = MIN_ALPHA;
                 alphaDelta *= -1;

@@ -19,7 +19,7 @@ class PowerUp extends Agent {
     private static final float FLYING_SPEED = 15f;
     private static final int MESSAGE_DURATION = 45;
 
-    static final float EXTRA_TIME = 1.5f;
+    static final float EXTRA_TIME = 1.2f;
     static final int EXTRA_LIFE = 3;
     static final int IMMUNITY_DURATION = 300;
     static final int IMMUNITY_DURATION_SHORT = 100;
@@ -73,7 +73,7 @@ class PowerUp extends Agent {
         } else {
             if (!jumped) {
                 jumped = true;
-                globalAudio.play(jumpSound);
+                globalAudio.play(jumpSound, .5f);
             }
 
             float distance2 = hero.getCenter().dst2(getCenter());
@@ -81,7 +81,7 @@ class PowerUp extends Agent {
                 type.activateEffect(levelScreen);
                 levelScreen.setAgentMessage(messageAgent, MESSAGE_DURATION);
 
-                globalAudio.play(catchSound);
+                globalAudio.play(catchSound, .5f);
                 setVisible(false);
             }
         }
