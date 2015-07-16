@@ -25,6 +25,7 @@ class LevelScreenSet {
     final ShapeRenderer mainShape;
     final BitmapFont mainFont; //TODO: useful?
     final DnaShadowedFont mainShadowedFont;
+    final DnaShadowedFont mainShadowedYellowFont;
     final DnaCamera mainCamera;
     final DnaCamera fixedCamera;
     final HyperStore localHyperStore;
@@ -40,6 +41,7 @@ class LevelScreenSet {
         mainShape.setColor(Color.WHITE);
         mainFont = game.getMainWhiteFont();
         mainShadowedFont = game.getMainShadowedFont();
+        mainShadowedYellowFont = game.getMainShadowedYellowFont();
         mainCamera = game.getMainCamera();
         mainInputTranslator = game.getClearedMainInputTranslator();
         mainInputTranslator.clear();

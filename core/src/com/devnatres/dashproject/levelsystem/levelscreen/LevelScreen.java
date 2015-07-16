@@ -480,7 +480,7 @@ public class LevelScreen implements Screen {
     }
 
     private void renderHub() {
-        score.renderActionScore(set.mainBatch, set.mainShadowedFont);
+        score.renderActionScore(set.mainBatch, set.mainShadowedYellowFont);
 
         Number timeNumber = variables.getTimeNumber();
         if (timeNumber.getValue() < CRITICAL_TIME) {
@@ -490,9 +490,8 @@ public class LevelScreen implements Screen {
         }
         timeNumber.render(set.mainBatch);
         if (extraTimeMessageDuration > 0) {
-            int x = (int)set.screenWidth/2 - set.mainShadowedFont.getTextWidth(extraTimeString)/2;
             int y = (int)set.screenHeight/3 - 35;
-            set.mainShadowedFont.draw(set.mainBatch, extraTimeString, x, y);
+            set.mainShadowedFont.drawCenteredInX(set.mainBatch, extraTimeString, y);
             extraTimeMessageDuration--;
         }
 

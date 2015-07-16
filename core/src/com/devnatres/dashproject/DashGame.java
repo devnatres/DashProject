@@ -52,6 +52,7 @@ public class DashGame extends Game {
     private BitmapFont mainWhiteFont;
     private BitmapFont mainYellowFont;
     private DnaShadowedFont mainShadowedFont;
+    private DnaShadowedFont mainShadowedYellowFont;
     private ShapeRenderer mainShape;
     private DnaCamera mainCamera;
     private DnaCamera systemCamera;
@@ -94,6 +95,10 @@ public class DashGame extends Game {
         return mainShadowedFont;
     }
 
+    public DnaShadowedFont getMainShadowedYellowFont() {
+        return mainShadowedYellowFont;
+    }
+
     public ShapeRenderer getMainShape() {
         return mainShape;
     }
@@ -131,6 +136,7 @@ public class DashGame extends Game {
         mainWhiteFont = new BitmapFont(Gdx.files.internal("fonts/white.fnt"), false);
         mainYellowFont = new BitmapFont(Gdx.files.internal("fonts/yellow.fnt"), false);
         mainShadowedFont = new DnaShadowedFont();
+        mainShadowedYellowFont = new DnaShadowedFont(true);
 
         mainShape = new ShapeRenderer();
 
@@ -227,6 +233,7 @@ public class DashGame extends Game {
         mainWhiteFont.dispose();
         mainYellowFont.dispose();
         mainShadowedFont.dispose();
+        mainShadowedYellowFont.dispose();
         mainShape.dispose();
 
         pressAgainTexture.dispose();

@@ -10,6 +10,8 @@ import com.devnatres.dashproject.dnagdx.DnaAnimation;
 import com.devnatres.dashproject.dnagdx.GlobalAudio;
 import com.devnatres.dashproject.tools.Tools;
 
+import static com.badlogic.gdx.graphics.Texture.*;
+
 /**
  * Represents a number that draws itself with a bitmap atlas. <br>
  *     <br>
@@ -87,6 +89,9 @@ public class Number {
         }
 
         countSound = DashGame.getInstance().getHyperStore().getSound("sounds/count.ogg");
+
+        // To prevent scale issues with Linear filter, we ensure that the filter is set to the default one (Nearest).
+        numberTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
     }
 
     public void setCountSound(boolean enabled) {

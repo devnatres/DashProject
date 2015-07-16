@@ -31,6 +31,7 @@ public class Score {
     private static final int Y_LINE_POSITION = 600;
     private static final int Y_LINE_ICR = -50;
     private static final int CHAIN_SCORE_DURATION = 90;
+    //private static final float CHAIN_SCORE_SCALE = 1.2f;
     private static final int SCORE_COUNT_PHASE_DURATION = 78;
     private static final int MAX_CHAIN_SCORE_FACTOR = 500;
     private static final int LIFE_SCORE_FACTOR = 200;
@@ -285,9 +286,17 @@ public class Score {
 
     public void renderActionScore(Batch preparedBatch, DnaShadowedFont shadowedFont) {
         if (chainScoreDuration > 0) {
-            int x = screenWidth/2 - shadowedFont.getTextWidth(chainScoreString)/2;
+            /*float scalePhase = (float)(CHAIN_SCORE_DURATION - chainScoreDuration) / CHAIN_SCORE_DURATION;
+            if (scalePhase < 0.5f) {
+                shadowedFont.setScale(1f + scalePhase*(CHAIN_SCORE_SCALE - 1)*2);
+            } else {
+                shadowedFont.setScale(CHAIN_SCORE_SCALE - (scalePhase - 0.5f)*(CHAIN_SCORE_SCALE - 1)*2);
+            }*/
+
             int y = screenHeight/3;
-            shadowedFont.draw(preparedBatch, chainScoreString, x, y);
+            shadowedFont.drawCenteredInX(preparedBatch, chainScoreString, y);
+            //shadowedFont.setScale(1f);
+
             chainScoreDuration--;
         }
 

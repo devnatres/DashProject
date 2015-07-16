@@ -201,13 +201,13 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         int trophyXMargin = 20;
         int levelX = 150;
         int levelY = 500;
-        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_A), levelX, levelY);
+        drawYellowTextRight(texts.get(ETexts.LEVEL_TROPHY_A), levelX, levelY);
         paintTrophy(gameState.getCurrentLevelTrophyA(), levelX+trophyXMargin, levelY, false);
         levelY -= 40;
-        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_B), levelX, levelY);
+        drawYellowTextRight(texts.get(ETexts.LEVEL_TROPHY_B), levelX, levelY);
         paintTrophy(gameState.getCurrentLevelTrophyB(), levelX+trophyXMargin, levelY, false);
         levelY -= 40;
-        drawTextRight(texts.get(ETexts.LEVEL_TROPHY_C), levelX, levelY);
+        drawYellowTextRight(texts.get(ETexts.LEVEL_TROPHY_C), levelX, levelY);
         paintTrophy(gameState.getCurrentLevelTrophyC(), levelX+trophyXMargin, levelY, false);
 
         int scoreX1 = 50;
@@ -251,6 +251,10 @@ public class LobbyScreen implements Screen, IButtonExecutable {
 
     private void drawTextRight(String string, float x, float y) {
         mainWhiteFont.drawMultiLine(mainBatch, string, x, y, 0, HAlignment.RIGHT);
+    }
+
+    private void drawYellowTextRight(String string, float x, float y) {
+        mainYellowFont.drawMultiLine(mainBatch, string, x, y, 0, HAlignment.RIGHT);
     }
 
     private void paintTrophy(int score, int refX, int refY, boolean light) {
