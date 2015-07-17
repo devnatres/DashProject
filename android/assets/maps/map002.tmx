@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="35" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
   <image source="tileset_basic.png" width="160" height="224"/>
  </tileset>
@@ -9,16 +9,23 @@
  <tileset firstgid="37" name="tileset_mines" tilewidth="64" tileheight="64">
   <image source="tileset_mines.png" width="64" height="64"/>
  </tileset>
- <layer name="ground" width="25" height="25">
+ <layer name="ground" width="25" height="35">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgwA8EgJgdiNnQaHki9RFSBwKMQCwNxFJotAyR+gipGwl2SEHlsYmT4hYQEAViHiDmhtKEzCTHDlL8NWoHbjsYaGwHNdPuqB0IdbjKVVw0OWUJqWlx1I5RO0btoK4d6HUpsbQiATtEkdQBAKIUaenECQAA
+   H4sIAAAAAAAACxNgYGBgB2I2Eml5BvxAAEkdIxBLA7EUibQMATsYkdSNdDtIcctwsUMUiHmAmJtImtrxhg2Q6u/BbgcpaXfUDuLVwcpHYsvb4VZejdoxaseoHeTbAav7FGloBzY/jdoxaseoHZiA1LYojFYkwQ4A1jiTjqwNAAA=
   </data>
  </layer>
- <layer name="blocks" width="25" height="25">
+ <layer name="blocks" width="25" height="35">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGHmAF4j5aGyHEBAL09gOdMAJxBxYMCed3TEK6AdGSpyz0MEO5mFiBz3CaiAArNxGL79xiZMDYOU2evmNS3wUjIKBBgDU38oSxAkAAA==
+   H4sIAAAAAAAAC2NgGH6AE4g5sGBOJDW8QMxHY3cIAbEwje1ABsT4mxp6RsHgASMl/ljoYAfzMLGDHmE1EABWZqOX3bjEyQGwMhu97MYlPgqGD0BPR7RoI6Cno9H0NHzBaHk1CqgJABwcARqsDQAA
   </data>
  </layer>
+ <objectgroup name="levelscript0">
+  <properties>
+   <property name="step0" value="heroposition,1,22"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,0"/>
+  </properties>
+ </objectgroup>
  <objectgroup name="horde0">
   <object type="robot" gid="36" x="736" y="736">
    <properties>
@@ -27,11 +34,45 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="levelscript0">
+ <objectgroup name="levelscript1">
   <properties>
-   <property name="step0" value="heroposition,1,22"/>
+   <property name="step0" value="heroposition,23,2"/>
    <property name="step1" value="backscroll,SC01"/>
-   <property name="step2" value="createhorde,0"/>
+   <property name="step2" value="createhorde,1"/>
+   <property name="step3" value="waithordekilled,1"/>
+   <property name="step4" value="createhorde,2"/>
   </properties>
+ </objectgroup>
+ <objectgroup name="horde1">
+  <object type="tank" gid="36" x="160" y="1056">
+   <properties>
+    <property name="step0" value="delaymove,30,2,32"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="128" y="864">
+   <properties>
+    <property name="step0" value="delaymove,45,9,26"/>
+    <property name="step1" value="delaymove,45,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="256" y="1056">
+   <properties>
+    <property name="step0" value="delaymove,30,11,32"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde2">
+  <object type="tank" gid="36" x="224" y="160"/>
+  <object type="robot" gid="36" x="160" y="160"/>
+  <object type="tank" gid="36" x="128" y="64">
+   <properties>
+    <property name="step0" value="move,7,1"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="36" x="288" y="64"/>
+  <object type="tank" gid="36" x="416" y="64"/>
  </objectgroup>
 </map>
