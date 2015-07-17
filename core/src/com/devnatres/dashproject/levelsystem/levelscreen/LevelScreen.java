@@ -103,6 +103,10 @@ public class LevelScreen implements Screen {
     }
 
     private void prepareGame() {
+        float initialHeroX = limitCameraTargetX(hero.getCenterX());
+        float initialHeroY = limitCameraTargetY(hero.getCenterY());
+        set.mainCamera.position.set(initialHeroX, initialHeroY, 0f);
+
         set.skipCameraAssistant = !gameState.isCameraAssistantActivated();
         variables.setTime(level.levelId.getInitialTime());
         variables.waitingTime = MIN_READY_TIME;
