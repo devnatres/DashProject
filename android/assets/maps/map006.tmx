@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
+  <image source="tileset_basic.png" width="160" height="224"/>
+ </tileset>
+ <tileset firstgid="36" name="tileset_foes" tilewidth="32" tileheight="64">
+  <image source="tileset_foes.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="37" name="tileset_mines" tilewidth="64" tileheight="64">
+  <image source="tileset_mines.png" width="64" height="64"/>
+ </tileset>
+ <layer name="ground" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACxNgYGBgB2I2ImhBBtxAgERzGIFYGoiliKCZ8NhLqjmj9uKnccUbsfrJtRedliABDwd7sdESdAhncuiRaK8oEPMAMTeNaWLLAWoD5HAdtXfg7CWlHiWFJpSu6JGvmLD4j5A+YvLJcKl/R+1FAFLKWzEq2ksqGLV31F5a2Etq+qcWAADLqQ+OEA4AAA==
+  </data>
+ </layer>
+ <layer name="blocks" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAX0BLxAzEeCOLWAEBALkyAOAiA3cZCACbmfWD8yE6EGGbASkMfnR2rbS078gtzHhYb5oXKcDJhhjM1ecuKXFMCKw15ag5FmLwsUj4JRQA6gdT2CC1CrnCEVwPyLiyZGLzkA5l9cNDF66Q1GatqgNxj17ygYqgAAjyXCSBAOAAA=
+  </data>
+ </layer>
+ <objectgroup name="levelscript0">
+  <properties>
+   <property name="createhorde,3" value=""/>
+   <property name="step0" value="heroposition,6,28"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,0"/>
+   <property name="step3" value="waithordekilled,0"/>
+   <property name="step4" value="createhorde,1"/>
+   <property name="step5" value="waithordekilled,1"/>
+   <property name="step6" value="createhorde,2"/>
+   <property name="step7" value="waithordekilled,2"/>
+   <property name="step8" value="createhorde,3"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="horde0">
+  <object type="robot" gid="36" x="96" y="832"/>
+  <object type="tank" gid="36" x="256" y="768">
+   <properties>
+    <property name="step0" value="delaymove,15,8,20"/>
+    <property name="step1" value="delaymove,15,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="96" y="672">
+   <properties>
+    <property name="step0" value="move,3,22"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="36" x="224" y="608">
+   <properties>
+    <property name="step0" value="delaymove,30,5,18"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde1">
+  <object gid="36" x="672" y="704"/>
+  <object type="tank" gid="36" x="768" y="704"/>
+  <object gid="36" x="864" y="704"/>
+  <object type="tank" gid="36" x="704" y="576">
+   <properties>
+    <property name="step0" value="move,27,17"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde2">
+  <object gid="36" x="736" y="320">
+   <properties>
+    <property name="step0" value="move,21,9"/>
+    <property name="step1" value="move,21,6"/>
+    <property name="step2" value="delaymove,45,21,9"/>
+    <property name="step3" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="512" y="224"/>
+  <object type="tank" gid="36" x="864" y="64">
+   <properties>
+    <property name="step0" value="move,27,3"/>
+    <property name="step1" value="delaymove,45,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="800" y="224"/>
+ </objectgroup>
+ <objectgroup name="horde3">
+  <object type="robot" gid="36" x="224" y="288">
+   <properties>
+    <property name="step0" value="delaymove,45,4,8"/>
+    <property name="step1" value="delaymove,45,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="320" y="224">
+   <properties>
+    <property name="step0" value="move,10,2"/>
+    <property name="step1" value="move,7,2"/>
+    <property name="step2" value="move,7,6"/>
+    <property name="step3" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="32" y="288"/>
+  <object type="robot" gid="36" x="128" y="224"/>
+  <object type="tank" gid="36" x="32" y="160"/>
+ </objectgroup>
+</map>
