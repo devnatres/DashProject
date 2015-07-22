@@ -187,14 +187,19 @@ public class Foe extends Agent {
     }
 
     private boolean isHeroUncovered() {
-        Vector2 heroCenter = hero.getCenter();
+        final Vector2 heroCenter = hero.getCenter();
         boolean isHeroCovered = false;
-        Vector2 center = getCenter();
+        final Vector2 center = getCenter();
 
-        if ((center.x < heroCenter.x && hero.isCoverLeft())
-                || (center.x > heroCenter.x && hero.isCoverRight())
-                || (center.y < heroCenter.y && hero.isCoverDown())
-                || (center.y > heroCenter.y && hero.isCoverUp())) {
+        final float heroLeftCover = heroCenter.x - map.getCollisionMarginX();
+        final float heroRightCover = heroCenter.x + map.getCollisionMarginX();
+        final float heroUpCover = heroCenter.y + map.getCollisionMarginY();
+        final float heroDownCover = heroCenter.y - map.getCollisionMarginY();
+
+        if ((center.x < heroLeftCover && hero.isCoverLeft())
+                || (center.x > heroRightCover && hero.isCoverRight())
+                || (center.y < heroDownCover && hero.isCoverDown())
+                || (center.y > heroUpCover && hero.isCoverUp())) {
             isHeroCovered = true;
         }
         return !isHeroCovered;

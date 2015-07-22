@@ -103,6 +103,14 @@ public class LevelMap implements Disposable {
         return blockMapSlider.slideRectangle(rectangle);
     }
 
+    public float getCollisionMarginX() {
+        return tilePixelWidth / 2f;
+    }
+
+    public float getCollisionMarginY() {
+        return tilePixelHeight / 2f;
+    }
+
     /**
      * Given a rectangle that represents a volume,
      * this method indicates if the rectangle has adjacent obstacles,
@@ -118,8 +126,8 @@ public class LevelMap implements Disposable {
 
         final float centerRectangleX = rectangle.getX() + rectangle.getWidth()/2;
         final float centerRectangleY = rectangle.getY() + rectangle.getHeight()/2;
-        final float marginX = tilePixelWidth / 2;
-        final float marginY = tilePixelHeight / 2;
+        final float marginX = getCollisionMarginX();
+        final float marginY = getCollisionMarginY();
         coverDirection.clear();
         lowCoverDirection.clear();
 

@@ -11,12 +11,12 @@
  </tileset>
  <layer name="ground" width="30" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACxNgYGBgB2I2ImhBBtxAgERzGIFYGoiliKCZ8NhLqjmj9uKnccUbsfrJtRedliABDwd7sdESdAhncuiRaK8oEPMAMTeNaWLLAWoD5HAdtXfg7CWlHiWFJpSu6JGvmLD4j5A+YvLJcKl/R+1FAFLKWzEq2ksqGLV31F5a2Etq+qcWAADLqQ+OEA4AAA==
+   H4sIAAAAAAAACxNgYGBgB2I2ImhBBtxAgERzGIFYGoiliKCZ8NhLqjmj9uKnccUbsfrJtRedliABDwd7cbmD1uFMDj0S7RUFYh4g5qYxTWw5QG2AHK6j9g6cvaTUo6TQhNIVPfIVExb/EdJHTD4ZLvXvqL0IQEp5K0ZFe0kFo/aO2ksLe0lN/9QCAEFYVUgQDgAA
   </data>
  </layer>
  <layer name="blocks" width="30" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAX0BLxAzEeCOLWAEBALkyAOAiA3cZCACbmfWD8yE6EGGbASkMfnR2rbS078gtzHhYb5oXKcDJhhjM1ecuKXFMCKw15ag5FmLwsUj4JRQA6gdT2CC1CrnCEVwPyLiyZGLzkA5l9cNDF66Q1GatqgNxj17ygYqgAAjyXCSBAOAAA=
+   H4sIAAAAAAAAC2NgGAX0BLxAzEeCOLWAEBALkyAOAiA3cZCACbmfWD8yE6EGGbASkMfnR2rbS078gtzHhYT5keQ4GTDDGJu95MQvKYAVh720BiPNXhYoHgWjgBxA63oEF6BWOUMqgPkXF02MXnIAzL+4aGL00huM1LRBbzDq31EwVAEAKPV78xAOAAA=
   </data>
  </layer>
  <objectgroup name="levelscript0">
