@@ -355,6 +355,7 @@ public class LevelScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        set.mainCamera.updateViewport(width, height);
     }
 
     public LevelMap getMap() {

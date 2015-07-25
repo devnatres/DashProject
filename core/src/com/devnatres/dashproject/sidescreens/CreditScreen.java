@@ -66,7 +66,7 @@ public class CreditScreen implements Screen, IButtonExecutable {
 
     @Override
     public void resize(int width, int height) {
-
+        mainCamera.updateViewport(width, height);
     }
 
     @Override
