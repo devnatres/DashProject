@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
+  <image source="tileset_basic.png" width="160" height="224"/>
+ </tileset>
+ <tileset firstgid="36" name="tileset_foes" tilewidth="32" tileheight="64">
+  <image source="tileset_foes.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="37" name="tileset_mines" tilewidth="64" tileheight="64">
+  <image source="tileset_mines.png" width="64" height="64"/>
+ </tileset>
+ <layer name="ground" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2VsQ6AIAxE0UEHHXTQGP3//7RsxjTSKwWj6SWXTvIoliMEG03kntwJ6mzEjGrIB3kX1DaDc+9PwrPgIv1xXOS/aPvjuDn7jnUD7Nzvcd+aKy13IY/koXC1yg1U13P9AzeVe6XOOfc9qpHXHLfGveLeo9R3kntinRtP84Cu41wdF8nb1ZCLyrnOLcFF599KJwBc4koQDgAA
+  </data>
+ </layer>
+ <layer name="blocks" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYHABXiDmIAHzUcleZhLVs2IRA7mdDw+fVvYKAbEwHj42AFLDhYT50eT50eQJmTcKRsEoGFhATHlDC0BMeUNLAPM3Ok2MHkoAzN/oNDF6RsEooAYgJc1TE5CS5kfB0AAAya8EWRAOAAA=
+  </data>
+ </layer>
+ <objectgroup name="mines">
+  <object gid="37" x="256" y="288"/>
+  <object gid="37" x="576" y="256"/>
+  <object gid="37" x="640" y="640"/>
+  <object gid="37" x="512" y="576"/>
+  <object gid="37" x="384" y="608"/>
+  <object gid="37" x="224" y="672"/>
+  <object gid="37" x="96" y="672"/>
+  <object gid="37" x="160" y="736"/>
+ </objectgroup>
+ <objectgroup name="levelscript0">
+  <properties>
+   <property name="createhorde,3" value=""/>
+   <property name="step0" value="heroposition,22,2"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,0"/>
+   <property name="step3" value="waithordekilled,0"/>
+   <property name="step4" value="createhorde,1"/>
+   <property name="step5" value="waithordekilled,1"/>
+   <property name="step6" value="createhorde,2"/>
+   <property name="step7" value="waithordekilled,2"/>
+   <property name="step8" value="createhorde,3"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="horde0">
+  <object type="robot" gid="36" x="352" y="288"/>
+  <object type="robot" gid="36" x="160" y="288"/>
+ </objectgroup>
+ <objectgroup name="horde1">
+  <object type="tank" gid="36" x="672" y="256">
+   <properties>
+    <property name="step2" value="move,21,9"/>
+    <property name="step3" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="36" x="800" y="256"/>
+ </objectgroup>
+ <objectgroup name="horde2">
+  <object type="tank" gid="36" x="704" y="704"/>
+  <object type="robot" gid="36" x="832" y="704"/>
+  <object type="robot" gid="36" x="608" y="640">
+   <properties>
+    <property name="step0" value="delaymove,30,19,22"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde3">
+  <object type="tank" gid="36" x="192" y="928"/>
+  <object type="robot" gid="36" x="96" y="736">
+   <properties>
+    <property name="step0" value="move,3,24"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="96" y="928"/>
+ </objectgroup>
+</map>
