@@ -11,7 +11,7 @@
  </tileset>
  <layer name="ground" width="30" height="30">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2VsQ6AIAxE0UEHHXTQGP3//7RsxjTSKwWj6SWXTvIoliMEG03kntwJ6mzEjGrIB3kX1DaDc+9PwrPgIv1xXOS/aPvjuDn7jnUD7Nzvcd+aKy13IY/koXC1yg1U13P9AzeVe6XOOfc9qpHXHLfGveLeo9R3kntinRtP84Cu41wdF8nb1ZCLyrnOLcFF599KJwBc4koQDgAA
+   H4sIAAAAAAAAC+2VsQ6AIAxE1UEHHXTQGP3//7RsxjTagwPFcMmlG49COaqKo1HciVtDnUhMp1q8izdDbQI41/4sPAYX6U/jIvfi25/GDdm3qyvgws2P+9Zc+XJn8SDuI1dWbqA6n+sfuE+5F+ucQ/+jFHmtcVO8K+0/+mpuWN4nm3s3h+g6uXORvF2IXFSFW7gxuOj8s3QAGsIoxBAOAAA=
   </data>
  </layer>
  <layer name="blocks" width="30" height="30">
@@ -23,11 +23,9 @@
   <object gid="37" x="256" y="288"/>
   <object gid="37" x="576" y="256"/>
   <object gid="37" x="640" y="640"/>
-  <object gid="37" x="512" y="576"/>
-  <object gid="37" x="384" y="608"/>
+  <object gid="37" x="448" y="608"/>
   <object gid="37" x="224" y="672"/>
   <object gid="37" x="96" y="672"/>
-  <object gid="37" x="160" y="736"/>
  </objectgroup>
  <objectgroup name="levelscript0">
   <properties>
