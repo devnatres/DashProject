@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="40" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset_basic" tilewidth="32" tileheight="32">
+  <image source="tileset_basic.png" width="160" height="224"/>
+ </tileset>
+ <tileset firstgid="36" name="tileset_foes" tilewidth="32" tileheight="64">
+  <image source="tileset_foes.png" width="32" height="64"/>
+ </tileset>
+ <tileset firstgid="37" name="tileset_mines" tilewidth="64" tileheight="64">
+  <image source="tileset_mines.png" width="64" height="64"/>
+ </tileset>
+ <layer name="ground" width="25" height="40">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACxNgYGBgB2I2MmhBBtxAAKpOHogZgVgaiKXIoJnw2AEzV2bUDjiNK76kqGgHIXrUjlE7Ru0YtWPUDvrZwQPEikAsCmXTwv3ogNr+oaYd3DjCgRp2gMwWQ9KPHuaU2kFsW2HUjuFjB4hGb1PD2tC0yB/o7cKByufofqQmTY3+x2Ao20ftGJx2wMp9bhrRoDoGAC2r86ygDwAA
+  </data>
+ </layer>
+ <layer name="lowblocks" width="25" height="40">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWUAnEoHup20AqMhg95YDTcRsEoIB6M5peBAeJoeKjaMVzBaPyMglEwCkbB0AMAi1xgNKAPAAA=
+  </data>
+ </layer>
+ <layer name="blocks" width="25" height="40">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGHlAhA52sA4TO0RwsGkFhnK40SOshnL4IAN6pKXhCDiBmAMNcw6oiwY/4AViPhrbIQTEwjS2YxSMglEwCgYLwFYX4cKjdRQE4KqLqFlH4aqLqFFHsWARE8EjTg5gxiLGikecHAAKCy40LIxHfKAAAPejipegDwAA
+  </data>
+ </layer>
+ <objectgroup name="levelscript0">
+  <properties>
+   <property name="step0" value="heroposition,21,38"/>
+   <property name="step1" value="backscroll,SC01"/>
+   <property name="step2" value="createhorde,0"/>
+   <property name="step3" value="waithordekilled,0"/>
+   <property name="step4" value="createhorde,1"/>
+   <property name="step5" value="waithordekilled,1"/>
+   <property name="step6" value="createhorde,2"/>
+   <property name="step7" value="waithordekilled,2"/>
+  </properties>
+ </objectgroup>
+ <objectgroup name="horde0">
+  <object type="tank" gid="36" x="512" y="1088">
+   <properties>
+    <property name="step0" value="move,17,33"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="36" x="480" y="1216">
+   <properties>
+    <property name="step0" value="move,18,37"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="384" y="1216">
+   <properties>
+    <property name="step0" value="move,9,37"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde1">
+  <object type="tank" gid="36" x="480" y="672">
+   <properties>
+    <property name="step0" value="delaymove,30,15,16"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="416" y="544">
+   <properties>
+    <property name="step0" value="delaymove,30,13,20"/>
+    <property name="step1" value="delaymove,30,origin"/>
+   </properties>
+  </object>
+  <object type="robot" gid="36" x="576" y="448">
+   <properties>
+    <property name="step0" value="move,15,13"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="horde2">
+  <properties>
+   <property name="step0" value="move,4,5"/>
+  </properties>
+  <object type="robot" gid="36" x="96" y="192">
+   <properties>
+    <property name="step0" value="move,4,5"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="128" y="320">
+   <properties>
+    <property name="step0" value="move,3,9"/>
+    <property name="step1" value="move,origin"/>
+   </properties>
+  </object>
+  <object type="tank" gid="36" x="32" y="192">
+   <properties>
+    <property name="step0" value="delaymove,45,1,9"/>
+    <property name="step1" value="delaymove,45,origin"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

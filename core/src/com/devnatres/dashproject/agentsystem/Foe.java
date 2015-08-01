@@ -158,7 +158,7 @@ public class Foe extends Agent {
     }
 
     private void shotIfHeroInSight() {
-        if (hero.isDying()) return;
+        if (hero.isDying() || hero.hasImmunity()) return;
 
         if (camera.isOnCamera(this)) {
             if (fireWait > 0) {
@@ -216,7 +216,7 @@ public class Foe extends Agent {
         if (life > 0) life -= damagePoints;
 
         if (life <= 0) {
-            globalAudio.play(countSound, .5f);
+            globalAudio.play(countSound, .8f);
 
             if (horde != null) horde.countKilledFoe();
 

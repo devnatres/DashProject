@@ -293,7 +293,7 @@ public class Hero extends Agent {
     }
 
     public void receiveDamage(int damage) {
-        if (!dying && immunityPowerUpExistence.getRemainingDuration() == 0) {
+        if (!dying && !hasImmunity()) {
             damageImageDuration = DAMAGE_DURATION;
             globalAudio.play(damageSound, .5f);
             levelScreen.setDamageHardFlashingDuration(DAMAGE_FLASHING_DURATION);

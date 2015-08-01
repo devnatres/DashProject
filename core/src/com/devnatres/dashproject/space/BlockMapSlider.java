@@ -134,6 +134,20 @@ public class BlockMapSlider {
     }
 
     private boolean calculateSlideRectangle(Rectangle rectangle) {
+        // Some previous corrections to avoid positions out of the map
+        if (rectangle.getX() < 0) {
+            rectangle.setX(0);
+        }
+        if (rectangle.getX()+rectangle.getWidth() > mapPixelWidth) {
+            rectangle.setX(mapPixelWidth - rectangle.getWidth());
+        }
+        if (rectangle.getY() < 0) {
+            rectangle.setY(0);
+        }
+        if (rectangle.getY()+rectangle.getHeight() > mapPixelHeight) {
+            rectangle.setY(mapPixelHeight - rectangle.getHeight());
+        }
+
         // Determine the grid of tiles overlapping the rectangle
         int minColumn = (int)(rectangle.getX() / tilePixelWidth);
         int maxColumn = (int)((rectangle.getX() + rectangle.getWidth()-1) / tilePixelWidth);
