@@ -27,6 +27,7 @@ public class Foe extends Agent {
               EAnimFoe.FOE_ROBOT_WALKING,
               EAnimFoe.FOE_ROBOT_DYING,
               "fx/pum.png",
+              "foes/foe_halo.png",
               1,
               1,
               50,
@@ -40,6 +41,7 @@ public class Foe extends Agent {
                 EAnimFoe.FOE_TANK_STUNNING,
                 EAnimFoe.FOE_TANK_DYING,
                 "fx/pum.png",
+                "foes/foe_halo_2.png",
                 2,
                 1,
                 75,
@@ -61,6 +63,7 @@ public class Foe extends Agent {
     private final DnaAnimation basicAnimation;
     private final DnaAnimation stunAnimation;
     private final DnaAnimation deadAnimation;
+    private final Sprite haloImage;
     private final Sprite pumImage;
     private int pumImageDuration;
     private final Shake shake = new Shake(TOTAL_SHAKE_DURATION, ONE_SHAKE_DURATION);
@@ -89,6 +92,7 @@ public class Foe extends Agent {
                IAnimCreator stunAnimCreator,
                IAnimCreator deadAnimCreator,
                String pumTexture,
+               String haloTexture,
                int life,
                int damage,
                int standardScore,
@@ -99,6 +103,7 @@ public class Foe extends Agent {
         basicAnimation = getAnimation();
         stunAnimation = stunAnimCreator.create(hyperStore);
         deadAnimation = deadAnimCreator.create(hyperStore);
+        haloImage = new Sprite(hyperStore.getTexture(haloTexture));
         pumImage = new Sprite(hyperStore.getTexture(pumTexture));
 
         this.life = life;
@@ -274,6 +279,10 @@ public class Foe extends Agent {
             super.draw(batch, parentAlpha);
             setPosition(xBeforeShake, yBeforeShake);
         } else {
+            if (!isDying() && levelScreen.isBulletTime()) {
+                haloImage.setCenter(getCenterX(), getCenterY());
+                haloImage.draw(batch);
+            }
             super.draw(batch, parentAlpha);
             if (pumImageDuration > 0) {
                 pumImageDuration--;

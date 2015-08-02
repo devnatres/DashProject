@@ -198,6 +198,16 @@ public enum EExposition {
             expoHero.addDisplayAction();
             expoHero.assignToFigure(figure1);
 
+            ExpoAnim expoFoeBHalo = new ExpoAnim(createAnimation(hyperStore, "foes/foe_halo.png"), positionFoeB);
+            expoFoeBHalo.addHideAction(120);
+            expoFoeBHalo.addDisplayAndHideAction(45);
+            expoFoeBHalo.assignToFigure(figure1);
+
+            ExpoAnim expoFoeCHalo = new ExpoAnim(createAnimation(hyperStore, "foes/foe_halo.png"), positionFoeC);
+            expoFoeCHalo.addHideAction(120);
+            expoFoeCHalo.addDisplayAndHideAction(90);
+            expoFoeCHalo.assignToFigure(figure1);
+
             ExpoAnim expoFoeA = new ExpoAnim(EAnimFoe.FOE_ROBOT_WALKING.create(hyperStore), positionFoeA);
             expoFoeA.addDisplayAction(120);
             expoFoeA.addHideAction();
@@ -283,6 +293,10 @@ public enum EExposition {
             final Vector2 positionC = new Vector2(280, 505);
             final Vector2 positionTank = new Vector2(positionB.x-30, positionB.y-15);
 
+            ExpoAnim expoFoeBHalo = new ExpoAnim(createAnimation(hyperStore, "foes/foe_halo_2.png"), positionTank);
+            expoFoeBHalo.addHideAction(120);
+            expoFoeBHalo.addDisplayAndHideAction(45);
+            expoFoeBHalo.assignToFigure(figure1);
 
             ExpoAnim expoFoe = new ExpoAnim(EAnimFoe.FOE_TANK_WALKING.create(hyperStore), positionTank);
             expoFoe.addDisplayAction(120);
