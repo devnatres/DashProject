@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.devnatres.dashproject.DashGame;
@@ -56,6 +56,7 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     private final BitmapFont mainWhiteFont;
     private final BitmapFont mainYellowFont;
     private final DnaCamera mainCamera;
+    private final GlyphLayout glyphLayout = new GlyphLayout();
 
     private final Texture heroTexture;
     private final Texture background;
@@ -173,11 +174,11 @@ public class LobbyScreen implements Screen, IButtonExecutable {
         mainBatch.draw(heroTexture, 50, 600);
 
         int headX = 240;
-        mainWhiteFont.drawMultiLine(mainBatch, "Record Score", headX, 780, 0, HAlignment.CENTER);
-        mainWhiteFont.drawMultiLine(mainBatch, texts.get(ETexts.TOTAL_SCORE), headX, 750, 0, HAlignment.CENTER);
+        drawCentered(mainWhiteFont, "Record Score", headX, 780);
+        drawCentered(mainWhiteFont, texts.get(ETexts.TOTAL_SCORE), headX, 750);
 
-        mainWhiteFont.drawMultiLine(mainBatch, "Levels", headX, 700, 0, HAlignment.CENTER);
-        mainWhiteFont.drawMultiLine(mainBatch, texts.get(ETexts.PROGRESS), headX, 670, 0, HAlignment.CENTER);
+        drawCentered(mainWhiteFont, "Levels", headX, 700);
+        drawCentered(mainWhiteFont, texts.get(ETexts.PROGRESS), headX, 670);
 
         final int trophyYIcr = 3;
         int trophyWidth = trophy_shape.getWidth();
@@ -250,11 +251,21 @@ public class LobbyScreen implements Screen, IButtonExecutable {
     }
 
     private void drawTextRight(String string, float x, float y) {
-        mainWhiteFont.drawMultiLine(mainBatch, string, x, y, 0, HAlignment.RIGHT);
+        drawRight(mainWhiteFont, string, x, y);
     }
 
     private void drawYellowTextRight(String string, float x, float y) {
-        mainYellowFont.drawMultiLine(mainBatch, string, x, y, 0, HAlignment.RIGHT);
+        drawRight(mainYellowFont, string, x, y);
+    }
+
+    private void drawCentered(BitmapFont font, String string, float x, float y) {
+        glyphLayout.setText(font, string);
+        font.draw(mainBatch, string, x - glyphLayout.width / 2f, y);
+    }
+
+    private void drawRight(BitmapFont font, String string, float x, float y) {
+        glyphLayout.setText(font, string);
+        font.draw(mainBatch, string, x - glyphLayout.width, y);
     }
 
     private void paintTrophy(int score, int refX, int refY, boolean light) {

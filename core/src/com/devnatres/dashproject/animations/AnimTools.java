@@ -25,7 +25,7 @@ final class AnimTools {
                 texture.getWidth()/columns,
                 texture.getHeight()/rows);
 
-        Array<TextureRegion> frames = new Array();
+        Array<TextureRegion> frames = new Array<TextureRegion>();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 frames.add(tmp[i][j]);

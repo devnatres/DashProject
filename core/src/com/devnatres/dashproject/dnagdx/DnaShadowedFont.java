@@ -3,6 +3,7 @@ package com.devnatres.dashproject.dnagdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.utils.Disposable;
 import com.devnatres.dashproject.DashGame;
 
@@ -14,6 +15,7 @@ public class DnaShadowedFont implements Disposable {
 
     private final BitmapFont foreFont;
     private final BitmapFont backFont;
+    private final GlyphLayout glyphLayout;
     private final int centerX;
 
     public DnaShadowedFont() {
@@ -25,6 +27,7 @@ public class DnaShadowedFont implements Disposable {
 
         foreFont = new BitmapFont(Gdx.files.internal(foreFontResource), false);
         backFont = new BitmapFont(Gdx.files.internal("fonts/black.fnt"), false);
+        glyphLayout = new GlyphLayout();
 
         centerX = DashGame.SCREEN_WIDTH / 2;
     }
@@ -46,12 +49,13 @@ public class DnaShadowedFont implements Disposable {
     }
 
     public void setScale(float scaleXY) {
-        foreFont.setScale(scaleXY);
-        backFont.setScale(scaleXY);
+        foreFont.getData().setScale(scaleXY);
+        backFont.getData().setScale(scaleXY);
     }
 
     public int getTextWidth(String string) {
-        return (int) foreFont.getBounds(string).width;
+        glyphLayout.setText(foreFont, string);
+        return (int) glyphLayout.width;
     }
 
     @Override
