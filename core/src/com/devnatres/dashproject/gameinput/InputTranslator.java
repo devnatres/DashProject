@@ -6,7 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.devnatres.dashproject.DashGame;
 import com.devnatres.dashproject.dnagdx.DnaCamera;
 
@@ -33,12 +32,10 @@ public class InputTranslator implements InputProcessor {
     private boolean menuRequested;
     private final int menuKeycode;
 
-    private final Vector3 clickCoordinates;
     private final Vector2 touchDownPointOnCamera;
 
     public InputTranslator() {
         touchDownPoint = new Vector2();
-        clickCoordinates = new Vector3();
         touchDownPointOnCamera = new Vector2();
 
         resetKeycode = (Gdx.app.getType() == Application.ApplicationType.Android) ? Input.Keys.BACK : Input.Keys.R;
@@ -147,9 +144,8 @@ public class InputTranslator implements InputProcessor {
     public Vector2 getTouchDownPointOnCamera(DnaCamera camera) {
         Vector2 point = getTouchDownPoint();
         if (point != null) {
-            clickCoordinates.set(touchDownPoint.x, touchDownPoint.y, 0);
-            Vector3 position = camera.unproject(clickCoordinates);
-            touchDownPointOnCamera.set(position.x, position.y);
+            touchDownPointOnCamera.set(touchDownPoint.x, touchDownPoint.y);
+            camera.unprojectViewport(touchDownPointOnCamera);
             return touchDownPointOnCamera;
         } else {
             return null;

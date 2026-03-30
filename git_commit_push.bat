@@ -1,3 +1,3 @@
 git add .
-git commit -m "Carga niveles"
+git commit -m "Arreglado redimensionamiento de pantalla"
 git push origin migracion
