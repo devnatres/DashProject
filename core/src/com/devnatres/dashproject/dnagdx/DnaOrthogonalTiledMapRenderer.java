@@ -33,15 +33,15 @@ public class DnaOrthogonalTiledMapRenderer extends OrthogonalTiledMapRenderer {
     @Override
     protected void beginRender () {
         AnimatedTiledMapTile.updateAnimationBaseTime();
-        if (ownsSpriteBatch) {
-            spriteBatch.begin();
+        if (ownsBatch) {
+            batch.begin();
         }
     }
 
     @Override
     protected void endRender () {
-        if (ownsSpriteBatch) {
-            spriteBatch.end();
+        if (ownsBatch) {
+            batch.end();
         }
     }
 }

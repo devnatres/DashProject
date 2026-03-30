@@ -91,7 +91,7 @@ public class LevelMap implements Disposable {
     }
 
     public Batch getBatch() {
-        return tiledMapRenderer.getSpriteBatch();
+        return tiledMapRenderer.getBatch();
     }
 
     public void paint(OrthographicCamera camera) {

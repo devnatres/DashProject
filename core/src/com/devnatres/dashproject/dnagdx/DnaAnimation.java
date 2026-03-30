@@ -10,14 +10,14 @@ import com.devnatres.dashproject.gameconstants.Time;
  * Extends the Animation Gdx class to manage its own state time.<br>
  *     <br>
  * Created by DevNatres on 07/01/2015. */
-public class DnaAnimation extends Animation {
+public class DnaAnimation extends Animation<TextureRegion> {
     private float currentStateTime;
 
-    public DnaAnimation(float frameDuration, Array<? extends TextureRegion> keyFrames) {
+    public DnaAnimation(float frameDuration, Array<TextureRegion> keyFrames) {
         super(frameDuration, keyFrames);
     }
 
-    public DnaAnimation(float frameDuration, Array<? extends TextureRegion> keyFrames, PlayMode playMode) {
+    public DnaAnimation(float frameDuration, Array<TextureRegion> keyFrames, PlayMode playMode) {
         super(frameDuration, keyFrames, playMode);
     }
 

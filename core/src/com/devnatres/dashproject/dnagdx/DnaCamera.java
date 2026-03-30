@@ -42,6 +42,10 @@ public class DnaCamera extends OrthographicCamera {
         fitViewport.update(width, height);
     }
 
+    public Vector2 unprojectViewport(Vector2 screenCoords) {
+        return fitViewport.unproject(screenCoords);
+    }
+
     public float getUp() {
         return position.y + halfCameraHeight;
     }

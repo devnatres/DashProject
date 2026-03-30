@@ -1,31 +1,48 @@
-apply plugin: "java"
+plugins {
+    id "application"
+}
 
-sourceCompatibility = 1.6
-sourceSets.main.java.srcDirs = [ "src/" ]
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
-project.ext.mainClassName = "com.devnatres.dashproject.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets");
+sourceSets.main.java.srcDirs = ["src/"]
 
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
+def assetsDir = file("../android/assets")
+
+application {
+    mainClass = "com.devnatres.dashproject.desktop.DesktopLauncher"
+}
+
+dependencies {
+    implementation project(":core")
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    runtimeOnly "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    runtimeOnly "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+tasks.named("run", JavaExec) {
+    workingDir = assetsDir
     standardInput = System.in
-    workingDir = project.assetsDir
     ignoreExitValue = true
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
+tasks.register("dist", Jar) {
+    dependsOn tasks.named("classes")
+    archiveClassifier = "all"
+    from sourceSets.main.output
+    from configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    from assetsDir
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
-        attributes 'Main-Class': project.mainClassName
+        attributes "Main-Class": application.mainClass.get()
     }
 }
-
-dist.dependsOn classes
 
 eclipse {
     project {
